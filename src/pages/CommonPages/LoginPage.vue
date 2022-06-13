@@ -4,17 +4,10 @@
             <q-card-section>
                 <q-form class="q-gutter-lg flex column justify-around" action="/panel">
                     <div>
-                        <q-input
-                            label="Username"
-                            v-model="user.username"
-                            :rules="[val => !!val || 'Field is required']"
-                        />
-                        <q-input
-                            label="Password"
-                            type="password"
-                            v-model="user.password"
-                            :rules="[val => !!val || 'Field is required']"
-                        />
+                        <q-input label="Username" v-model="user.username"
+                            :rules="[val => !!val || 'Field is required']" />
+                        <q-input label="Password" type="password" v-model="user.password"
+                            :rules="[val => !!val || 'Field is required']" />
                     </div>
                     <div class="flex justify-end">
                         <q-btn color="primary" label="Login" type="submit" rounded></q-btn>

@@ -3,26 +3,40 @@ const routes = [
         path: '/',
         component: () => import('layouts/BlankLayout.vue'),
         children: [
-            { path: '', component: () => import('pages/LoginPage.vue') },
+            { path: '', component: () => import('src/pages/CommonPages/LoginPage.vue') },
         ],
     },
     {
         path: '/panel',
         component: () => import('layouts/MainLayout.vue'),
         children: [
-            { path: '', component: () => import('pages/IndexPage.vue') },
+            { path: '', component: () => import('src/pages/AdminPages/AdminHomePage.vue') },
         ],
     },
     {
         path: '/panel/create',
         component: () => import('layouts/MainLayout.vue'),
         children: [
-            { path: '', component: () => import('pages/CreatePage.vue') },
+            { path: '', component: () => import('src/pages/CommonPages/CreatePage.vue') },
+        ],
+    },
+    {
+        path: '/panel/addUser',
+        component: () => import('layouts/MainLayout.vue'),
+        children: [
+            { path: '', component: () => import('src/pages/AdminPages/AddUserPage.vue') },
+        ],
+    },
+    {
+        path: '/panel/configurations',
+        component: () => import('layouts/MainLayout.vue'),
+        children: [
+            { path: '', component: () => import('src/pages/AdminPages/ConfigurationPage.vue') },
         ],
     },
     {
         path: '/:catchAll(.*)*',
-        component: () => import('pages/ErrorNotFound.vue'),
+        component: () => import('src/pages/CommonPages/ErrorNotFound.vue'),
     },
 ];
 

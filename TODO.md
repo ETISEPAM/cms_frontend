@@ -4,6 +4,10 @@
 - Toggle between light and dark mode & conditional styling.
 - Form to add a user.
 - Users will be immediately redirected to a page where they're asked to change their temporary password upon first login attempt.
+- Delete / Edit user will be added to add user page.
+- Fix sidebar list min-width to 100%
+- Add titles to create content type
+- Install bootstrap
 - new feature 2
 - ...
 

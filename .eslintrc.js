@@ -84,5 +84,6 @@ module.exports = {
     'no-plusplus': 'off',
     'max-len': ['error', { 'code': 140 }],
     'quotes': ['error', 'single'],
+    'linebreak-style': ['error', 'windows'],
   }
 }
