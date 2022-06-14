@@ -1,22 +1,22 @@
 <template>
-    <q-page class="page flex content-center">
-        <div class="q-pa-md">
-            <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
+    <q-page class="page">
+        <q-card class="q-pa-md inset-shadow row justify-center">
+            <q-form @submit="onSubmit" @reset="onReset" class="col col-md-8 col-xl-6 q-py-md q-gutter-sm">
                 <q-input filled v-model="name_surname" label="Name Surname" lazy-rules
-                    :rules="[val => val && val.length > 0 || 'Please type something']"></q-input>
+                    :rules="[val => val && val.length > 0 || 'Field is required']"></q-input>
 
                 <q-input filled v-model="username" label="Username" lazy-rules
-                    :rules="[val => val && val.length > 0 || 'Please type something']"></q-input>
+                    :rules="[val => val && val.length > 0 || 'Field is required']"></q-input>
 
                 <q-input filled v-model="email" label="Email" lazy-rules
-                    :rules="[val => val && val.length > 0 || 'Please type something']"></q-input>
+                    :rules="[val => val && val.length > 0 || 'Field is required']"></q-input>
 
-                <div>
+                <div class="row justify-end">
                     <q-btn label="Save" type="submit" color="primary"></q-btn>
                     <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm"></q-btn>
                 </div>
             </q-form>
-        </div>
+        </q-card>
     </q-page>
 </template>
 
@@ -32,17 +32,11 @@ export default defineComponent({
         const nameSurname = ref(null);
         const username = ref(null);
         const email = ref(null);
-        const temporaryPassword = ref(null);
-        const temporaryPasswordConformation = ref(null);
-        const active = ref(false);
 
         return {
             nameSurname,
             username,
             email,
-            temporaryPassword,
-            temporaryPasswordConformation,
-            active,
 
             onSave() {
                 $q.notify({
@@ -57,9 +51,6 @@ export default defineComponent({
                 nameSurname.value = null;
                 username.value = null;
                 email.value = null;
-                temporaryPassword.value = null;
-                temporaryPasswordConformation.value = null;
-                active.value = false;
             },
         };
     },
