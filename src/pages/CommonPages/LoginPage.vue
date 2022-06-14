@@ -22,6 +22,8 @@
 
 <script>
 import { defineComponent } from 'vue';
+/* import { VueReCaptcha } from 'vue-recaptcha-v3';
+Vue.use(VueReCaptcha, { siteKey: '6LeBsWwgAAAAAOf3towi940LaSxthzMd-ZFZYgyd' }); */
 
 export default defineComponent({
     name: 'LoginPage',
@@ -33,7 +35,13 @@ export default defineComponent({
             },
         };
     },
+    /*  onSubmit() {
+        this.$recaptcha("login").then((token) => {
+            formData.append("g-recaptcha-response", token);
+        }),
+    }, */
 });
+
 </script>
 
 <style lang="sass" scoped>
