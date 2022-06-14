@@ -1,32 +1,28 @@
 <template>
-    <q-page class="page flex flex-center">
-        <div id="q-app" style="min-height: 100vh;">
-            <div class="q-pa-md" style="max-width: 100%">
-                <q-card>
-                    <q-tabs v-model="tab" dense class="text-grey" active-color="primary" indicator-color="primary">
-                        <div class="row justify-around" style="min-width: 100%">
-                            <q-tab name="system" label="System"></q-tab>
-                            <q-tab name="site" label="Site"></q-tab>
-                            <q-tab name="media" label="Media"></q-tab>
-                        </div>
-                    </q-tabs>
+    <q-page class="page">
+        <q-card class="card">
+            <q-tabs v-model="tab" class="tabs text-grey" active-color="primary" indicator-color="primary" narrow-indicator>
+                <div class="tabs row col">
+                    <q-tab name="system" label="System" class="col"></q-tab>
+                    <q-tab name="site" label="Site" class="col"></q-tab>
+                    <q-tab name="media" label="Media" class="col"></q-tab>
+                </div>
+            </q-tabs>
 
-                    <q-tab-panels v-model="tab" animated>
-                        <q-tab-panel name="system">
-                            <div class="text-h6">System</div>
-                        </q-tab-panel>
+            <q-tab-panels v-model="tab" animated class="q-py-xs inset-shadow">
+                <q-tab-panel name="system">
+                    <div class="text-h6 q-py-md">System</div>
+                </q-tab-panel>
 
-                        <q-tab-panel name="site">
-                            <div class="text-h6">Site</div>
-                        </q-tab-panel>
+                <q-tab-panel name="site">
+                    <div class="text-h6 q-py-md">Site</div>
+                </q-tab-panel>
 
-                        <q-tab-panel name="media">
-                            <div class="text-h6">Media</div>
-                        </q-tab-panel>
-                    </q-tab-panels>
-                </q-card>
-            </div>
-        </div>
+                <q-tab-panel name="media">
+                    <div class="text-h6 q-py-md">Media</div>
+                </q-tab-panel>
+            </q-tab-panels>
+        </q-card>
     </q-page>
 </template>
 
@@ -45,5 +41,9 @@ export default defineComponent({
 
 <style lang="sass" scoped>
 .page
-    font-size: 3.3rem
+    height: 100%
+    margin: 0
+
+    .q-tab-panel
+        padding: 0
 </style>

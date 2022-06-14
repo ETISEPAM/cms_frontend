@@ -1,8 +1,18 @@
 <template>
     <q-layout view="lHh Lpr lFf" class="layout">
+        <q-header elevated class="q-pl-sm main-header">
+            <q-toolbar>
+                <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
+
+                <q-toolbar-title>
+                    ETIS
+                </q-toolbar-title>
+            </q-toolbar>
+        </q-header>
+
         <q-drawer v-model="leftDrawerOpen" side="left" elevated :breakpoint="605" show-if-above
             class="drawer flex justify-center">
-            <q-list separator padding class="list rounded-borders flex column justify-between">
+            <q-list separator padding class="list col rounded-borders flex column justify-between">
                 <div>
                     <q-item clickable v-ripple :active="link === 'home'" @click="link = 'home'" active-class="current"
                         to="/panel" exact>
@@ -13,22 +23,22 @@
                         <q-item-section>Homepage</q-item-section>
                     </q-item>
 
-                    <q-item clickable v-ripple :active="link === 'create'" @click="link = 'create'"
-                        active-class="current" to="/panel/create" exact>
+                    <q-item clickable v-ripple :active="link === 'type'" @click="link = 'type'"
+                        active-class="current" to="/panel/type" exact>
                         <q-item-section avatar>
                             <q-icon name="add" />
                         </q-item-section>
 
-                        <q-item-section>Create Content Type</q-item-section>
+                        <q-item-section>Content Types</q-item-section>
                     </q-item>
 
-                    <q-item clickable v-ripple :active="link === 'list'" @click="link = 'list'" active-class="current"
-                        to="/panel" exact>
+                    <q-item clickable v-ripple :active="link === 'content'" @click="link = 'content'" active-class="current"
+                        to="/panel/content" exact>
                         <q-item-section avatar>
                             <q-icon name="format_list_bulleted" />
                         </q-item-section>
 
-                        <q-item-section>List Content Types</q-item-section>
+                        <q-item-section>Contents</q-item-section>
                     </q-item>
 
                     <q-item clickable v-ripple :active="link === 'conf'" @click="link = 'conf'" active-class="current"
@@ -88,8 +98,19 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
+@media (min-width: 605px)
+    .main-header
+        display: none
+
+.main-header
+    background-color: #000
+    height: 8%
+    .q-toolbar
+        height: 100%
+
+        .q-btn
+            height: 100%
+
 .page-container
     padding: 0
-    .q-list
-        min-width: 100%
 </style>
