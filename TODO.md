@@ -7,7 +7,7 @@
 - Delete / Edit user will be added to add user page.
 - Fix sidebar list min-width to 100%
 - Add titles to create content type
-- Install bootstrap
+- Install bootstrap --DONE
 - new feature 2
 - ...
 
