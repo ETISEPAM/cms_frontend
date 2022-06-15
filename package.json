@@ -1,8 +1,8 @@
 {
   "name": "html",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Headless CMS for EMAKINA.TR",
-  "productName": "Cour Four CMS",
+  "productName": "ETIS CMS",
   "author": "Berke TINAS",
   "private": true,
   "scripts": {

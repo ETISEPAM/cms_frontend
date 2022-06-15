@@ -85,5 +85,6 @@ module.exports = {
     'max-len': ['error', { 'code': 140 }],
     'quotes': ['error', 'single'],
     'linebreak-style': ['error', 'windows'],
+    'no-multi-spaces': ['error', { 'ignoreEOLComments': true }],
   }
 }

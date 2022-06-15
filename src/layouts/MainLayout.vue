@@ -10,9 +10,12 @@
             </q-toolbar>
         </q-header>
 
-        <q-drawer v-model="leftDrawerOpen" side="left" elevated :breakpoint="605" show-if-above
-            class="drawer flex justify-center">
-            <q-list separator padding class="list col rounded-borders flex column justify-between">
+        <q-drawer v-model="leftDrawerOpen" side="left" elevated :breakpoint="800" show-if-above
+            class="drawer column justify-between content-center">
+            <div class="image col-2 row justify-center self-center">
+                <img src="~src/assets/imgs/emakinaDark.png" alt="EMAKINA Logo" />
+            </div>
+            <q-list separator padding class="list col-10 rounded-borders flex column justify-between">
                 <div>
                     <q-item clickable v-ripple :active="link === 'home'" @click="link = 'home'" active-class="current"
                         to="/panel" exact>
@@ -98,7 +101,7 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
-@media (min-width: 605px)
+@media (min-width: 800px)
     .main-header
         display: none
 
@@ -110,6 +113,11 @@ export default defineComponent({
 
         .q-btn
             height: 100%
+
+.image
+    overflow: hidden
+.list
+    width: 100%
 
 .page-container
     padding: 0

@@ -8,58 +8,56 @@
                 </div>
             </q-tabs>
 
-            <q-tab-panels v-model="tab" animated class="q-py-xs inset-shadow">
+            <q-tab-panels v-model="tab" animated class="q-pt-xs inset-shadow">
                 <q-tab-panel name="list">
-                    <div class="text-h6 q-py-md">CONTENT TYPE PAGE</div>
+                    <Suspense>
+                        <template #default>
+                            <ListItems page='contentTypePage' />
+                        </template>
+                        <template #fallback>
+                            <q-list>
+                                <q-item class="row wrap">
+                                    <q-item-section avatar class="row flex-center col-2">
+                                        <q-skeleton type="QAvatar" />
+                                    </q-item-section>
+
+                                    <q-item-section class="row col-6">
+                                        <q-item-label class="row">
+                                            <q-skeleton type="text" class="col-6" />
+                                        </q-item-label>
+                                        <q-item-label caption>
+                                            <q-skeleton type="QRange" />
+                                        </q-item-label>
+                                    </q-item-section>
+                                </q-item>
+                            </q-list>
+                        </template>
+                    </Suspense>
                 </q-tab-panel>
 
                 <q-tab-panel name="create">
                     <q-card class="no-box-shadow">
-                        <q-card-section>
-                            <q-carousel
-                                v-model="slide"
-                                transition-prev="slide-right"
-                                transition-next="slide-left"
-                                swipeable
-                                animated
-                                padding
-                                arrows
+                        <q-form class="row wrap justify-center col q-gutter-lg q-py-lg">
+                            <q-input filled v-model="type.name" label="Title" class="col-9 col-lg-6">
+                                <template v-slot:prepend>
+                                    <q-icon name="text_fields" />
+                                </template>
+                            </q-input>
+                            <q-input
+                                v-model="type.description"
+                                filled
+                                label="Description"
+                                type="textarea"
+                                class="col-9 col-lg-6"
                             >
-                                <!-- DO NOT DELETE UNTIL YOU FIGURE IT OUT -->
-
-                                <!-- <template v-slot:navigation-icon="{ active, btnProps, onClick }">
-                                    <q-btn v-if="active" size="lg" icon="home" color="yellow" flat round dense @click="onClick" />
-                                    <q-btn v-else size="sm" :icon="btnProps.icon" color="white" flat round dense @click="onClick" />
-                                </template> -->
-
-                                <q-carousel-slide name="title-form" class="column justify-center">
-                                    <q-form class="form q-gutter-lg q-pr-sm column no-wrap justify-around">
-                                        <q-input filled v-model="type.title" label="Title">
-                                            <template v-slot:prepend>
-                                                <q-icon name="text_fields" />
-                                            </template>
-                                        </q-input>
-                                        <q-input
-                                            v-model="type.description"
-                                            filled
-                                            label="Description"
-                                            type="textarea"
-                                        >
-                                            <template v-slot:prepend>
-                                                <q-icon name="description" />
-                                            </template>
-                                        </q-input>
-                                    </q-form>
-                                </q-carousel-slide>
-                                <q-carousel-slide name="publish-form" class="flex justify-end">
-                                    <q-form class="form column no-wrap justify-around items-end">
-                                        <q-checkbox v-model="type.isPublished" label="Publish" color="teal" left-label />
-                                        <q-checkbox v-model="type.dpAuthor" label="Display author information" color="teal" left-label />
-                                        <q-checkbox v-model="type.dpDate" label="Display date information" color="teal" left-label />
-                                    </q-form>
-                                </q-carousel-slide>
-                            </q-carousel>
-                        </q-card-section>
+                                <template v-slot:prepend>
+                                    <q-icon name="description" />
+                                </template>
+                            </q-input>
+                            <div class="button col-9 col-lg-6 row justify-end">
+                                <q-btn color="teal" label="Create" rounded v-on:click="create" />
+                            </div>
+                        </q-form>
                     </q-card>
                 </q-tab-panel>
             </q-tab-panels>
@@ -69,26 +67,52 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
+import ListItems from 'components/ListItems.vue';
+import { ContentStore } from 'stores/content-store.js';
+import axios from 'axios';
+
+const contentStore = ContentStore();
 
 export default defineComponent({
     name: 'TypePage',
+    components: {
+        ListItems,
+    },
     setup() {
         return {
-            slide: ref('title-form'),
-            tab: ref('list'),
+            tab: ref('list'),           // INITIAL TAB ON PAGE
         };
     },
     data() {
         return {
             type: {
-                title: '',
+                name: '',               // CONTENT TYPE
                 description: '',
-                isPublished: false,
-                dpAuthor: false,
-                dpDate: false,
-                dpSig: false,
             },
         };
+    },
+    methods: {
+        create() {
+            axios
+                .post(
+                    'http://127.0.0.1:3000/contentType',
+                    {
+                        name: this.type.name,                   // POST INPUT CONTENT TYPE TO DATABASE WITH NO FIELDS BY DEFAULT
+                        description: this.type.description,
+                        fields: [],
+                    },
+                )
+                .then((response) => {
+                    console.log(response.data);
+                    contentStore.$patch({ typeList: [...contentStore.typeList, response.data] });   // UPDATE CONTENT STORE TYPE LIST
+                })                                                                                  // WITHOUT SENDING ANOTHER GET REQUEST
+                .catch((err) => {                                                                   // TO THE BACK-END
+                    console.log(err.response.data);
+                });
+
+            this.type.name = '';
+            this.type.description = '';                     // RESET FORM VALUES
+        },
     },
 });
 </script>
@@ -98,6 +122,12 @@ export default defineComponent({
     height: 100%
     margin: 0
 
-    .q-tab-panel
-        padding: 0
+    .q-card
+        background-color: inherit
+
+        .q-tab-panel
+            padding: 0
+
+            .q-carousel
+                min-height: 100%
 </style>
