@@ -33,18 +33,25 @@ Given a version number MAJOR.MINOR.PATCH:
 
 
 
-## 1.1.0 - 2022-05-24
+## 1.0.0 - 2022-06-15
 ### Added
-- Added example
+- Mock database
+- Store management via Pinia
+- Content & Content type listing and creation
+- Configuration and Add User pages
 
 ### Changed
-- Changed example
-
-### Fixed
-- Fixed example
+- "Create Content Type" and "List Content Type" pages on the sidebar are now "Content Types" and "Contents", with both pages having two tabs "List", and "Create" each
 
 
 
-## 1.0.0 - 2022-05-23
+## 0.0.1 - 2022-06-14
 ### Added
-- Added example
+- Mobile First, responsiveness w/ bootstrap
+- Proper src folder structure
+- editorconfig and ESLint configurations
+- Blank and Main layouts
+- Login form and validation
+- Admin panel and sidebar
+- Create content type page and form
+- Logout button

@@ -1,22 +1,21 @@
 <template>
-    <q-page class="page flex content-center">
-        <div class="q-pa-md">
-            <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
-                <q-input filled v-model="name_surname" label="Name Surname" lazy-rules
-                    :rules="[val => val && val.length > 0 || 'Please type something']"></q-input>
-
+    <q-page class="page">
+        <q-card class="q-pa-md inset-shadow row justify-center">
+            <q-form @submit="onSubmit" @reset="onReset" class="col col-md-8 col-xl-6 q-py-md q-gutter-sm">
+                <q-input filled v-model="name" label="Name" lazy-rules
+                    :rules="[val => val && val.length > 0 || 'Field is required']"></q-input>
+                <q-input filled v-model="surname" label="Surname" lazy-rules
+                    :rules="[val => val && val.length > 0 || 'Field is required']"></q-input>
                 <q-input filled v-model="username" label="Username" lazy-rules
-                    :rules="[val => val && val.length > 0 || 'Please type something']"></q-input>
-
-                <q-input filled v-model="email" label="Email" lazy-rules
-                    :rules="[val => val && val.length > 0 || 'Please type something']"></q-input>
-
-                <div>
+                    :rules="[val => val && val.length > 0 || 'Field is required']"></q-input>
+                <q-input filled v-model="email" label="Email" lazy-rules :rules="
+                [val => isValidEmailAddress(val) || 'Please enter a valid email address']"></q-input>
+                <div class="row justify-end">
                     <q-btn label="Save" type="submit" color="primary"></q-btn>
                     <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm"></q-btn>
                 </div>
             </q-form>
-        </div>
+        </q-card>
     </q-page>
 </template>
 
@@ -29,20 +28,16 @@ export default defineComponent({
 
     setup() {
         const $q = useQuasar();
-        const nameSurname = ref(null);
+        const name = ref(null);
+        const surname = ref(null);
         const username = ref(null);
         const email = ref(null);
-        const temporaryPassword = ref(null);
-        const temporaryPasswordConformation = ref(null);
-        const active = ref(false);
 
         return {
-            nameSurname,
+            name,
+            surname,
             username,
             email,
-            temporaryPassword,
-            temporaryPasswordConformation,
-            active,
 
             onSave() {
                 $q.notify({
@@ -54,14 +49,19 @@ export default defineComponent({
             },
 
             onReset() {
-                nameSurname.value = null;
+                name.value = null;
+                surname.value = null;
                 username.value = null;
                 email.value = null;
-                temporaryPassword.value = null;
-                temporaryPasswordConformation.value = null;
-                active.value = false;
             },
         };
+    },
+    methods: {
+        isValidEmailAddress(email) {
+            // eslint-disable-next-line max-len
+            const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
+        },
     },
 });
 </script>
