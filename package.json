@@ -6,12 +6,15 @@
   "author": "Berke TINAS",
   "private": true,
   "scripts": {
+    "db:serve": "json-server --watch db.json --port=3000",
     "lint": "eslint --ext .js,.vue ./ --fix",
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
+    "@babel/eslint-parser": "^7.18.2",
     "@quasar/extras": "^1.0.0",
     "axios": "^0.21.1",
+    "json-server": "^0.17.0",
     "pinia": "^2.0.11",
     "quasar": "^2.6.0",
     "vue": "^3.0.0",

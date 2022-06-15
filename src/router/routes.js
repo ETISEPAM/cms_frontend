@@ -42,6 +42,13 @@ const routes = [
         ],
     },
     {
+        path: '/panel/changePassword',
+        component: () => import('layouts/BlankLayout.vue'),
+        children: [
+            { path: '', component: () => import('src/pages/UserPages/ChangeTempPassword.vue') },
+        ],
+    },
+    {
         path: '/:catchAll(.*)*',
         component: () => import('src/pages/CommonPages/ErrorNotFound.vue'),
     },
