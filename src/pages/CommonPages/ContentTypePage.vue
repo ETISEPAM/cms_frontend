@@ -7,7 +7,6 @@
                     <q-tab name="create" label="Create" class="col"></q-tab>
                 </div>
             </q-tabs>
-
             <q-tab-panels v-model="tab" animated class="q-pt-xs inset-shadow">
                 <q-tab-panel name="list">
                     <Suspense>

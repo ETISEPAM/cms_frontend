@@ -45,6 +45,8 @@ export default defineComponent({
     height: 100%
     margin: 0
 
+    .q-card
+        background-color: inherit
     .q-tab-panel
         padding: 0
 </style>

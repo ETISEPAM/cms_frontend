@@ -54,7 +54,7 @@
                             </template> -->
 
                             <q-carousel-slide name="landing-form">
-                                <q-form class="row q-gutter-lg q-pr-sm">
+                                <q-form class="row q-gutter-lg q-pr-sm q-pb-md">
                                     <div class="col-12 row">
 
                                         <!-- DROPDOWN AUTOCOMPLETE SELECTION MENU -->
@@ -157,7 +157,7 @@
                                 </q-form>
                             </q-carousel-slide>
                             <q-carousel-slide name="options-form" class="row wrap justify-end items-center q-pa-none">
-                                <q-form class="col-12 column no-wrap justify-center self-end q-gutter-sm">
+                                <q-form class="col-12 column no-wrap justify-center self-end q-gutter-sm text-right">
                                     <q-checkbox v-model="content.isPublished" label="Publish" color="teal" left-label />
                                     <q-checkbox v-model="content.dpAuthor" label="Display author information" color="teal" left-label />
                                     <q-checkbox v-model="content.dpDate" label="Display date information" color="teal" left-label />
@@ -240,6 +240,9 @@ export default defineComponent({
 .page
     height: 100%
     margin: 0
+
+    .q-card
+        background-color: inherit
 
     .q-tab-panel
         padding: 0
