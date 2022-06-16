@@ -1,7 +1,8 @@
 <template>
     <q-page class="page">
         <q-card class="card">
-            <q-tabs v-model="tab" class="tabs text-grey" active-color="primary" indicator-color="primary" narrow-indicator>
+            <q-tabs v-model="tab" class="tabs text-grey" active-color="primary" indicator-color="primary"
+                narrow-indicator>
                 <div class="tabs row col">
                     <q-tab name="system" label="System" class="col"></q-tab>
                     <q-tab name="site" label="Site" class="col"></q-tab>
