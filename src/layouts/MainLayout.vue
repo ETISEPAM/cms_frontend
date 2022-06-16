@@ -11,11 +11,13 @@
         </q-header>
 
         <q-drawer v-model="leftDrawerOpen" side="left" elevated :breakpoint="800" show-if-above
-            class="drawer column justify-between content-center">
-            <div class="image col-2 row justify-center self-center">
+            class="drawer"
+        >
+            <div class="image col-2 row justify-center self-center q-pt-lg">
                 <img src="~src/assets/imgs/emakinaDark.png" alt="EMAKINA Logo" />
             </div>
-            <q-list separator padding class="list col-10 rounded-borders flex column justify-between">
+
+            <q-list separator padding class="list col rounded-borders flex column justify-between q-pt-lg">
                 <div>
                     <q-item clickable v-ripple :active="link === 'home'" @click="link = 'home'" active-class="current"
                         to="/panel" exact>
@@ -108,16 +110,26 @@ export default defineComponent({
 .main-header
     background-color: #000
     height: 8%
+    min-height: 55px
     .q-toolbar
         height: 100%
 
         .q-btn
             height: 100%
 
-.image
-    overflow: hidden
-.list
-    width: 100%
+.drawer
+    height: 100%
+    min-height: 500px
+    display: flex
+    flex-direction: column
+    flex-wrap: nowrap
+
+    .image
+        min-height: 150px
+
+    .list
+        height: calc(100% - 174px)
+        min-height: 344px
 
 .page-container
     padding: 0

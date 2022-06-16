@@ -96,7 +96,6 @@ export default defineComponent({
                 this.$router.push({ path: '/panel' });
             } else {
                 this.invalid = true;
-                console.log(this.invalid);
             }
         },
     },
