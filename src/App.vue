@@ -9,7 +9,7 @@ import { useQuasar } from 'Quasar';
 export default defineComponent({
     name: 'App',
     setup() {
-        const $q = useQuasar();
+        const $q = useQuasar(); // DARK MODE
         $q.dark.set(true);
     },
 });

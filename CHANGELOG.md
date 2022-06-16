@@ -33,18 +33,34 @@ Given a version number MAJOR.MINOR.PATCH:
 
 
 
-## 1.1.0 - 2022-05-24
+## 1.1.0 - 2022-06-16
 ### Added
-- Added example
-
-### Changed
-- Changed example
+- New alert prompt with support contact information upon invalid login information submission.
 
 ### Fixed
-- Fixed example
+- GET request upon login no longer returns all users in the database and therefore allows anyone to log in (fixed request parameters).
 
 
 
-## 1.0.0 - 2022-05-23
+## 1.0.0 - 2022-06-15
 ### Added
-- Added example
+- Mock database
+- Store management via Pinia
+- Content & Content type listing and creation
+- Configuration and Add User pages
+
+### Changed
+- "Create Content Type" and "List Content Type" pages on the sidebar are now "Content Types" and "Contents", with both pages having two tabs "List", and "Create" each
+
+
+
+## 0.0.1 - 2022-06-14
+### Added
+- Mobile First, responsiveness w/ bootstrap
+- Proper src folder structure
+- editorconfig and ESLint configurations
+- Blank and Main layouts
+- Login form and validation
+- Admin panel and sidebar
+- Create content type page and form
+- Logout button

@@ -1,18 +1,24 @@
 <template>
-    <q-page class="page flex flex-center">
-        Welcome to the Admin Panel.
+    <q-page class="q-pa-xl">
+        Welcome to the Admin Panel, {{ user.firstName }}.
     </q-page>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
+import { userStore } from 'stores/user-store.js';
 
 export default defineComponent({
-    name: 'IndexPage',
+    name: 'AdminHomePage',
+    setup() {
+        return {
+            user: userStore(),
+        };
+    },
 });
 </script>
 
 <style lang="sass" scoped>
-.page
-    font-size: 3.3rem
+.q-page
+    font-size: 3rem
 </style>
