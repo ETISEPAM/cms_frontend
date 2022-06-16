@@ -19,7 +19,7 @@
 - Contents' data is displayed as an object at the moment, properly format it.
 - Change icons of "Content Types" and "Contents" on the sidebar.
 - Better styling for Add User page.
-- Inform user via popup or some other method rather than alert upon invalid credential submission.
+- Inform user via popup or some other method rather than alert upon invalid credential submission. --DONE
 - changed feature
 - ...
 
@@ -29,6 +29,7 @@
 ## Fix
 - The selection menu in content creation tab fails if it is opened too quickly and/or without visiting other tabs.
 - Refreshing the page does not affect the URL but the active page on the sidebar resets back to Homepage.
+- Anyone is able to log in regardless of provided input. --DONE
 
 ## Security
 - Logging out or going back in history does not reset user or content stores, therefore one can simply undo last action (that brought them to the login page from the panel) and go back to the panel (displaying the user's or contents' information) straight from the login page without any input to the form.

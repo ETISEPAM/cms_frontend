@@ -104,19 +104,19 @@
                                             -->
 
                                             <template v-if="field.dataType === 'String'" v-slot:before>
-                                                    <q-icon name="text_fields" />
+                                                <q-icon name="text_fields" />
                                             </template>
                                             <template v-else-if="field.dataType === 'Number'" v-slot:before>
-                                                    <q-icon name="numbers" />
+                                                <q-icon name="numbers" />
                                             </template>
                                             <template v-else-if="field.dataType === 'Boolean'" v-slot:before>
-                                                    <q-icon name="toggle_off" />
+                                                <q-icon name="toggle_off" />
                                             </template>
                                             <template v-else-if="field.dataType === 'Date'" v-slot:before>
-                                                    <q-icon name="calendar_today" />
+                                                <q-icon name="calendar_today" />
                                             </template>
                                             <template v-else-if="field.dataType === 'File'" v-slot:before>
-                                                    <q-icon name="upload_file" />
+                                                <q-icon name="upload_file" />
                                             </template>
                                             <template v-if="field.dataType === 'String'" v-slot:control>
                                                 <div class="self-center full-width no-outline">String field</div>

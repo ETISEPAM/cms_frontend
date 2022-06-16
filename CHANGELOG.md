@@ -33,6 +33,15 @@ Given a version number MAJOR.MINOR.PATCH:
 
 
 
+## 1.1.0 - 2022-06-16
+### Added
+- New alert prompt with support contact information upon invalid login information submission.
+
+### Fixed
+- GET request upon login no longer returns all users in the database and therefore allows anyone to log in (fixed request parameters).
+
+
+
 ## 1.0.0 - 2022-06-15
 ### Added
 - Mock database
