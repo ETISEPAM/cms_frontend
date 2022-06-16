@@ -6,8 +6,8 @@
                     <div>
                         <q-input label="Current Password" type="password" v-model="currentPassword"
                             :rules="[val => !!val || 'Field is required']" />
-                        <q-input label="New Password" @update:modelValue="checkPassword" type="password"
-                            v-model="password" :rules="[val => !!val || 'Field is required']" />
+                        <q-input label="New Password" type="password" v-model="password" @input="checkPassword"
+                            @update:modelValue="checkPassword" :rules="[val => !!val || 'Field is required']" />
                         <div class="input_container">
                             <ul>
                                 <li v-bind:class="{ is_valid: contains_eight_characters }">8 Characters</li>
