@@ -44,7 +44,7 @@
                             :placeholder="user.lastName"></q-input>
                         <div class="q-pa-md q-gutter-y-sm row justify-between">
                             <q-btn label="Change Your Password" type="submit" color="primary"
-                                @click="this.$router.push('changePassword')"></q-btn>
+                                @click="this.$router.push('newpassword')"></q-btn>
                             <q-btn label="Save" @click="updateProfile" color="primary"></q-btn>
                         </div>
                         <!-- <div class="row justify-end">
