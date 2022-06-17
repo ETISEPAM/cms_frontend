@@ -1,6 +1,6 @@
 <template>
-    <q-page class="flex justify-around content-center">
-        <q-card>
+    <q-page class="row justify-around content-center">
+        <q-card class="col-10 col-sm-8 col-md-6 col-lg-4">
             <q-card-section>
                 <q-form class="q-gutter-lg flex column justify-around" action="/panel">
                     <div>
@@ -24,7 +24,7 @@
                     </div>
                     <div class="row justify-end">
                         <q-btn label="Reset" @click="onReset" color="primary" flat class="q-ml-sm"></q-btn>
-                        <q-btn label="Change" type="submit" color="primary"></q-btn>
+                        <q-btn label="Change" color="primary" to="/panel"></q-btn>
                     </div>
                 </q-form>
             </q-card-section>
@@ -37,7 +37,7 @@ import { defineComponent } from 'vue';
 import { userStore } from 'stores/user-store.js';
 
 export default defineComponent({
-    name: 'ChangeTempPassword',
+    name: 'NewPassword',
 
     data() {
         return {
@@ -102,11 +102,7 @@ export default defineComponent({
 
 <style lang="sass" scoped>
 .q-page
-    width: 80%
-    margin: 0 auto
-
-    .q-card
-        width: 40%
+    margin: 0
 
 *, *:before, *:after
     box-sizing: inherit

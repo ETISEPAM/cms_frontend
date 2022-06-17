@@ -2,9 +2,9 @@
     <q-list v-if="page === 'contentTypePage'">
         <q-expansion-item
             group="typeExpand"
-            v-for="type in typeArray"
+            v-for="type in contentStore.typeList"
             :key="type.id"
-            expand-icon="none"
+            expand-icon-class="hidden"
             class="q-py-xs"
             clickable
             ripple
@@ -24,7 +24,45 @@
                 </q-item-section>
 
                 <q-item-section side>
-                    <q-icon name="edit" />
+                    <q-icon name="edit" class="cursor-pointer"/>
+                    <q-popup-proxy cover :breakpoint="500">
+                        <q-card class="q-pa-md">
+                            <div class="column">
+                                <q-input
+                                    type="text"
+                                    color="teal"
+                                    v-model="name"
+                                    filled
+                                    autofocus
+                                    :placeholder="type.name"
+                                    @keyup.enter="type.name = name; name = '';"
+                                >
+                                    <template v-slot:prepend>
+                                        <q-icon
+                                            name="text_fields"
+                                            color="teal"
+                                        />
+                                    </template>
+                                </q-input>
+
+                                <q-input
+                                    type="textarea"
+                                    color="teal"
+                                    v-model="description"
+                                    filled
+                                    :placeholder="type.description"
+                                    @keyup.enter="type.description = description; description = '';"
+                                >
+                                    <template v-slot:prepend>
+                                        <q-icon
+                                            name="text_fields"
+                                            color="teal"
+                                        />
+                                    </template>
+                                </q-input>
+                            </div>
+                        </q-card>
+                    </q-popup-proxy>
                 </q-item-section>
             </template>
 
@@ -200,6 +238,47 @@
                                     {{ field.isMandatory == null ? 'N/A' : (field.isMandatory ? 'TRUE' : 'FALSE') }}
                                 </q-btn>
                             </q-item>
+                            <!-- <q-item class="add-field">
+                                <div class="cursor-pointer row items-center">
+                                    <q-icon name="add" color="" class="text-center q-pr-sm" />
+                                    <div class="text-italic">
+                                        {{ newKey ? newKey : 'NEW FIELD KEY' }}
+                                    </div>
+                                    <q-popup-edit v-model="newKey" :cover="false" :offset="[0, 10]" v-slot="scope">
+                                        <q-input
+                                            type="text"
+                                            v-model="scope.value"
+                                            dense
+                                            autofocus
+                                            @keyup.enter="scope.set"
+                                        >
+                                            <template v-slot:prepend>
+                                                <q-icon
+                                                    name="text_fields"
+                                                />
+                                            </template>
+                                        </q-input>
+                                    </q-popup-edit>
+                                </div>
+                                <div class="cursor-pointer">
+                                    <div class="text-italic">{{ newVal ? newVal : 'NEW FIELD VALUE' }}</div>
+                                    <q-popup-edit v-model="newVal" :cover="false" :offset="[0, 10]" v-slot="scope">
+                                        <q-input
+                                            type="text"
+                                            v-model="scope.value"
+                                            dense
+                                            autofocus
+                                            @keyup.enter="scope.set"
+                                        >
+                                            <template v-slot:prepend>
+                                                <q-icon
+                                                    name="text_fields"
+                                                />
+                                            </template>
+                                        </q-input>
+                                    </q-popup-edit>
+                                </div>
+                            </q-item> -->
                         </q-list>
                     </q-card-section>
                 </q-card>
@@ -207,23 +286,87 @@
         </q-expansion-item>
     </q-list>
     <q-list v-else-if="page === 'contentPage'">
-        <q-item v-for="content in contentArray" :key="content.id" class="q-py-md" clickable v-ripple>
-            <q-item-section avatar>
-                <q-avatar color="primary" text-color="white">
-                    <!-- {{ content.name.charAt(0) }} -->
-                    C
-                </q-avatar>
-            </q-item-section>
+        <q-expansion-item
+            group="contentExpand"
+            v-for="content in contentStore.contentList"
+            :key="content.id"
+            expand-icon-class="hidden"
+            class="q-py-xs"
+            clickable
+            ripple
+            expand-separator
+        >
+            <template v-slot:header>
+                <q-item-section avatar class="q-pl-sm">
+                    <q-avatar color="primary" text-color="white">
+                        C
+                    </q-avatar>
+                </q-item-section>
 
-            <q-item-section>
-                 <q-item-label>{{ typeArray.find((type) => type.id == content.typeId).name }}</q-item-label>
-                 <q-item-label caption lines="1">{{ content.contents }}</q-item-label>
-             </q-item-section>
+                <q-item-section>
+                    <q-item-label>{{ contentStore.typeList.find((type) => type.id === content.typeId).name }}</q-item-label>
+                    <q-item-label caption lines="1">{{ content.tag }}</q-item-label>
+                </q-item-section>
 
-             <q-item-section side>
-                 <q-icon name="edit" />
-             </q-item-section>
-        </q-item>
+                <q-item-section side>
+                    <q-icon name="edit" class="cursor-pointer"/>
+                    <q-popup-proxy cover :breakpoint="500">
+                        <q-card class="q-pa-md">
+                            <div class="column">
+                                <q-input
+                                    type="text"
+                                    color="teal"
+                                    v-model="tag"
+                                    filled
+                                    :placeholder="content.tag"
+                                    @keyup.enter="content.tag = tag; tag = '';"
+                                >
+                                    <template v-slot:prepend>
+                                        <q-icon
+                                            name="text_fields"
+                                            color="teal"
+                                        />
+                                    </template>
+                                </q-input>
+                            </div>
+                        </q-card>
+                    </q-popup-proxy>
+                </q-item-section>
+            </template>
+
+            <q-card>
+                <q-card-section>
+                    <q-list class="fields no-border">
+                        <q-item v-for="key in Object.keys(content.contents)" :key="key">
+                            <div class="row items-center">
+                                <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
+                                <span>{{ key }}</span>
+                            </div>
+                            <div class="cursor-pointer">
+                                {{ content.contents[key] }}
+                                <q-popup-edit v-model="content.contents[key]" :cover="false" :offset="[0, 10]" v-slot="scope">
+                                    <q-input
+                                        type="text"
+                                        color="teal"
+                                        v-model="scope.value"
+                                        dense
+                                        autofocus
+                                        @keyup.enter="scope.set"
+                                    >
+                                        <template v-slot:prepend>
+                                            <q-icon
+                                                name="text_fields"
+                                                color="teal"
+                                            />
+                                        </template>
+                                    </q-input>
+                                </q-popup-edit>
+                            </div>
+                        </q-item>
+                    </q-list>
+                </q-card-section>
+            </q-card>
+        </q-expansion-item>
     </q-list>
 </template>
 
@@ -239,25 +382,26 @@ export default defineComponent({
     },
     data() {
         return {
-            tempField: {
-                label: null,
-                dataType: null,
-                default: null,
-                minVal: null,
-                maxVal: null,
-                isMandatory: null,
-            },
+            contentStore: ContentStore(),
+            name: '',
+            description: '',
+            tag: '',
+            newKey: '',
+            newVal: '',
         };
     },
     async setup() {
-        let typeArray;
-        let contentArray;
-
         const contentStore = ContentStore();
 
-        contentStore.$subscribe((mutation) => {
-            console.log(mutation.payload);
-        }, { detached: true });
+        // contentStore.$subscribe(async (mutation, state) => {
+        //     console.log(mutation, mutation.events, state);
+        //     await axios.patch(
+        //         `http://127.0.0.1:3000/contentType/${mutation.events.target.id}`,
+        //         {
+        //             [mutation.events.key]: mutation.events.newValue,
+        //         },
+        //     );
+        // }, { detached: true });
 
         if (!contentStore.typeList.length) {
             // eslint-disable-next-line
@@ -269,10 +413,9 @@ export default defineComponent({
                     console.log(err);
                 });
 
-            typeArray = response.data;
-            contentStore.typeList = typeArray;
-        } else {
-            typeArray = contentStore.typeList;
+            if (response.data.length) {
+                contentStore.typeList = response.data;
+            }
         }
 
         if (!contentStore.contentList.length) {
@@ -285,21 +428,17 @@ export default defineComponent({
                     console.log(err);
                 });
 
-            contentArray = response.data;
-            contentStore.contentList = contentArray;
-        } else {
-            contentArray = contentStore.contentList;
+            if (response.data.length) {
+                contentStore.contentList = response.data;
+            }
         }
-
-        return {
-            typeArray,
-            contentArray,
-        };
     },
 });
 </script>
 
 <style lang="sass" scoped>
+.hidden
+    display: none
 .field-expand
     background: rgb(35, 35, 35)
     padding: 0                      // q-px-none is overriden by quasar on utility class
@@ -310,6 +449,9 @@ export default defineComponent({
         justify-content: space-between
         align-items: center
         text-align: right
+
+    // .add-field
+    //     background: rgb(80, 80, 80)
 
     .q-item:nth-of-type(2n)
         background: rgb(40, 40, 40)
