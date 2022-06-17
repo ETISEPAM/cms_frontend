@@ -27,7 +27,7 @@ import axios from 'axios';
 import { userStore } from 'stores/user-store.js';
 
 export default defineComponent({
-    name: 'AddUserPage',
+    name: 'RegistrationPage',
     data() {
         return {
             user: {

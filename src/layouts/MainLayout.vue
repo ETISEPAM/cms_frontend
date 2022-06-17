@@ -55,8 +55,8 @@
                         <q-item-section>Configuration</q-item-section>
                     </q-item>
 
-                    <q-item clickable v-ripple :active="link === 'addUsr'" @click="link = 'addUsr'"
-                        active-class="current" to="/panel/addUser" exact>
+                    <q-item clickable v-ripple :active="link === 'registration'" @click="link = 'registration'"
+                        active-class="current" to="/panel/registration" exact>
                         <q-item-section avatar>
                             <q-icon name="person_add" />
                         </q-item-section>

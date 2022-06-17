@@ -238,6 +238,47 @@
                                     {{ field.isMandatory == null ? 'N/A' : (field.isMandatory ? 'TRUE' : 'FALSE') }}
                                 </q-btn>
                             </q-item>
+                            <!-- <q-item class="add-field">
+                                <div class="cursor-pointer row items-center">
+                                    <q-icon name="add" color="" class="text-center q-pr-sm" />
+                                    <div class="text-italic">
+                                        {{ newKey ? newKey : 'NEW FIELD KEY' }}
+                                    </div>
+                                    <q-popup-edit v-model="newKey" :cover="false" :offset="[0, 10]" v-slot="scope">
+                                        <q-input
+                                            type="text"
+                                            v-model="scope.value"
+                                            dense
+                                            autofocus
+                                            @keyup.enter="scope.set"
+                                        >
+                                            <template v-slot:prepend>
+                                                <q-icon
+                                                    name="text_fields"
+                                                />
+                                            </template>
+                                        </q-input>
+                                    </q-popup-edit>
+                                </div>
+                                <div class="cursor-pointer">
+                                    <div class="text-italic">{{ newVal ? newVal : 'NEW FIELD VALUE' }}</div>
+                                    <q-popup-edit v-model="newVal" :cover="false" :offset="[0, 10]" v-slot="scope">
+                                        <q-input
+                                            type="text"
+                                            v-model="scope.value"
+                                            dense
+                                            autofocus
+                                            @keyup.enter="scope.set"
+                                        >
+                                            <template v-slot:prepend>
+                                                <q-icon
+                                                    name="text_fields"
+                                                />
+                                            </template>
+                                        </q-input>
+                                    </q-popup-edit>
+                                </div>
+                            </q-item> -->
                         </q-list>
                     </q-card-section>
                 </q-card>
@@ -345,20 +386,22 @@ export default defineComponent({
             name: '',
             description: '',
             tag: '',
+            newKey: '',
+            newVal: '',
         };
     },
     async setup() {
         const contentStore = ContentStore();
 
-        contentStore.$subscribe(async (mutation, state) => {
-            console.log(mutation, mutation.events.target, state);
-            await axios.patch(
-                `http://127.0.0.1:3000/contentType/${mutation.events.target.id}`,
-                {
-                    [mutation.events.key]: mutation.events.newValue,
-                },
-            );
-        }, { detached: true });
+        // contentStore.$subscribe(async (mutation, state) => {
+        //     console.log(mutation, mutation.events, state);
+        //     await axios.patch(
+        //         `http://127.0.0.1:3000/contentType/${mutation.events.target.id}`,
+        //         {
+        //             [mutation.events.key]: mutation.events.newValue,
+        //         },
+        //     );
+        // }, { detached: true });
 
         if (!contentStore.typeList.length) {
             // eslint-disable-next-line
@@ -406,6 +449,9 @@ export default defineComponent({
         justify-content: space-between
         align-items: center
         text-align: right
+
+    // .add-field
+    //     background: rgb(80, 80, 80)
 
     .q-item:nth-of-type(2n)
         background: rgb(40, 40, 40)
