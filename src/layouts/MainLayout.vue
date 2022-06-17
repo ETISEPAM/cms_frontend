@@ -31,7 +31,7 @@
                     <q-item clickable v-ripple :active="link === 'type'" @click="link = 'type'"
                         active-class="current" to="/panel/type" exact>
                         <q-item-section avatar>
-                            <q-icon name="add" />
+                            <q-icon name="content_copy" />
                         </q-item-section>
 
                         <q-item-section>Content Types</q-item-section>
@@ -40,7 +40,7 @@
                     <q-item clickable v-ripple :active="link === 'content'" @click="link = 'content'" active-class="current"
                         to="/panel/content" exact>
                         <q-item-section avatar>
-                            <q-icon name="format_list_bulleted" />
+                            <q-icon name="notes" />
                         </q-item-section>
 
                         <q-item-section>Contents</q-item-section>

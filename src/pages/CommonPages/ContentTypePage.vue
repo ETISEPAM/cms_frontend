@@ -118,9 +118,7 @@ export default defineComponent({
 
 <style lang="sass" scoped>
 .page
-    height: 100%
     margin: 0
-
     .q-card
         background-color: inherit
 
