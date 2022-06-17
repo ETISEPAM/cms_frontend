@@ -19,7 +19,8 @@
                                 </div>
                                 <div class="col-12 row justify-evenly items-center">
                                     <div>
-                                        If the issue persists, contact support at <span class="phone">+90 507 279 19 19</span>
+                                        If the issue persists, contact support at <span class="phone">+90 507 279 19
+                                            19</span>
                                     </div>
                                     <q-card-actions align="right">
                                         <q-btn label="CONFIRM" color="teal" v-close-popup />
@@ -92,8 +93,20 @@ export default defineComponent({
                     firstName: response.data[0].firstName,
                     lastName: response.data[0].lastName,
                     jwToken: response.data[0].jwToken,
+                    email: response.data[0].email,
+                    password: response.data[0].password,
                 };
-                this.$router.push({ path: '/panel' });
+                if (response.data[0].firstLogin === true) {
+                    axios.patch(
+                        `http://127.0.0.1:3000/user/${response.data[0].id}`,
+                        {
+                            firstLogin: false,
+                        },
+                    );
+                    this.$router.push({ path: '/panel/changePassword' });
+                } else {
+                    this.$router.push({ path: '/panel' });
+                }
             } else {
                 this.invalid = true;
             }

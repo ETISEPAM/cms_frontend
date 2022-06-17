@@ -5,10 +5,11 @@
                 <q-form class="q-gutter-lg flex column justify-around" action="/panel">
                     <div>
                         <q-input label="Current Password" type="password" v-model="currentPassword"
-                            :rules="[val => !!val || 'Field is required']" />
+                            :rules="[!val ? 'Field is req' : (matches ? '' : 'Password is incorrect.')]"
+                            @update:modelValue="matches = matchCurrPassword()" />
                         <q-input label="New Password" type="password" v-model="password" @input="checkPassword"
                             @update:modelValue="checkPassword" :rules="[val => !!val || 'Field is required']" />
-                        <div class="input_container">
+                        <div class="input_container q-pt-xl">
                             <ul>
                                 <li v-bind:class="{ is_valid: contains_eight_characters }">8 Characters</li>
                                 <li v-bind:class="{ is_valid: contains_number }">Contains Number</li>
@@ -17,11 +18,12 @@
                                 </li>
                             </ul>
                         </div>
-                        <q-input label="Confirm New Password" type="password" v-model="newPasswordConf"
+                        <q-input label="Confirm New Password" type="password" @input="matchPassword"
+                            @update:modelValue="matchPassword" v-model="newPasswordConf"
                             :rules="[val => !!val || 'Field is required']" />
                     </div>
                     <div class="row justify-end">
-                        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm"></q-btn>
+                        <q-btn label="Reset" @click="onReset" color="primary" flat class="q-ml-sm"></q-btn>
                         <q-btn label="Change" type="submit" color="primary"></q-btn>
                     </div>
                 </q-form>
@@ -32,13 +34,20 @@
 
 <script>
 import { defineComponent } from 'vue';
+import { userStore } from 'stores/user-store.js';
 
 export default defineComponent({
-    name: 'AddUserPage',
+    name: 'ChangeTempPassword',
 
     data() {
         return {
+            user: userStore(),
+            currentPassword: '',
             password: '',
+            matches: false,
+            matchError: false,
+            matchError1: false,
+            newPasswordConf: '',
             password_length: 0,
             contains_eight_characters: false,
             contains_number: false,
@@ -74,6 +83,19 @@ export default defineComponent({
                 this.valid_password = false;
             }
         },
+        matchPassword() {
+            if (this.newPasswordConf !== this.password) {
+                this.matchError = 'Passwords do not match';
+            }
+        },
+        matchCurrPassword() {
+            return this.currentPassword === this.user.password;
+        },
+        onReset() {
+            this.password = '';
+            this.newPasswordConf = '';
+            this.currentPassword = '';
+        },
     },
 });
 </script>
@@ -90,7 +112,6 @@ export default defineComponent({
     box-sizing: inherit
 
 body
-    font-family: 'Open Sans', sans-serif
     display: flex
     justify-content: center
     align-items: center
@@ -111,7 +132,7 @@ ul
 
 li
     margin-bottom: 8px
-    color: #525f7f
+    color: #FFFFFF
     position: relative
 
 li:before
@@ -127,9 +148,9 @@ li:before
 
 .input_container
     position: relative
-    padding: 30px
+    padding: 5px
     border-radius: 6px
-    background: #FFF
+    background: #272727
 
 input[type="password"]
     line-height: 1.5
