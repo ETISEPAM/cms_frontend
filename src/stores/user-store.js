@@ -5,6 +5,10 @@ export const userStore = defineStore('user', {
         id: 0,
         firstName: '',
         lastName: '',
+        userName: '',
+        email: '',
+        password: '',
+        firstLogin: true,
         jwToken: '',
     }),
 });
