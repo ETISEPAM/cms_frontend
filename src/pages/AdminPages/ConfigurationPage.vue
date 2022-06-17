@@ -38,14 +38,14 @@
                     <div class="q-pa-md q-gutter-y-lg column justify-center">
                         <div class="text-h4 q-py-md">Profile Settings</div>
                         <div class="text-h6 q-py-md">Change your profile settings here</div>
-                        <q-input class="inpField" filled v-model="user.firstName" label="Change Your Name"
+                        <q-input class="inpField" filled v-model="firstName" stack-label label="Change Your Name"
                             :placeholder="user.firstName"></q-input>
-                        <q-input class="inpField" filled v-model="user.lastName" label="Change Your Surname"
+                        <q-input class="inpField" filled v-model="lastName" stack-label label="Change Your Surname"
                             :placeholder="user.lastName"></q-input>
                         <div class="q-pa-md q-gutter-y-sm row justify-between">
                             <q-btn label="Change Your Password" type="submit" color="primary"
                                 @click="this.$router.push('changePassword')"></q-btn>
-                            <q-btn label="Save" type="submit" color="primary"></q-btn>
+                            <q-btn label="Save" @click="updateProfile" color="primary"></q-btn>
                         </div>
                         <!-- <div class="row justify-end">
                             <q-btn label="Save" type="submit" color="primary"></q-btn>
@@ -61,6 +61,7 @@
 import { ref, defineComponent, watch } from 'vue';
 import { useQuasar } from 'quasar';
 import { userStore } from 'stores/user-store.js';
+import axios from 'axios';
 
 export default defineComponent({
     name: 'ConfigurationPage',
@@ -72,6 +73,12 @@ export default defineComponent({
             user: userStore(),
         };
     },
+    data() {
+        return {
+            firstName: this.user.firstName,
+            lastName: this.user.lastName,
+        };
+    },
     methods: {
         lightModeOn() {
             const $q = useQuasar();
@@ -79,6 +86,16 @@ export default defineComponent({
             watch(() => $q.dark.isActive, (val) => {
                 console.log(val ? 'On dark mode' : 'On light mode');
             });
+        },
+        async updateProfile() {
+            axios.patch(
+
+                `http://127.0.0.1:3000/user/${this.user.id}`,
+                {
+                    firstName: this.firstName,
+                    lastName: this.lastName,
+                },
+            );
         },
     },
 });
