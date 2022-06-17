@@ -11,6 +11,22 @@
                         <q-input label="Email" v-model="email" :rules="[val => !!val || 'Field is required']" />
                         <q-input label="Password" type="password" v-model="password"
                             :rules="[val => !!val || 'Field is required']" />
+                        <q-dialog v-model="invalid" class="dialog">
+                            <q-card class="row content-between q-pa-md">
+                                <div class="col-12 row">
+                                    <q-icon name="error" class="flex self-center q-pr-md" />
+                                    The information you've entered is incorrect, please try again.
+                                </div>
+                                <div class="col-12 row justify-evenly items-center">
+                                    <div>
+                                        If the issue persists, contact support at <span class="phone">+90 507 279 19 19</span>
+                                    </div>
+                                    <q-card-actions align="right">
+                                        <q-btn label="CONFIRM" color="teal" v-close-popup />
+                                    </q-card-actions>
+                                </div>
+                            </q-card>
+                        </q-dialog>
                     </div>
                     <div class="button flex justify-end">
                         <q-btn color="primary" label="Login" rounded v-on:click="login"></q-btn>
@@ -24,11 +40,17 @@
 <script>
 import axios from 'axios';
 import { userStore } from 'stores/user-store.js';
+import { defineComponent, ref } from 'vue';
 
 const user = userStore();
 
-export default {
+export default defineComponent({
     name: 'LoginPage',
+    setup() {
+        return {
+            invalid: ref(false),
+        };
+    },
     data() {
         return {
             email: '',
@@ -53,11 +75,16 @@ export default {
             // --- CODE BELOW USES MOCK DATABASE ---
             // POST LOGIN FORM INPUT AND NAVIGATE TO HOMEPAGE IF VALID
 
-            const response = await axios
-                .get('http://127.0.0.1:3000/user', { param: { email: this.email, password: this.password } })
-                .catch((err) => {
-                    console.log(err);
-                });
+            const response = await axios({
+                method: 'get',
+                url: 'http://127.0.0.1:3000/user',
+                params: {
+                    email: this.email,
+                    password: this.password,
+                },
+            }).catch((err) => {
+                console.log(err);
+            });
 
             if (response.data.length) {
                 user.$state = {
@@ -68,13 +95,19 @@ export default {
                 };
                 this.$router.push({ path: '/panel' });
             } else {
-                alert('invalid');
+                this.invalid = true;
             }
         },
     },
-};
+});
 
 </script>
 
 <style lang="sass" scoped>
+.q-card
+    min-height: 15%
+
+    .phone
+        color: $primary
+        text-decoration: underline
 </style>

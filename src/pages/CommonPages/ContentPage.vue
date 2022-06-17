@@ -54,7 +54,7 @@
                             </template> -->
 
                             <q-carousel-slide name="landing-form">
-                                <q-form class="row q-gutter-lg q-pr-sm">
+                                <q-form class="row q-gutter-lg q-pr-sm q-pb-md">
                                     <div class="col-12 row">
 
                                         <!-- DROPDOWN AUTOCOMPLETE SELECTION MENU -->
@@ -90,74 +90,95 @@
                                     </div>
 
                                     <div v-if="content.typeId" class="col row wrap justify-center q-gutter-md">
-                                        <q-field
-                                            v-for="field in typeArray.find((type) => type.id === content.typeId).fields"
+                                        <div
+                                            v-for="field in contentStore.typeList.find((type) => type.id === content.typeId).fields"
                                             :key="field.id"
-                                            :label="field.label"
-                                            stack-label
-                                            filled
-                                            clearable
                                             class="col-11 col-md-5 col-lg-4"
                                         >
-                                            <!--
-                                                DYNAMIC FORM GENERATED BELOW BASED ON FIELD DATA TYPE
-                                            -->
-
-                                            <template v-if="field.dataType === 'String'" v-slot:before>
-                                                    <q-icon name="text_fields" />
-                                            </template>
-                                            <template v-else-if="field.dataType === 'Number'" v-slot:before>
-                                                    <q-icon name="numbers" />
-                                            </template>
-                                            <template v-else-if="field.dataType === 'Boolean'" v-slot:before>
-                                                    <q-icon name="toggle_off" />
-                                            </template>
-                                            <template v-else-if="field.dataType === 'Date'" v-slot:before>
-                                                    <q-icon name="calendar_today" />
-                                            </template>
-                                            <template v-else-if="field.dataType === 'File'" v-slot:before>
-                                                    <q-icon name="upload_file" />
-                                            </template>
-                                            <template v-if="field.dataType === 'String'" v-slot:control>
-                                                <div class="self-center full-width no-outline">String field</div>
-                                            </template>
-                                            <template v-else-if="field.dataType === 'Number'" v-slot:control>
-                                                <div class="self-center full-width no-outline">Integer field</div>
-                                            </template>
-                                            <template v-else-if="field.dataType === 'Boolean'" v-slot:control>
-                                                <q-btn-toggle
-                                                    v-model="content.bool"
-                                                    toggle-color="teal"
-                                                    :options="[
-                                                        {label: 'Yes', value: true},
-                                                        {label: 'No', value: false},
-                                                    ]"
+                                            <div v-if="field.dataType === 'String'">
+                                                <q-input
+                                                    v-model="content.input[field.label]"
+                                                    :label="field.label"
+                                                    type="text"
                                                     clearable
-                                                    unelevated
-                                                    dense
-                                                    flat
-                                                    size="md"
-                                                />
-                                            </template>
-                                            <template v-else-if="field.dataType === 'Date'" v-slot:control>
-                                                <div class="text-overline">{{ content.date }}</div>
-                                                <q-popup-proxy transition-show="scale" transition-hide="scale" :breakpoint="800">
-                                                    <q-date v-model="content.date" />
-                                                </q-popup-proxy>
-                                            </template>
-                                            <template v-else-if="field.dataType === 'File'" v-slot:control>
+                                                    filled
+                                                >
+                                                    <template v-slot:before>
+                                                        <q-icon name="text_fields" />
+                                                    </template>
+                                                </q-input>
+                                            </div>
+                                            <div v-else-if="field.dataType === 'Number'">
+                                                <q-input
+                                                    v-model="content.input[field.label]"
+                                                    :label="field.label"
+                                                    type="number"
+                                                    clearable
+                                                    filled
+                                                >
+                                                    <template v-slot:before>
+                                                        <q-icon name="numbers" />
+                                                    </template>
+                                                </q-input>
+                                            </div>
+                                            <div v-else-if="field.dataType === 'Boolean'">
+                                                <q-field
+                                                    filled
+                                                >
+                                                    <template v-slot:before>
+                                                        <q-icon name="toggle_off" />
+                                                    </template>
+                                                    <template v-slot:prepend>
+                                                        <div class="text-caption">{{ field.label }}</div>
+                                                    </template>
+                                                    <q-btn-toggle
+                                                        v-model="content.input[field.label]"
+                                                        color="teal"
+                                                        toggle-color="primary"
+                                                        flat
+                                                        :options="[
+                                                            {label: 'YES', value: true},
+                                                            {label: 'NO', value: false},
+                                                        ]"
+                                                        spread
+                                                    />
+                                                </q-field>
+                                            </div>
+                                            <div v-else-if="field.dataType === 'Date'">
+                                                <q-input
+                                                    v-model="content.input[field.label]"
+                                                    :label="field.label"
+                                                    clearable
+                                                    filled
+                                                >
+                                                    <template v-slot:before>
+                                                        <q-icon name="calendar_today" />
+                                                    </template>
+                                                    <q-popup-proxy transition-show="scale" transition-hide="scale" :breakpoint="800">
+                                                        <q-date
+                                                            v-model="content.input[field.label]"
+                                                        />
+                                                    </q-popup-proxy>
+                                                </q-input>
+                                            </div>
+                                            <div v-else-if="field.dataType === 'File'">
                                                 <q-file
-                                                    v-model="file"
-                                                    label="Select file"
-                                                    padding="md"
-                                                />
-                                            </template>
-                                        </q-field>
+                                                    v-model="content.input[field.label]"
+                                                    :label="field.label"
+                                                    clearable
+                                                    filled
+                                                >,
+                                                    <template v-slot:before>
+                                                        <q-icon name="upload_file" />
+                                                    </template>
+                                                </q-file>
+                                            </div>
+                                        </div>
                                     </div>
                                 </q-form>
                             </q-carousel-slide>
                             <q-carousel-slide name="options-form" class="row wrap justify-end items-center q-pa-none">
-                                <q-form class="col-12 column no-wrap justify-center self-end q-gutter-sm">
+                                <q-form class="col-12 column no-wrap justify-center self-end q-gutter-sm text-right">
                                     <q-checkbox v-model="content.isPublished" label="Publish" color="teal" left-label />
                                     <q-checkbox v-model="content.dpAuthor" label="Display author information" color="teal" left-label />
                                     <q-checkbox v-model="content.dpDate" label="Display date information" color="teal" left-label />
@@ -175,11 +196,10 @@
 </template>
 
 <script>
+import axios from 'axios';
 import { defineComponent, ref } from 'vue';
 import { ContentStore } from 'stores/content-store.js';
 import ListItems from 'components/ListItems.vue';
-
-const contentStore = ContentStore();
 
 export default defineComponent({
     name: 'ContentPage',
@@ -188,17 +208,20 @@ export default defineComponent({
     },
     data() {
         return {
-            content: {
+            content: {                      // CONTENT DEFAULT VALUES (WILL BE UPDATED)
                 typeId: 0,
-                date: '2022/01/01',         // CONTENT DEFAULT VALUES (WILL BE UPDATED)
-                bool: false,
+                input: {},
                 isPublished: false,
                 dpAuthor: false,
                 dpDate: false,
+                tag: 'default tag',
             },
+            contentStore: ContentStore(),
         };
     },
     setup() {
+        const contentStore = ContentStore();
+
         const options = ref(
             contentStore.typeList.map((type) => {
                 const option = {
@@ -216,7 +239,6 @@ export default defineComponent({
             tab: ref('list'),                   // INITIAL TAB IN PAGE
             model,
             options,
-            typeArray: contentStore.typeList,
             filter(val, update) {
                 update(() => {
                     options.value = contentStore.typeList
@@ -233,14 +255,48 @@ export default defineComponent({
             },
         };
     },
+    methods: {
+        create() {
+            axios
+                .post(
+                    'http://127.0.0.1:3000/content',
+                    {
+                        typeId: this.content.typeId,
+                        contents: this.content.input,
+                        isPublished: this.content.isPublished,
+                        showAuthor: this.content.dpAuthor,
+                        showDate: this.content.dpDate,
+                        tag: this.content.tag,
+                    },
+                )
+                .then((response) => {
+                    console.log(response.data);
+                    this.contentStore.$patch({ contentList: [...this.contentStore.contentList, response.data] });
+                })
+                .catch((err) => {
+                    console.log(err.response.data);
+                });
+
+            this.content.typeId = 0;
+            this.content.input = {};
+            this.content.isPublished = false;
+            this.content.dpAuthor = false;
+            this.content.dpDate = false;
+        },
+    },
 });
 </script>
 
 <style lang="sass" scoped>
 .page
-    height: 100%
     margin: 0
+
+    .q-card
+        background-color: inherit
 
     .q-tab-panel
         padding: 0
+
+        .q-placeholder
+            max-width: 0
 </style>

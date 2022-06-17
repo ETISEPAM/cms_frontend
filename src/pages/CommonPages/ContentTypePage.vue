@@ -7,7 +7,6 @@
                     <q-tab name="create" label="Create" class="col"></q-tab>
                 </div>
             </q-tabs>
-
             <q-tab-panels v-model="tab" animated class="q-pt-xs inset-shadow">
                 <q-tab-panel name="list">
                     <Suspense>
@@ -119,9 +118,7 @@ export default defineComponent({
 
 <style lang="sass" scoped>
 .page
-    height: 100%
     margin: 0
-
     .q-card
         background-color: inherit
 
