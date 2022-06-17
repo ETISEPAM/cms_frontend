@@ -45,7 +45,7 @@
                         <div class="q-pa-md q-gutter-y-sm row justify-between">
                             <q-btn label="Change Your Password" type="submit" color="primary"
                                 @click="this.$router.push('newpassword')"></q-btn>
-                            <q-btn label="Save" type="submit" color="primary"></q-btn>
+                            <q-btn label="Save" @click="updateProfile" color="primary"></q-btn>
                         </div>
                         <!-- <div class="row justify-end">
                             <q-btn label="Save" type="submit" color="primary"></q-btn>
