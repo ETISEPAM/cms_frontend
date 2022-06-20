@@ -208,7 +208,7 @@ export default defineComponent({
     },
     data() {
         return {
-            content: {                      // CONTENT DEFAULT VALUES (WILL BE UPDATED)
+            content: {
                 typeId: 0,
                 input: {},
                 isPublished: false,
