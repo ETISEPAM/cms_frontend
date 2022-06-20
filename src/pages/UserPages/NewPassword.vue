@@ -5,8 +5,8 @@
                 <q-form class="q-gutter-lg flex column justify-around" action="/panel">
                     <div>
                         <q-input label="Current Password" type="password" v-model="currentPassword"
-                            :rules="[!val ? 'Field is req' : (matches ? '' : 'Password is incorrect.')]"
-                            @update:modelValue="matches = matchCurrPassword()" />
+                            @input="matchCurrPassword" @update:modelValue="matchCurrPassword"
+                            :rules="[passwordsMatchesOld ? '' : 'Please enter correct password']" />
                         <q-input label="New Password" type="password" v-model="password" @input="checkPassword"
                             @update:modelValue="checkPassword" :rules="[val => !!val || 'Field is required']" />
                         <div class="input_container q-pt-xl">
@@ -18,13 +18,14 @@
                                 </li>
                             </ul>
                         </div>
-                        <q-input label="Confirm New Password" type="password" @input="matchPassword"
-                            @update:modelValue="matchPassword" v-model="newPasswordConf"
+                        <q-input label="Confirm New Password" type="password" v-model="newPasswordConf"
+                            @input="matchPassword" @update:modelValue="matchPassword"
                             :rules="[val => !!val || 'Field is required']" />
                     </div>
                     <div class="row justify-end">
                         <q-btn label="Reset" @click="onReset" color="primary" flat class="q-ml-sm"></q-btn>
-                        <q-btn label="Change" color="primary" to="/panel"></q-btn>
+                        <q-btn label="Change" color="primary" @click="updatePassword">
+                        </q-btn>
                     </div>
                 </q-form>
             </q-card-section>
@@ -35,6 +36,7 @@
 <script>
 import { defineComponent } from 'vue';
 import { userStore } from 'stores/user-store.js';
+import axios from 'axios';
 
 export default defineComponent({
     name: 'NewPassword',
@@ -44,16 +46,15 @@ export default defineComponent({
             user: userStore(),
             currentPassword: '',
             password: '',
-            matches: false,
-            matchError: false,
-            matchError1: false,
+            passwordsMatchesOld: false,
+            passwordsMatchesNew: false,
             newPasswordConf: '',
             password_length: 0,
             contains_eight_characters: false,
             contains_number: false,
             contains_uppercase: false,
             contains_special_character: false,
-            valid_password: false,
+            validPassword: false,
         };
     },
     methods: {
@@ -78,23 +79,47 @@ export default defineComponent({
                 && this.contains_special_character === true
                 && this.contains_uppercase === true
                 && this.contains_number === true) {
-                this.valid_password = true;
+                this.validPassword = true;
             } else {
-                this.valid_password = false;
+                this.validPassword = false;
             }
         },
         matchPassword() {
-            if (this.newPasswordConf !== this.password) {
-                this.matchError = 'Passwords do not match';
+            if (this.newPasswordConf === this.password) {
+                this.passwordsMatchesNew = true;
+                console.log(this.passwordsMatchesNew);
+            } else {
+                this.passwordsMatchesNew = false;
+                console.log(this.passwordsMatchesNew);
             }
         },
         matchCurrPassword() {
-            return this.currentPassword === this.user.password;
+            if (this.currentPassword === this.user.password) {
+                this.passwordsMatchesOld = true;
+                console.log(this.passwordsMatchesOld);
+            } else {
+                this.passwordsMatchesOld = false;
+                console.log(this.passwordsMatchesOld);
+            }
         },
         onReset() {
             this.password = '';
             this.newPasswordConf = '';
             this.currentPassword = '';
+        },
+        async updatePassword() {
+            console.log(this.validPassword);
+            console.log(this.passwordsMatchesNew);
+            console.log(this.passwordsMatchesOld);
+            if (this.validPassword === true && this.passwordsMatchesNew === true && this.passwordsMatchesOld === true) {
+                console.log('patch');
+                axios.patch(
+                    `http://127.0.0.1:3000/user/${this.user.id}`,
+                    {
+                        password: this.newPasswordConf,
+                    },
+                );
+            }
         },
     },
 });
