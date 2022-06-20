@@ -28,10 +28,10 @@ const routes = [
         ],
     },
     {
-        path: '/panel/addUser',
+        path: '/panel/registration',
         component: () => import('layouts/MainLayout.vue'),
         children: [
-            { path: '', component: () => import('src/pages/AdminPages/AddUserPage.vue') },
+            { path: '', component: () => import('src/pages/AdminPages/RegistrationPage.vue') },
         ],
     },
     {
@@ -42,10 +42,10 @@ const routes = [
         ],
     },
     {
-        path: '/panel/changePassword',
+        path: '/panel/newpassword',
         component: () => import('layouts/BlankLayout.vue'),
         children: [
-            { path: '', component: () => import('src/pages/UserPages/ChangeTempPassword.vue') },
+            { path: '', component: () => import('src/pages/UserPages/NewPassword.vue') },
         ],
     },
     {

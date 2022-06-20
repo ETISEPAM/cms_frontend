@@ -10,7 +10,7 @@ import { userStore } from 'stores/user-store.js';
 
 export default defineComponent({
     name: 'AdminHomePage',
-    setup() {
+    data() {
         return {
             user: userStore(),
         };
