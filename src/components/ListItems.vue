@@ -35,7 +35,12 @@
                                     filled
                                     autofocus
                                     :placeholder="type.name"
-                                    @keyup.enter="type.name = name; name = '';"
+                                    @keyup.enter="
+                                        type.name = (name ? name : type.name);
+                                        type.description = (description ? description : type.description);
+                                        name = '';
+                                        description = '';
+                                    "
                                 >
                                     <template v-slot:prepend>
                                         <q-icon
@@ -51,7 +56,12 @@
                                     v-model="description"
                                     filled
                                     :placeholder="type.description"
-                                    @keyup.enter="type.description = description; description = '';"
+                                    @keyup.enter="
+                                        type.name = (name ? name : type.name);
+                                        type.description = (description ? description : type.description);
+                                        name = '';
+                                        description = '';
+                                    "
                                 >
                                     <template v-slot:prepend>
                                         <q-icon
@@ -167,16 +177,21 @@
                                     </q-popup-edit>
                                 </div>
                             </q-item>
-                            <q-item>
+                            <q-item v-if="field.dataType !== 'File'">
                                 <div class="row items-center">
                                     <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
                                     <span>Default value:</span>
                                 </div>
                                 <div class="cursor-pointer">
-                                    {{ field.default ? field.default : 'N/A' }}
+                                    {{ field.default }}
                                     <q-popup-edit v-model="field.default" :cover="false" :offset="[0, 10]" v-slot="scope">
                                         <q-input
-                                            :type="field.dataType === 'Date' ? 'date' : 'number'"
+                                            v-if="field.dataType !== 'Boolean'"
+                                            :type="
+                                                field.dataType === 'Date' ? 'date' :
+                                                    (field.dataType === 'String' || field.dataType === 'Boolean' ? 'text' : 'number')
+
+                                            "
                                             color="teal"
                                             v-model="scope.value"
                                             dense
@@ -185,18 +200,47 @@
                                         >
                                             <template v-slot:prepend>
                                                 <q-icon
-                                                    :name="field.dataType === 'Date' ? 'calendar_today' : 'numbers'"
+                                                    :name="
+                                                        field.dataType === 'Date' ? 'calendar_today' :
+                                                            (field.dataType === 'String' || field.dataType === 'Boolean' ? 'text_fields' :
+                                                                'numbers')
+
+                                                    "
                                                     color="teal"
                                                 />
                                             </template>
                                         </q-input>
+
+                                        <q-select
+                                            v-else
+                                            filled
+                                            clearable
+                                            v-model="field.default"
+                                            use-input
+                                            hide-selected
+                                            fill-input
+                                            dense
+                                            options-dense
+                                            input-debounce="0"
+                                            :options="boolOptions"
+                                            label="Default value"
+                                            emit-value
+                                            map-options
+                                            class="col-12 col-sm-6 col-md-4 col-lg-3"
+                                        >
+                                        </q-select>
                                     </q-popup-edit>
                                 </div>
                             </q-item>
-                            <q-item>
+                            <q-item v-if="field.dataType !== 'Boolean'">
                                 <div class="row items-center">
                                     <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
-                                    <span>Minimum value:</span>
+                                    <span>
+                                        {{
+                                            field.dataType == 'String' ? 'Minimum length:' :
+                                                (field.dataType === 'File' ? 'Minimum required:' : 'Minimum value:')
+                                        }}
+                                    </span>
                                 </div>
                                 <div class="cursor-pointer">
                                     {{ field.minVal ? field.minVal : 'N/A' }}
@@ -219,13 +263,18 @@
                                     </q-popup-edit>
                                 </div>
                             </q-item>
-                            <q-item>
+                            <q-item v-if="field.dataType !== 'Boolean'">
                                 <div class="row items-center">
                                     <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
-                                    <span>Maximum value:</span>
+                                    <span>
+                                        {{
+                                            field.dataType === 'String' ? 'Maximum length:' :
+                                                (field.dataType === 'File' ? 'Maximum allowed:' : 'Maximum value:')
+                                        }}
+                                    </span>
                                 </div>
                                 <div class="cursor-pointer">
-                                    {{ field.maxVal ? field.maxVal : 'N/A' }}
+                                    {{ field.maxVal }}
                                     <q-popup-edit v-model="field.maxVal" :cover="false" :offset="[0, 10]" v-slot="scope">
                                         <q-input
                                             :type="field.dataType === 'Date' ? 'date' : 'number'"
@@ -251,11 +300,10 @@
                                     <span>Is mandatory:</span>
                                 </div>
                                 <q-btn
-                                    flat
-                                    dense
-                                    class="q-pa-none"
+                                    color="teal"
+                                    v-on:click="field.isMandatory = !field.isMandatory"
                                 >
-                                    {{ field.isMandatory == null ? 'N/A' : (field.isMandatory ? 'TRUE' : 'FALSE') }}
+                                    {{ field.isMandatory }}
                                 </q-btn>
                             </q-item>
                         </q-list>
@@ -298,7 +346,7 @@
                                     v-model="tag"
                                     filled
                                     :placeholder="content.tag"
-                                    @keyup.enter="content.tag = tag; tag = '';"
+                                    @keyup.enter="content.tag = (tag ? tag : content.tag); tag = '';"
                                 >
                                     <template v-slot:prepend>
                                         <q-icon
@@ -316,26 +364,44 @@
             <q-card>
                 <q-card-section>
                     <q-list class="fields no-border">
-                        <q-item v-for="key in Object.keys(content.contents)" :key="key">
+                        <q-item v-for="field in content.contents" :key="field.id">
                             <div class="row items-center">
                                 <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
-                                <span>{{ key }}</span>
+                                <span>{{ field.label }}</span>
                             </div>
                             <div class="cursor-pointer">
-                                {{ content.contents[key] }}
-                                <q-popup-edit v-model="content.contents[key]" :cover="false" :offset="[0, 10]" v-slot="scope">
+                                {{ field.value }}
+                                <q-popup-edit v-model="field.value" :cover="false" :offset="[0, 10]" v-slot="scope">
                                     <q-input
-                                        type="text"
+                                        :type="field.dataType === 'Number' ? 'number' :
+                                            (field.dataType === 'Date' ? 'date' :
+                                                (field.dataType === 'File' ? 'file' : 'text'))"
+                                        :clickable="field.dataType === 'Boolean'"
+                                        :readonly="field.dataType ==='Boolean'"
                                         color="teal"
                                         v-model="scope.value"
                                         dense
                                         autofocus
+                                        :autogrow="field.dataType === 'String'"
                                         @keyup.enter="scope.set"
                                     >
                                         <template v-slot:prepend>
                                             <q-icon
-                                                name="text_fields"
+                                                :name="
+                                                    field.dataType === 'String' ? 'text_fields' :
+                                                        (field.dataType === 'Number' ? 'numbers' :
+                                                            (field.dataType === 'Boolean' ? 'toggle_off' :
+                                                                (field.dataType === 'Date' ? 'calendar_today' :
+                                                                    (field.dataType === 'File' ? 'upload_file' : ''))))"
                                                 color="teal"
+                                            />
+                                        </template>
+                                        <template v-if="field.dataType === 'Boolean'" v-slot:append>
+                                            <q-icon
+                                                name="arrow_circle_left"
+                                                color="teal"
+                                                class="cursor-pointer"
+                                                @click="scope.value = !scope.value; field.value = !field.value;"
                                             />
                                         </template>
                                     </q-input>
@@ -445,8 +511,19 @@ export default defineComponent({
             },
         ]);
         const options = ref(optionTemplate.value);
+        const boolOptions = [
+            {
+                label: 'True',
+                value: true,
+            },
+            {
+                label: 'False',
+                value: false,
+            },
+        ];
         return {
             options,
+            boolOptions,
             filter(val, update) {
                 update(() => {
                     options.value = optionTemplate.value
