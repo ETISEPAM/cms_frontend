@@ -67,10 +67,8 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import ListItems from 'components/ListItems.vue';
-import { ContentStore } from 'stores/content-store.js';
 import axios from 'axios';
-
-const contentStore = ContentStore();
+import { TypeStore } from 'stores/type-store';
 
 export default defineComponent({
     name: 'TypePage',
@@ -88,6 +86,7 @@ export default defineComponent({
                 name: '',               // CONTENT TYPE
                 description: '',
             },
+            typeStore: TypeStore(),
         };
     },
     methods: {
@@ -103,7 +102,7 @@ export default defineComponent({
                 )
                 .then((response) => {
                     console.log(response.data);
-                    contentStore.$patch({ typeList: [...contentStore.typeList, response.data] });   // UPDATE CONTENT STORE TYPE LIST
+                    this.typeStore.$patch({ list: [...this.typeStore.list, response.data] });   // UPDATE CONTENT STORE TYPE LIST
                 })                                                                                  // WITHOUT SENDING ANOTHER GET REQUEST
                 .catch((err) => {                                                                   // TO THE BACK-END
                     console.log(err.response.data);

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
 
-export const ContentStore = defineStore('content', {
+export const TypeStore = defineStore('type', {
     state: () => ({ list: [] }),
 });

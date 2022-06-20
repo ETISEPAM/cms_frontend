@@ -2,7 +2,7 @@
     <q-list v-if="page === 'contentTypePage'">
         <q-expansion-item
             group="typeExpand"
-            v-for="type in contentStore.typeList"
+            v-for="type in typeStore.list"
             :key="type.id"
             expand-icon-class="hidden"
             class="q-py-xs"
@@ -38,6 +38,7 @@
                                     @keyup.enter="
                                         type.name = (name ? name : type.name);
                                         type.description = (description ? description : type.description);
+                                        updateTypeHeader(type.id, type.name, type.description);
                                         name = '';
                                         description = '';
                                     "
@@ -59,6 +60,7 @@
                                     @keyup.enter="
                                         type.name = (name ? name : type.name);
                                         type.description = (description ? description : type.description);
+                                        updateTypeHeader(type.id, type.name, type.description);
                                         name = '';
                                         description = '';
                                     "
@@ -85,6 +87,12 @@
                 expand-separator
                 class="field-expand"
                 popup
+                @hide="
+                    if (fieldsChanged) {
+                        fieldsChanged = false;
+                        updateTypeFields(type.id, [...type.fields]);
+                    }
+                "
             >
                 <template v-slot:header>
                     <div class="col row items-center">
@@ -95,6 +103,8 @@
                                         (field.dataType === 'Boolean' ? 'toggle_off' :
                                             (field.dataType === 'Date' ? 'calendar_today' :
                                                 (field.dataType === 'File' ? 'upload_file' : ''))))"
+
+                            color="teal"
                         />
                         <q-item-section class="col q-pl-sm">
                             <q-item-label>{{ field.label }}</q-item-label>
@@ -119,7 +129,7 @@
                                             v-model="scope.value"
                                             dense
                                             autofocus
-                                            @keyup.enter="scope.set"
+                                            @keyup.enter="scope.set(); fieldsChanged = true;"
                                         >
                                             <template v-slot:prepend>
                                                 <q-icon
@@ -153,7 +163,7 @@
                                             label="Data Type"
                                             emit-value
                                             map-options
-                                            @update:model-value="field.dataType = newVal; newVal = '';"
+                                            @update:model-value="field.dataType = newVal; newVal = ''; fieldsChanged = true;"
                                             class="col-12 col-sm-6 col-md-4 col-lg-3"
                                             :placeholder="field.dataType"
                                         >
@@ -196,7 +206,7 @@
                                             v-model="scope.value"
                                             dense
                                             autofocus
-                                            @keyup.enter="scope.set"
+                                            @keyup.enter="scope.set(); fieldsChanged = true;"
                                         >
                                             <template v-slot:prepend>
                                                 <q-icon
@@ -226,6 +236,7 @@
                                             label="Default value"
                                             emit-value
                                             map-options
+                                            @update:model-value="fieldsChanged = true"
                                             class="col-12 col-sm-6 col-md-4 col-lg-3"
                                         >
                                         </q-select>
@@ -251,7 +262,7 @@
                                             v-model="scope.value"
                                             dense
                                             autofocus
-                                            @keyup.enter="scope.set"
+                                            @keyup.enter="scope.set(); fieldsChanged = true;"
                                         >
                                             <template v-slot:prepend>
                                                 <q-icon
@@ -282,7 +293,7 @@
                                             v-model="scope.value"
                                             dense
                                             autofocus
-                                            @keyup.enter="scope.set"
+                                            @keyup.enter="scope.set(); fieldsChanged = true;"
                                         >
                                             <template v-slot:prepend>
                                                 <q-icon
@@ -301,9 +312,21 @@
                                 </div>
                                 <q-btn
                                     color="teal"
-                                    v-on:click="field.isMandatory = !field.isMandatory"
+                                    v-on:click="field.isMandatory = !field.isMandatory; fieldsChanged = true;"
                                 >
                                     {{ field.isMandatory }}
+                                </q-btn>
+                            </q-item>
+                            <q-item>
+                                <div class="row items-center">
+                                    <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
+                                    <span>Is unique:</span>
+                                </div>
+                                <q-btn
+                                    color="teal"
+                                    v-on:click="field.isUnique = !field.isUnique; fieldsChanged = true;"
+                                >
+                                    {{ field.isUnique }}
                                 </q-btn>
                             </q-item>
                         </q-list>
@@ -315,13 +338,19 @@
     <q-list v-else-if="page === 'contentPage'">
         <q-expansion-item
             group="contentExpand"
-            v-for="content in contentStore.contentList"
+            v-for="content in contentStore.list"
             :key="content.id"
             expand-icon-class="hidden"
             class="q-py-xs"
             clickable
             ripple
             expand-separator
+            @hide="
+                if (contentsChanged) {
+                    contentsChanged = false;
+                    updateContents(content.id, [...content.contents]);
+                }
+            "
         >
             <template v-slot:header>
                 <q-item-section avatar class="q-pl-sm">
@@ -331,7 +360,7 @@
                 </q-item-section>
 
                 <q-item-section>
-                    <q-item-label>{{ contentStore.typeList.find((type) => type.id === content.typeId).name }}</q-item-label>
+                    <q-item-label>{{ typeStore.list.find((type) => type.id === content.typeId).name }}</q-item-label>
                     <q-item-label caption lines="1">{{ content.tag }}</q-item-label>
                 </q-item-section>
 
@@ -346,7 +375,11 @@
                                     v-model="tag"
                                     filled
                                     :placeholder="content.tag"
-                                    @keyup.enter="content.tag = (tag ? tag : content.tag); tag = '';"
+                                    @keyup.enter="
+                                        content.tag = (tag ? tag : content.tag);
+                                        updateContentHeader(content.id, content.tag);
+                                        tag = '';
+                                    "
                                 >
                                     <template v-slot:prepend>
                                         <q-icon
@@ -382,8 +415,7 @@
                                         v-model="scope.value"
                                         dense
                                         autofocus
-                                        :autogrow="field.dataType === 'String'"
-                                        @keyup.enter="scope.set"
+                                        @keyup.enter="scope.set(); contentsChanged = true;"
                                     >
                                         <template v-slot:prepend>
                                             <q-icon
@@ -401,7 +433,7 @@
                                                 name="arrow_circle_left"
                                                 color="teal"
                                                 class="cursor-pointer"
-                                                @click="scope.value = !scope.value; field.value = !field.value;"
+                                                @click="scope.value = !scope.value; field.value = !field.value; contentsChanged = true;"
                                             />
                                         </template>
                                     </q-input>
@@ -419,6 +451,7 @@
 import axios from 'axios';
 import { defineComponent, ref } from 'vue';
 import { ContentStore } from 'stores/content-store.js';
+import { TypeStore } from 'stores/type-store.js';
 
 export default defineComponent({
     name: 'ListItems',
@@ -428,27 +461,20 @@ export default defineComponent({
     data() {
         return {
             contentStore: ContentStore(),
+            typeStore: TypeStore(),
             name: '',
             description: '',
             tag: '',
-            newKey: '',
             newVal: '',
+            contentsChanged: false,
+            fieldsChanged: false,
         };
     },
     async setup() {
         const contentStore = ContentStore();
+        const typeStore = TypeStore();
 
-        // contentStore.$subscribe(async (mutation, state) => {
-        //     console.log(mutation, mutation.events, state);
-        //     await axios.patch(
-        //         `http://127.0.0.1:3000/contentType/${mutation.events.target.id}`,
-        //         {
-        //             [mutation.events.key]: mutation.events.newValue,
-        //         },
-        //     );
-        // }, { detached: true });
-
-        if (!contentStore.typeList.length) {
+        if (!typeStore.list.length) {
             // eslint-disable-next-line
             await new Promise((slp) => setTimeout(slp, 1000));
 
@@ -459,11 +485,11 @@ export default defineComponent({
                 });
 
             if (response.data.length) {
-                contentStore.typeList = response.data;
+                typeStore.list = response.data;
             }
         }
 
-        if (!contentStore.contentList.length) {
+        if (!contentStore.list.length) {
             // eslint-disable-next-line
             await new Promise((slp) => setTimeout(slp, 1000));
 
@@ -474,7 +500,7 @@ export default defineComponent({
                 });
 
             if (response.data.length) {
-                contentStore.contentList = response.data;
+                contentStore.list = response.data;
             }
         }
 
@@ -532,6 +558,73 @@ export default defineComponent({
             },
         };
     },
+    methods: {
+        async updateTypeHeader(id, pName, pDescription) {
+            console.log('update type header');
+            axios
+                .patch(
+                    `http://127.0.0.1:3000/contentType/${id}`,
+                    {
+                        name: pName,
+                        description: pDescription,
+                    },
+                )
+                .then((response) => {
+                    console.log(response.data);
+                })
+                .catch((err) => {
+                    console.log(err.response.data);
+                });
+        },
+        async updateContentHeader(id, pTag) {
+            console.log('update type header');
+            axios
+                .patch(
+                    `http://127.0.0.1:3000/content/${id}`,
+                    {
+                        tag: pTag,
+                    },
+                )
+                .then((response) => {
+                    console.log(response.data);
+                })
+                .catch((err) => {
+                    console.log(err.response.data);
+                });
+        },
+        async updateContents(id, pContents) {
+            console.log('update contents');
+            axios
+                .patch(
+                    `http://127.0.0.1:3000/content/${id}`,
+                    {
+                        contents: pContents,
+                    },
+                )
+                .then((response) => {
+                    console.log(response.data);
+                })
+                .catch((err) => {
+                    console.log(err.response.data);
+                });
+        },
+        async updateTypeFields(id, pFields) {
+            console.log('update contents');
+            axios
+                .patch(
+                    `http://127.0.0.1:3000/contentType/${id}`,
+                    {
+                        fields: pFields,
+                    },
+                )
+                .then((response) => {
+                    console.log(response.data);
+                })
+                .catch((err) => {
+                    console.log(err.response.data);
+                });
+        },
+    },
 });
 </script>
 
@@ -549,14 +642,14 @@ export default defineComponent({
         align-items: center
         text-align: right
 
-    // .add-field
-    //     background: rgb(80, 80, 80)
+        &:nth-of-type(2n)
+            background: rgb(40, 40, 40)
 
-    .q-item:nth-of-type(2n)
-        background: rgb(40, 40, 40)
+        div
+            min-width: 40%
 
-    span
-        padding-right: 2rem
-        color: teal
-        font-weight: 700
+        span
+            padding-right: 2rem
+            color: teal
+            font-weight: 700
 </style>
