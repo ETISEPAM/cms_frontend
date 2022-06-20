@@ -128,22 +128,42 @@
                                 </div>
                                 <div class="cursor-pointer">
                                     {{ field.dataType }}
-                                    <q-popup-edit v-model="field.dataType" :cover="false" :offset="[0, 10]" v-slot="scope">
-                                        <q-input
-                                            type="text"
-                                            color="teal"
-                                            v-model="scope.value"
+                                    <q-popup-edit v-model="field.dataType" :cover="false" :offset="[0, 10]">
+                                        <q-select
+                                            filled
+                                            clearable
+                                            v-model="newVal"
+                                            use-input
+                                            hide-selected
+                                            fill-input
                                             dense
-                                            autofocus
-                                            @keyup.enter="scope.set"
+                                            behavior="menu"
+                                            :options="options"
+                                            @filter="filter"
+                                            label="Data Type"
+                                            emit-value
+                                            map-options
+                                            @update:model-value="field.dataType = newVal; newVal = '';"
+                                            class="col-12 col-sm-6 col-md-4 col-lg-3"
+                                            :placeholder="field.dataType"
                                         >
-                                            <template v-slot:prepend>
-                                                <q-icon
-                                                    name="text_fields"
-                                                    color="teal"
-                                                />
+                                            <template v-slot:no-option>
+                                                <q-item>
+                                                    <q-item-section class="text-grey">
+                                                        No results
+                                                    </q-item-section>
+                                                </q-item>
                                             </template>
-                                        </q-input>
+                                            <template v-slot:option="scope">
+                                                <q-item v-bind="scope.itemProps">
+                                                    <q-icon :name="scope.opt.icon" class="q-pr-sm" />
+                                                    <q-item-section>
+                                                        <q-item-label>{{ scope.opt.label }}</q-item-label>
+                                                        <q-item-label caption>{{ scope.opt.description }}</q-item-label>
+                                                    </q-item-section>
+                                                </q-item>
+                                            </template>
+                                        </q-select>
                                     </q-popup-edit>
                                 </div>
                             </q-item>
@@ -238,47 +258,6 @@
                                     {{ field.isMandatory == null ? 'N/A' : (field.isMandatory ? 'TRUE' : 'FALSE') }}
                                 </q-btn>
                             </q-item>
-                            <!-- <q-item class="add-field">
-                                <div class="cursor-pointer row items-center">
-                                    <q-icon name="add" color="" class="text-center q-pr-sm" />
-                                    <div class="text-italic">
-                                        {{ newKey ? newKey : 'NEW FIELD KEY' }}
-                                    </div>
-                                    <q-popup-edit v-model="newKey" :cover="false" :offset="[0, 10]" v-slot="scope">
-                                        <q-input
-                                            type="text"
-                                            v-model="scope.value"
-                                            dense
-                                            autofocus
-                                            @keyup.enter="scope.set"
-                                        >
-                                            <template v-slot:prepend>
-                                                <q-icon
-                                                    name="text_fields"
-                                                />
-                                            </template>
-                                        </q-input>
-                                    </q-popup-edit>
-                                </div>
-                                <div class="cursor-pointer">
-                                    <div class="text-italic">{{ newVal ? newVal : 'NEW FIELD VALUE' }}</div>
-                                    <q-popup-edit v-model="newVal" :cover="false" :offset="[0, 10]" v-slot="scope">
-                                        <q-input
-                                            type="text"
-                                            v-model="scope.value"
-                                            dense
-                                            autofocus
-                                            @keyup.enter="scope.set"
-                                        >
-                                            <template v-slot:prepend>
-                                                <q-icon
-                                                    name="text_fields"
-                                                />
-                                            </template>
-                                        </q-input>
-                                    </q-popup-edit>
-                                </div>
-                            </q-item> -->
                         </q-list>
                     </q-card-section>
                 </q-card>
@@ -372,7 +351,7 @@
 
 <script>
 import axios from 'axios';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { ContentStore } from 'stores/content-store.js';
 
 export default defineComponent({
@@ -432,6 +411,49 @@ export default defineComponent({
                 contentStore.contentList = response.data;
             }
         }
+
+        const optionTemplate = ref([
+            {
+                label: 'String',
+                value: 'String',
+                description: 'Text field.',
+                icon: 'text_fields',
+            },
+            {
+                label: 'Number',
+                value: 'Number',
+                description: 'Number field.',
+                icon: 'numbers',
+            },
+            {
+                label: 'Boolean',
+                value: 'Boolean',
+                description: 'True or false.',
+                icon: 'toggle_off',
+            },
+            {
+                label: 'Date',
+                value: 'Date',
+                description: 'Datepicker.',
+                icon: 'calendar_today',
+            },
+            {
+                label: 'File',
+                value: 'File',
+                description: 'Filepicker.',
+                icon: 'upload_file',
+            },
+        ]);
+        const options = ref(optionTemplate.value);
+        return {
+            options,
+            filter(val, update) {
+                update(() => {
+                    options.value = optionTemplate.value
+                        .filter((v) => v.label.toLocaleLowerCase().includes(val.toLocaleLowerCase()));
+                });
+            },
+        };
     },
 });
 </script>
