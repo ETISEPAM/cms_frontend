@@ -29,6 +29,11 @@
                             </q-card>
                         </q-dialog>
                     </div>
+                    <!-- <div>
+                        <vue-recaptcha ref="recaptcha" @expired="onExpired" :sitekey="sitekey">
+                        </vue-recaptcha>
+                        <button @click="resetRecaptcha">Reset ReCAPTCHA</button>
+                    </div> -->
                     <div class="button flex justify-end">
                         <q-btn color="primary" label="Login" rounded v-on:click="login"></q-btn>
                     </div>
@@ -56,6 +61,7 @@ export default defineComponent({
         return {
             email: '',
             password: '',
+            sitekey: '6LeBsWwgAAAAAOf3towi940LaSxthzMd-ZFZYgyd',
         };
     },
     methods: {
@@ -92,6 +98,7 @@ export default defineComponent({
                     id: response.data[0].id,
                     firstName: response.data[0].firstName,
                     lastName: response.data[0].lastName,
+                    username: response.data[0].username,
                     jwToken: response.data[0].jwToken,
                     email: response.data[0].email,
                     password: response.data[0].password,
@@ -112,6 +119,15 @@ export default defineComponent({
                 this.invalid = true;
             }
         },
+        /* onSubmit() {
+            this.$refs.invisibleRecaptcha.execute();
+        },
+        onExpired() {
+            console.log('Expired');
+        },
+        resetRecaptcha() {
+            this.$refs.recaptcha.reset();
+        }, */
     },
 });
 
