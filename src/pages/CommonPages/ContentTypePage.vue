@@ -1,7 +1,8 @@
 <template>
     <q-page class="page">
         <q-card class="card">
-            <q-tabs v-model="tab" class="tabs text-grey" active-color="primary" indicator-color="primary" narrow-indicator>
+            <q-tabs v-model="tab" class="tabs text-grey" active-color="primary" indicator-color="primary"
+                narrow-indicator>
                 <div class="tabs row col">
                     <q-tab name="list" label="List" class="col"></q-tab>
                     <q-tab name="create" label="Create" class="col"></q-tab>
@@ -42,13 +43,8 @@
                                     <q-icon name="text_fields" />
                                 </template>
                             </q-input>
-                            <q-input
-                                v-model="type.description"
-                                filled
-                                label="Description"
-                                type="textarea"
-                                class="col-9 col-lg-6"
-                            >
+                            <q-input v-model="type.description" filled label="Description" type="textarea"
+                                class="col-9 col-lg-6">
                                 <template v-slot:prepend>
                                     <q-icon name="description" />
                                 </template>

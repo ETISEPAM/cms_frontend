@@ -42,6 +42,8 @@
                             :placeholder="user.firstName"></q-input>
                         <q-input class="inpField" filled v-model="lastName" stack-label label="Change Your Surname"
                             :placeholder="user.lastName"></q-input>
+                        <q-input class="inpField" filled v-model="username" stack-label label="Change Your Username"
+                            :placeholder="user.username"></q-input>
                         <div class="q-pa-md q-gutter-y-sm row justify-between">
                             <q-btn label="Change Your Password" type="submit" color="primary"
                                 @click="this.$router.push('newpassword')"></q-btn>
@@ -77,6 +79,7 @@ export default defineComponent({
         return {
             firstName: this.user.firstName,
             lastName: this.user.lastName,
+            username: this.user.username,
         };
     },
     methods: {
@@ -94,6 +97,7 @@ export default defineComponent({
                 {
                     firstName: this.firstName,
                     lastName: this.lastName,
+                    username: this.username,
                 },
             );
         },
