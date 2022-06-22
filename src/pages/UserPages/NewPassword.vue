@@ -4,14 +4,22 @@
             <q-card-section>
                 <q-form class="q-gutter-lg flex column justify-around" action="/panel">
                     <div>
-                        <q-input label="Current Password" type="password" v-model="currentPassword"
+                        <q-input :label="data[language.getLanguage].currentPassword" type="password"
+                            v-model="currentPassword"
                             @input="passwordsMatchesOld = matchCurrPassword(user.password, currentPassword)"
                             @update:modelValue="passwordsMatchesOld = matchCurrPassword(user.password, currentPassword)"
-                            :rules="[passwordsMatchesOld ? '' : 'Please enter correct password']" />
-                        <q-input label="New Password" type="password" v-model="password"
+                            :rules="[val => !!val || data[language.getLanguage].fieldRequired]" bottom-slots
+                            :error="!passwordsMatchesOld && currentPassword !== ''">
+                            <template v-slot:error>
+                                {{ data[language.getLanguage].enterCorrPass }}
+                                {{ error }}
+                            </template>
+                        </q-input>
+
+                        <q-input :label="data[language.getLanguage].newPassword" type="password" v-model="password"
                             @input="validPassword = checkPassword(password)"
                             @update:modelValue="validPassword = checkPassword(password)"
-                            :rules="[val => !!val || 'Field is required']" />
+                            :rules="[val => !!val || data[language.getLanguage].fieldRequired]" />
                         <div class="input_container q-pt-xl">
                             <ul>
                                 <li v-bind:class="{ is_valid: validPassword.eight }">8 Characters</li>
@@ -21,14 +29,16 @@
                                 </li>
                             </ul>
                         </div>
-                        <q-input label="Confirm New Password" type="password" v-model="newPasswordConf"
+                        <q-input :label="data[language.getLanguage].confirmNewPass" type="password"
+                            v-model="newPasswordConf"
                             @input="passwordsMatchesNew = matchPassword(password, newPasswordConf)"
                             @update:modelValue="passwordsMatchesNew = matchPassword(password, newPasswordConf)"
-                            :rules="[val => !!val || 'Field is required']" />
+                            :rules="[val => !!val || data[language.getLanguage].fieldRequired]" />
                     </div>
                     <div class="row justify-end">
-                        <q-btn label="Reset" @click="onReset" color="primary" flat class="q-ml-sm"></q-btn>
-                        <q-btn label="Change" color="primary" @click="updatePassword">
+                        <q-btn :label="data[language.getLanguage].reset" @click="onReset" color="primary" flat
+                            class="q-ml-sm"></q-btn>
+                        <q-btn :label="data[language.getLanguage].saveIt" color="primary" @click="updatePassword">
                         </q-btn>
                     </div>
                 </q-form>
@@ -42,6 +52,10 @@ import { defineComponent } from 'vue';
 import { userStore } from 'stores/user-store.js';
 import axios from 'axios';
 import { checkPassword, matchPassword, matchCurrPassword } from 'src/validations.js';
+import { useLanguageStore } from 'stores/language-store.js';
+import data from 'src/languages/i18n.js';
+
+const language = useLanguageStore();
 
 export default defineComponent({
     name: 'NewPassword',
@@ -64,6 +78,8 @@ export default defineComponent({
             matchPassword,
             checkPassword,
             matchCurrPassword,
+            language,
+            data,
         };
     },
     methods: {
