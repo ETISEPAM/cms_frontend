@@ -1,10 +1,11 @@
 <template>
     <q-page class="page">
         <q-card>
-            <q-tabs v-model="tab" class="tabs text-grey" active-color="primary" indicator-color="primary" narrow-indicator>
+            <q-tabs v-model="tab" class="tabs text-grey" active-color="primary" indicator-color="primary"
+                narrow-indicator>
                 <div class="tabs row col">
-                    <q-tab name="list" label="List" class="col"></q-tab>
-                    <q-tab name="create" label="Create" class="col"></q-tab>
+                    <q-tab name="list" :label="data[language.getLanguage].list" class="col"></q-tab>
+                    <q-tab name="create" :label="data[language.getLanguage].create" class="col"></q-tab>
                 </div>
             </q-tabs>
 
@@ -12,7 +13,7 @@
                 <q-tab-panel name="list">
                     <Suspense>
                         <template #default>
-                            <ListItems page='contentPage'/>
+                            <ListItems page='contentPage' />
                         </template>
                         <template #fallback>
                             <q-list>
@@ -37,15 +38,8 @@
 
                 <q-tab-panel name="create">
                     <q-card class="no-box-shadow">
-                        <q-carousel
-                            v-model="slide"
-                            transition-prev="slide-right"
-                            transition-next="slide-left"
-                            swipeable
-                            animated
-                            padding
-                            arrows
-                        >
+                        <q-carousel v-model="slide" transition-prev="slide-right" transition-next="slide-left" swipeable
+                            animated padding arrows>
                             <!-- DO NOT DELETE UNTIL YOU FIGURE IT OUT -->
 
                             <!-- <template v-slot:navigation-icon="{ active, btnProps, onClick }">
@@ -59,116 +53,71 @@
 
                                         <!-- DROPDOWN AUTOCOMPLETE SELECTION MENU -->
 
-                                        <q-select
-                                            filled
-                                            clearable
-                                            v-model="model"
-                                            use-input
-                                            hide-selected
-                                            fill-input
-                                            input-debounce="0"
-                                            :options="options"
-                                            @filter="filter"
-                                            label="Content Type"
-                                            emit-value
-                                            map-options
+                                        <q-select filled clearable v-model="model" use-input hide-selected fill-input
+                                            input-debounce="0" :options="options" @filter="filter"
+                                            :label="data[language.getLanguage].contentType" emit-value map-options
                                             @update:model-value="content.typeId = model"
-                                            class="col-12 col-sm-6 col-md-4 col-lg-3"
-                                        >
+                                            class="col-12 col-sm-6 col-md-4 col-lg-3">
                                             <template v-slot:no-option>
                                                 <q-item>
                                                     <q-item-section class="text-grey">
-                                                        No results
+                                                        {{ data[language.getLanguage].noResults }}
                                                     </q-item-section>
                                                 </q-item>
                                             </template>
                                         </q-select>
                                         <div v-if="!content.typeId" class="col-12 flex items-center">
                                             <q-icon name="error_outline" class="q-pr-sm q-pt-sm" />
-                                            <span class="q-pt-sm">Please select a content type.</span>
+                                            <span class="q-pt-sm">{{ data[language.getLanguage].selectCT }}</span>
                                         </div>
                                     </div>
 
                                     <div v-if="content.typeId" class="col row wrap justify-center q-gutter-md">
-                                        <div
-                                            v-for="field in typeStore.list.find((type) => type.id === content.typeId).fields"
-                                            :key="field.id"
-                                            class="col-11 col-md-5 col-lg-4"
-                                        >
+                                        <div v-for="field in typeStore.list.find((type) => type.id === content.typeId).fields"
+                                            :key="field.id" class="col-11 col-md-5 col-lg-4">
                                             <div v-if="field.dataType === 'String'">
-                                                <q-input
-                                                    v-model="newContent[field.label]"
-                                                    :label="field.label"
-                                                    type="text"
-                                                    clearable
-                                                    filled
-                                                >
+                                                <q-input v-model="newContent[field.label]" :label="field.label"
+                                                    type="text" clearable filled>
                                                     <template v-slot:before>
                                                         <q-icon name="text_fields" />
                                                     </template>
                                                 </q-input>
                                             </div>
                                             <div v-else-if="field.dataType === 'Number'">
-                                                <q-input
-                                                    v-model="newContent[field.label]"
-                                                    :label="field.label"
-                                                    type="number"
-                                                    clearable
-                                                    filled
-                                                >
+                                                <q-input v-model="newContent[field.label]" :label="field.label"
+                                                    type="number" clearable filled>
                                                     <template v-slot:before>
                                                         <q-icon name="numbers" />
                                                     </template>
                                                 </q-input>
                                             </div>
                                             <div v-else-if="field.dataType === 'Boolean'">
-                                                <q-field
-                                                    :label="field.label"
-                                                    stack-label
-                                                    class="row q-pa-none"
-                                                >
+                                                <q-field :label="field.label" stack-label class="row q-pa-none">
                                                     <template v-slot:before>
                                                         <q-icon name="toggle_off" />
                                                     </template>
-                                                    <q-btn-toggle
-                                                        v-model="newContent[field.label]"
-                                                        unelevated
-                                                        text-color="white"
-                                                        toggle-color="primary"
-                                                        :options="[
-                                                            {label: 'Yes', value: true},
-                                                            {label: 'No', value: false},
-                                                        ]"
-                                                        spread
-                                                        dense
-                                                        class="col-12 q-pt-sm"
-                                                    />
+                                                    <q-btn-toggle v-model="newContent[field.label]" unelevated
+                                                        text-color="white" toggle-color="primary" :options="[
+                                                            { label: 'Yes', value: true },
+                                                            { label: 'No', value: false },
+                                                        ]" spread dense class="col-12 q-pt-sm" />
                                                 </q-field>
                                             </div>
                                             <div v-else-if="field.dataType === 'Date'">
-                                                <q-input
-                                                    v-model="newContent[field.label]"
-                                                    :label="field.label"
-                                                    clearable
-                                                    filled
-                                                >
+                                                <q-input v-model="newContent[field.label]" :label="field.label"
+                                                    clearable filled>
                                                     <template v-slot:before>
                                                         <q-icon name="calendar_today" />
                                                     </template>
-                                                    <q-popup-proxy transition-show="scale" transition-hide="scale" :breakpoint="800">
-                                                        <q-date
-                                                            v-model="newContent[field.label]"
-                                                        />
+                                                    <q-popup-proxy transition-show="scale" transition-hide="scale"
+                                                        :breakpoint="800">
+                                                        <q-date v-model="newContent[field.label]" />
                                                     </q-popup-proxy>
                                                 </q-input>
                                             </div>
                                             <div v-else-if="field.dataType === 'File'">
-                                                <q-file
-                                                    v-model="newContent[field.label]"
-                                                    :label="field.label"
-                                                    clearable
-                                                    filled
-                                                >,
+                                                <q-file v-model="newContent[field.label]" :label="field.label" clearable
+                                                    filled>,
                                                     <template v-slot:before>
                                                         <q-icon name="upload_file" />
                                                     </template>
@@ -184,34 +133,21 @@
                                         <span class="text-center">Tags</span>
                                         <q-icon name="add" color="teal" class="q-pl-sm" size="sm" />
                                         <q-popup-edit v-model="newTag" :cover="false" :offset="[0, 10]" v-slot="scope">
-                                            <q-input
-                                                type="text"
-                                                color="teal"
-                                                v-model="scope.value"
-                                                dense
-                                                autofocus
-                                                @keyup.enter="scope.set(); content.tag.push(newTag); newTag = '';"
-                                            >
+                                            <q-input type="text" color="teal" v-model="scope.value" dense autofocus
+                                                @keyup.enter="scope.set(); content.tag.push(newTag); newTag = '';">
                                                 <template v-slot:prepend>
-                                                    <q-icon
-                                                        name="text_fields"
-                                                        color="teal"
-                                                    />
+                                                    <q-icon name="text_fields" color="teal" />
                                                 </template>
                                             </q-input>
                                         </q-popup-edit>
                                     </div>
                                     <div class="tag-pool q-pa-sm">
                                         <q-list v-if="content.tag.length" class="row">
-                                            <q-item v-for="tag in content.tag" :key="tag" class="row items-center q-pa-sm">
+                                            <q-item v-for="tag in content.tag" :key="tag"
+                                                class="row items-center q-pa-sm">
                                                 <q-badge color="primary" :label="tag" rounded class="tag-badge" />
-                                                <q-btn
-                                                    fab-mini
-                                                    color="red"
-                                                    class="badge-delete q-ml-xs q-pa-xs"
-                                                    dense
-                                                    v-on:click="deleteTag(tag)"
-                                                >
+                                                <q-btn fab-mini color="red" class="badge-delete q-ml-xs q-pa-xs" dense
+                                                    v-on:click="deleteTag(tag)">
                                                     <q-icon name="clear" size="8px" />
                                                 </q-btn>
                                             </q-item>
@@ -222,12 +158,16 @@
                                     </div>
                                 </q-form>
                                 <q-form class="col-12 column no-wrap self-center q-gutter-sm text-right">
-                                    <q-checkbox v-model="content.isPublished" label="Publish" color="teal" left-label />
-                                    <q-checkbox v-model="content.dpAuthor" label="Display author information" color="teal" left-label />
-                                    <q-checkbox v-model="content.dpDate" label="Display date information" color="teal" left-label />
+                                    <q-checkbox v-model="content.isPublished"
+                                        :label="data[language.getLanguage].publish" color="teal" left-label />
+                                    <q-checkbox v-model="content.dpAuthor"
+                                        :label="data[language.getLanguage].displayInfo" color="teal" left-label />
+                                    <q-checkbox v-model="content.dpDate" :label="data[language.getLanguage].displayDate"
+                                        color="teal" left-label />
                                 </q-form>
                                 <div class="button flex justify-end">
-                                    <q-btn color="teal" label="Create" rounded v-on:click="create" />
+                                    <q-btn color="teal" :label="data[language.getLanguage].create" rounded
+                                        v-on:click="create" />
                                 </div>
                             </q-carousel-slide>
                         </q-carousel>
@@ -244,6 +184,10 @@ import { defineComponent, ref } from 'vue';
 import { ContentStore } from 'stores/content-store.js';
 import { TypeStore } from 'stores/type-store.js';
 import ListItems from 'components/ListItems.vue';
+import { useLanguageStore } from 'stores/language-store.js';
+import data from 'src/languages/i18n.js';
+
+const language = useLanguageStore();
 
 export default defineComponent({
     name: 'ContentPage',
@@ -262,6 +206,8 @@ export default defineComponent({
             },
             contentStore: ContentStore(),
             typeStore: TypeStore(),
+            data,
+            language,
             newTag: '',
             newContent: [],
         };

@@ -51,7 +51,8 @@
                             <div class="row justify-end">
                                 <q-btn :label="data[language.getLanguage].saveIt" type="reset" color="primary"
                                     @click="onSave()"></q-btn>
-                                <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm"></q-btn>
+                                <q-btn :label="data[language.getLanguage].reset" type="reset" color="primary" flat
+                                    class="q-ml-sm"></q-btn>
                             </div>
                         </q-form>
                     </q-card>
