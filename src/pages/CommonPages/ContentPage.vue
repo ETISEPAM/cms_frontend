@@ -76,11 +76,11 @@
                                             class="col-12 col-sm-6 col-md-4 col-lg-3"
                                         >
                                             <template v-slot:no-option>
-                                            <q-item>
-                                                <q-item-section class="text-grey">
-                                                    No results
-                                                </q-item-section>
-                                            </q-item>
+                                                <q-item>
+                                                    <q-item-section class="text-grey">
+                                                        No results
+                                                    </q-item-section>
+                                                </q-item>
                                             </template>
                                         </q-select>
                                         <div v-if="!content.typeId" class="col-12 flex items-center">
@@ -91,7 +91,7 @@
 
                                     <div v-if="content.typeId" class="col row wrap justify-center q-gutter-md">
                                         <div
-                                            v-for="field in contentStore.typeList.find((type) => type.id === content.typeId).fields"
+                                            v-for="field in typeStore.list.find((type) => type.id === content.typeId).fields"
                                             :key="field.id"
                                             class="col-11 col-md-5 col-lg-4"
                                         >
@@ -199,6 +199,7 @@
 import axios from 'axios';
 import { defineComponent, ref } from 'vue';
 import { ContentStore } from 'stores/content-store.js';
+import { TypeStore } from 'stores/type-store.js';
 import ListItems from 'components/ListItems.vue';
 
 export default defineComponent({
@@ -217,13 +218,14 @@ export default defineComponent({
                 tag: 'default tag',
             },
             contentStore: ContentStore(),
+            typeStore: TypeStore(),
         };
     },
     setup() {
-        const contentStore = ContentStore();
+        const typeStore = TypeStore();
 
         const options = ref(
-            contentStore.typeList.map((type) => {
+            typeStore.list.map((type) => {
                 const option = {
                     label: type.name,           // LABEL IS DISPLAYED ON THE DROPDOWN SELECT MENU
                     value: type.id,             // VALUE IS ACTUAL VALUE OF INPUT
@@ -241,7 +243,7 @@ export default defineComponent({
             options,
             filter(val, update) {
                 update(() => {
-                    options.value = contentStore.typeList
+                    options.value = typeStore.list
                         .map((type) => {
                             const option = {
                                 label: type.name,
@@ -271,7 +273,7 @@ export default defineComponent({
                 )
                 .then((response) => {
                     console.log(response.data);
-                    this.contentStore.$patch({ contentList: [...this.contentStore.contentList, response.data] });
+                    this.contentStore.$patch({ list: [...this.contentStore.list, response.data] });
                 })
                 .catch((err) => {
                     console.log(err.response.data);

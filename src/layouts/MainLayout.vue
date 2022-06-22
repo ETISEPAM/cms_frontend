@@ -117,19 +117,21 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
-@media (min-width: 800px)
-    .main-header
-        display: none
+@media (max-width: 800px)
+    .q-layout
+        .main-header
+            display: block
+            background-color: #000
+            height: 8%
+            min-height: 55px
+            .q-toolbar
+                height: 100%
+
+                .q-btn
+                    height: 100%
 
 .main-header
-    background-color: #000
-    height: 8%
-    min-height: 55px
-    .q-toolbar
-        height: 100%
-
-        .q-btn
-            height: 100%
+    display: none
 
 .drawer
     height: 100%
