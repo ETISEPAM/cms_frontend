@@ -4,38 +4,53 @@
             <q-tabs v-model="tab" class="tabs text-grey" active-color="primary" indicator-color="primary"
                 narrow-indicator>
                 <div class="tabs row col">
-                    <q-tab name="registerUser" label="Register User" class="col"></q-tab>
-                    <q-tab name="updateUser" label="Users List" class="col"></q-tab>
+                    <q-tab name="registerUser" :label="data[language.getLanguage].registerUser" class="col"></q-tab>
+                    <q-tab name="updateUser" :label="data[language.getLanguage].usersList" class="col"></q-tab>
                 </div>
             </q-tabs>
             <q-tab-panels v-model="tab" animated class="q-py-xs">
                 <q-tab-panel name="registerUser">
                     <q-card class="q-pa-md row justify-center">
                         <q-form @submit="onSubmit" @reset="onReset" class="col col-md-8 col-xl-6 q-py-md q-gutter-sm">
-                            <q-input filled v-model="user.name" label="Name" lazy-rules
-                                :rules="[val => val && val.length > 0 || 'Field is required']"></q-input>
-                            <q-input filled v-model="user.surname" label="Surname" lazy-rules
-                                :rules="[val => val && val.length > 0 || 'Field is required']"></q-input>
-                            <q-input filled v-model="user.username" label="Username" lazy-rules
-                                :rules="[val => val && val.length > 0 || 'Field is required']"></q-input>
-                            <q-input filled v-model="user.email" label="Email" lazy-rules :rules="
-                            [val => isValidEmailAddress(val) || 'Please enter a valid email address']"></q-input>
+                            <q-input filled v-model="user.name" :label="data[language.getLanguage].name" lazy-rules
+                                :rules="[val => val && val.length > 0 || data[language.getLanguage].fieldRequired]">
+                            </q-input>
+                            <q-input filled v-model="user.surname" :label="data[language.getLanguage].surname"
+                                lazy-rules
+                                :rules="[val => val && val.length > 0 || data[language.getLanguage].fieldRequired]">
+                            </q-input>
+                            <q-input filled v-model="user.username" :label="data[language.getLanguage].username"
+                                lazy-rules
+                                :rules="[val => val && val.length > 0 || data[language.getLanguage].fieldRequired]">
+                            </q-input>
+                            <q-input filled v-model="user.email" :label="data[language.getLanguage].email" lazy-rules
+                                :rules="
+                                [val => isValidEmailAddress(val) || data[language.getLanguage].validEmail]"></q-input>
                             <q-input filled v-model="user.password"
                                 @input="validPassword = checkPassword(user.password)"
-                                @update:modelValue="validPassword = checkPassword(user.password)" label="Password"
-                                type="password" :rules="[val => val && val.length > 0 || 'Field is required']">
+                                @update:modelValue="validPassword = checkPassword(user.password)"
+                                :label="data[language.getLanguage].password" type="password"
+                                :rules="[val => val && val.length > 0 || data[language.getLanguage].fieldRequired]">
                             </q-input>
                             <div class="input_container q-pt-xl">
                                 <ul>
-                                    <li v-bind:class="{ is_valid: validPassword.eight }">8 Characters</li>
-                                    <li v-bind:class="{ is_valid: validPassword.num }">Contains Number</li>
-                                    <li v-bind:class="{ is_valid: validPassword.upper }">Contains Uppercase</li>
-                                    <li v-bind:class="{ is_valid: validPassword.special }">Contains Special Character
+                                    <li v-bind:class="{ is_valid: validPassword.eight }">
+                                        {{ data[language.getLanguage].charNumber }}</li>
+                                    <li v-bind:class="{ is_valid: validPassword.num }">{{
+                                            data[language.getLanguage].containsNum
+                                    }}</li>
+                                    <li v-bind:class="{ is_valid: validPassword.upper }">{{
+                                            data[language.getLanguage].containsUpper
+                                    }}</li>
+                                    <li v-bind:class="{ is_valid: validPassword.special }">{{
+                                            data[language.getLanguage].conainsChar
+                                    }}
                                     </li>
                                 </ul>
                             </div>
                             <div class="row justify-end">
-                                <q-btn label="Save" type="reset" color="primary" @click="onSave()"></q-btn>
+                                <q-btn :label="data[language.getLanguage].saveIt" type="reset" color="primary"
+                                    @click="onSave()"></q-btn>
                                 <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm"></q-btn>
                             </div>
                         </q-form>
@@ -53,6 +68,10 @@ import { ref, defineComponent } from 'vue';
 import axios from 'axios';
 import { userStore } from 'stores/user-store.js';
 import { checkPassword } from 'src/validations.js';
+import { useLanguageStore } from 'stores/language-store.js';
+import data from 'src/languages/i18n.js';
+
+const language = useLanguageStore();
 
 export default defineComponent({
     name: 'RegistrationPage',
@@ -72,6 +91,8 @@ export default defineComponent({
                 firstLogin: true,
             },
             checkPassword,
+            language,
+            data,
             validPassword: {
                 eight: false,
                 num: false,
