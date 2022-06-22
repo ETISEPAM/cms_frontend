@@ -10,9 +10,7 @@
             </q-toolbar>
         </q-header>
 
-        <q-drawer v-model="leftDrawerOpen" side="left" elevated :breakpoint="800" show-if-above
-            class="drawer"
-        >
+        <q-drawer v-model="leftDrawerOpen" side="left" elevated :breakpoint="800" show-if-above class="drawer">
             <div class="image col-2 row justify-center self-center q-pt-lg">
                 <img src="~src/assets/imgs/emakinaDark.png" alt="EMAKINA Logo" />
             </div>
@@ -25,25 +23,25 @@
                             <q-icon name="home" />
                         </q-item-section>
 
-                        <q-item-section>Homepage</q-item-section>
+                        <q-item-section>{{ data[language.getLanguage].homepage }}</q-item-section>
                     </q-item>
 
-                    <q-item clickable v-ripple :active="link === 'type'" @click="link = 'type'"
-                        active-class="current" to="/panel/type" exact>
+                    <q-item clickable v-ripple :active="link === 'type'" @click="link = 'type'" active-class="current"
+                        to="/panel/type" exact>
                         <q-item-section avatar>
                             <q-icon name="content_copy" />
                         </q-item-section>
 
-                        <q-item-section>Content Types</q-item-section>
+                        <q-item-section>{{ data[language.getLanguage].contentTypes }}</q-item-section>
                     </q-item>
 
-                    <q-item clickable v-ripple :active="link === 'content'" @click="link = 'content'" active-class="current"
-                        to="/panel/content" exact>
+                    <q-item clickable v-ripple :active="link === 'content'" @click="link = 'content'"
+                        active-class="current" to="/panel/content" exact>
                         <q-item-section avatar>
                             <q-icon name="notes" />
                         </q-item-section>
 
-                        <q-item-section>Contents</q-item-section>
+                        <q-item-section>{{ data[language.getLanguage].contents }}</q-item-section>
                     </q-item>
 
                     <q-item clickable v-ripple :active="link === 'conf'" @click="link = 'conf'" active-class="current"
@@ -52,7 +50,7 @@
                             <q-icon name="build" />
                         </q-item-section>
 
-                        <q-item-section>Configuration</q-item-section>
+                        <q-item-section>{{ data[language.getLanguage].configuration }}</q-item-section>
                     </q-item>
 
                     <q-item clickable v-ripple :active="link === 'registration'" @click="link = 'registration'"
@@ -61,7 +59,7 @@
                             <q-icon name="person_add" />
                         </q-item-section>
 
-                        <q-item-section>Add User</q-item-section>
+                        <q-item-section>{{ data[language.getLanguage].userOp }}</q-item-section>
                     </q-item>
                 </div>
                 <div>
@@ -71,7 +69,7 @@
                             <q-icon name="logout" />
                         </q-item-section>
 
-                        <q-item-section>Log Out</q-item-section>
+                        <q-item-section>{{ data[language.getLanguage].logout }}</q-item-section>
                     </q-item>
                 </div>
             </q-list>
@@ -85,6 +83,10 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
+import { useLanguageStore } from 'stores/language-store.js';
+import data from 'src/languages/i18n.js';
+
+const language = useLanguageStore();
 
 export default defineComponent({
     name: 'MainLayout',
@@ -97,8 +99,20 @@ export default defineComponent({
                 leftDrawerOpen.value = !leftDrawerOpen.value;
             },
             link: ref('home'),
+            language,
+            data,
         };
     },
+    methods: {
+        changeLanguage() {
+            if (language.getLanguage === 'eng') {
+                language.setLanguage('tr');
+            } else {
+                language.setLanguage('eng');
+            }
+        },
+    },
+
 });
 </script>
 

@@ -2,28 +2,31 @@
     <q-page class="row wrap justify-center items-start">
         <div class="col-12 row justify-center self-center">
             <img src="~src/assets/imgs/emakinaDark.png" alt="EMAKINA Logo">
+
         </div>
 
         <q-card class="col-8 col-md-6 col-lg-4">
             <q-card-section class="col">
                 <q-form class="q-gutter-lg flex column justify-around" action="/panel">
                     <div>
-                        <q-input label="Email" v-model="email" :rules="[val => !!val || 'Field is required']" />
-                        <q-input label="Password" type="password" v-model="password"
+                        <q-input :label="data[language.getLanguage].email" v-model="email"
+                            :rules="[val => !!val || 'Field is required']" />
+                        <q-input :label="data[language.getLanguage].password" type="password" v-model="password"
                             :rules="[val => !!val || 'Field is required']" />
                         <q-dialog v-model="invalid" class="dialog">
                             <q-card class="row content-between q-pa-md">
                                 <div class="col-12 row">
                                     <q-icon name="error" class="flex self-center q-pr-md" />
-                                    The information you've entered is incorrect, please try again.
+                                    {{ data[language.getLanguage].confMessage }}
                                 </div>
                                 <div class="col-12 row justify-evenly items-center">
                                     <div>
-                                        If the issue persists, contact support at
+                                        {{ data[language.getLanguage].confMessageCon }}
                                         <span class="phone">+90 507 279 19 19</span>
                                     </div>
                                     <q-card-actions align="right">
-                                        <q-btn label="CONFIRM" color="teal" v-close-popup />
+                                        <q-btn :label="data[language.getLanguage].confButton" color="teal"
+                                            v-close-popup />
                                     </q-card-actions>
                                 </div>
                             </q-card>
@@ -35,20 +38,32 @@
                         <button @click="resetRecaptcha">Reset ReCAPTCHA</button>
                     </div> -->
                     <div class="button flex justify-end">
-                        <q-btn color="primary" label="Login" rounded v-on:click="login"></q-btn>
+                        <q-btn color="primary" :label="data[language.getLanguage].login" rounded v-on:click="login">
+                        </q-btn>
                     </div>
                 </q-form>
             </q-card-section>
         </q-card>
+        <div class="col-12 row justify-center">
+            <q-btn-group push>
+                <q-btn push label="EN" v-on:click="changeLanguageEn"></q-btn>
+                <q-btn push label="TR" v-on:click="changeLanguageTr"></q-btn>
+                <q-btn push label="RUS" v-on:click="changeLanguageRus"></q-btn>
+            </q-btn-group>
+        </div>
+
     </q-page>
 </template>
 
 <script>
 import axios from 'axios';
 import { userStore } from 'stores/user-store.js';
+import { useLanguageStore } from 'stores/language-store.js';
 import { defineComponent, ref } from 'vue';
+import data from 'src/languages/i18n.js';
 
 const user = userStore();
+const language = useLanguageStore();
 
 export default defineComponent({
     name: 'LoginPage',
@@ -62,6 +77,8 @@ export default defineComponent({
             email: '',
             password: '',
             sitekey: '6LeBsWwgAAAAAOf3towi940LaSxthzMd-ZFZYgyd',
+            data,
+            language,
         };
     },
     methods: {
@@ -118,6 +135,15 @@ export default defineComponent({
             } else {
                 this.invalid = true;
             }
+        },
+        changeLanguageEn() {
+            language.setLanguage('eng');
+        },
+        changeLanguageTr() {
+            language.setLanguage('tr');
+        },
+        changeLanguageRus() {
+            language.setLanguage('rus');
         },
         /* onSubmit() {
             this.$refs.invisibleRecaptcha.execute();
