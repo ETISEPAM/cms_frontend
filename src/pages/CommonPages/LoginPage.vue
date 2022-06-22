@@ -21,25 +21,18 @@
                                 </div>
                                 <div class="col-12 row items-center">
                                     <div class="q-pt-sm">
-                                        If the issue persists, contact support at
-                                        <span class="phone">+90 507 279 19 19</span>.
-                                    </div>
-                                </div>
-                                <div class="col-12 row justify-end">
-                                    <q-card-actions>
-                                        <q-btn label="CONFIRM" color="teal" v-close-popup />
-                                    </q-card-actions>
-                                </div>
-                                <div class="col-12 row justify-evenly items-center">
-                                    <div>
                                         {{ data[language.getLanguage].confMessageCon }}
                                         <span class="phone">+90 507 279 19 19</span>
                                     </div>
-                                    <q-card-actions align="right">
-                                        <q-btn :label="data[language.getLanguage].confButton" color="teal"
-                                            v-close-popup
-                                        />
-                                    </q-card-actions>
+                                    <div class="col-12 row justify-end">
+                                        <q-card-actions>
+                                            <q-btn
+                                                :label="data[language.getLanguage].confButton"
+                                                color="teal"
+                                                v-close-popup
+                                            />
+                                        </q-card-actions>
+                                    </div>
                                 </div>
                             </q-card>
                         </q-dialog>
