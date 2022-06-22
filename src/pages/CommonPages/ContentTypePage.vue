@@ -16,12 +16,12 @@
                         </template>
                         <template #fallback>
                             <q-list>
-                                <q-item class="row wrap">
-                                    <q-item-section avatar class="row flex-center col-2">
+                                <q-item class="row">
+                                    <q-item-section avatar class="row flex-center">
                                         <q-skeleton type="QAvatar" />
                                     </q-item-section>
 
-                                    <q-item-section class="row col-6">
+                                    <q-item-section class="row col-8">
                                         <q-item-label class="row">
                                             <q-skeleton type="text" class="col-6" />
                                         </q-item-label>

@@ -393,7 +393,11 @@ addField = false;
 
                 <q-item-section>
                     <q-item-label>{{ typeStore.list.find((type) => type.id === content.typeId).name }}</q-item-label>
-                    <q-item-label caption lines="1">{{ content.tag }}</q-item-label>
+                    <q-item-label caption lines="1" class="row">
+                        <div v-for="tag in content.tag" :key="tag" class="q-pr-sm q-pt-sm">
+                            <q-badge color="primary" :label="tag" rounded class="q-px-sm" />
+                        </div>
+                    </q-item-label>
                 </q-item-section>
 
                 <q-item-section side>
@@ -401,12 +405,7 @@ addField = false;
                     <q-popup-proxy cover :breakpoint="500">
                         <q-card class="q-pa-md">
                             <div class="column">
-                                <q-input type="text" color="teal" v-model="tag" filled :placeholder="content.tag"
-                                    @keyup.enter="
-    content.tag = (tag ? tag : content.tag);
-updateContentHeader(content.id, content.tag);
-tag = '';
-                                    ">
+                                <q-input type="text" color="teal">
                                     <template v-slot:prepend>
                                         <q-icon name="text_fields" color="teal" />
                                     </template>
@@ -421,11 +420,11 @@ tag = '';
                 <q-card-section>
                     <q-list class="fields no-border">
                         <q-item v-for="field in content.contents" :key="field.id" class="row">
-                            <div class="row items-center">
+                            <div class="row no-wrap items-center">
                                 <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
                                 <span>{{ field.label }}</span>
                             </div>
-                            <div class="q-pt-sm cursor-pointer">
+                            <div class="q-pb-sm q-pl-lg cursor-pointer">
                                 {{ field.value }}
                                 <q-popup-edit v-model="field.value" :cover="false" :offset="[0, 10]" v-slot="scope">
                                     <q-input :type="field.dataType === 'Number' ? 'number' :
@@ -485,7 +484,6 @@ export default defineComponent({
             typeStore: TypeStore(),
             name: '',
             description: '',
-            tag: '',
             newVal: '',
             contentsChanged: false,
             fieldsChanged: false,
@@ -499,8 +497,6 @@ export default defineComponent({
                 isUnique: null,
             },
             addField: false,
-            dialogId: 0,
-            dialogName: '',
             data,
             language,
         };
