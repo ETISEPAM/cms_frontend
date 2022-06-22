@@ -28,6 +28,8 @@
                                 <div class="col-12 row justify-end">
                                     <q-card-actions>
                                         <q-btn label="CONFIRM" color="teal" v-close-popup />
+                                    </q-card-actions>
+                                </div>
                                 <div class="col-12 row justify-evenly items-center">
                                     <div>
                                         {{ data[language.getLanguage].confMessageCon }}
