@@ -4,8 +4,8 @@
             <q-tabs v-model="tab" class="tabs text-grey" active-color="primary" indicator-color="primary"
                 narrow-indicator>
                 <div class="tabs row col">
-                    <q-tab name="list" label="List" class="col"></q-tab>
-                    <q-tab name="create" label="Create" class="col"></q-tab>
+                    <q-tab name="list" :label="data[language.getLanguage].list" class="col"></q-tab>
+                    <q-tab name="create" :label="data[language.getLanguage].create" class="col"></q-tab>
                 </div>
             </q-tabs>
             <q-tab-panels v-model="tab" animated class="q-pt-xs inset-shadow">
@@ -38,19 +38,21 @@
                 <q-tab-panel name="create">
                     <q-card class="no-box-shadow">
                         <q-form class="row wrap justify-center col q-gutter-lg q-py-lg">
-                            <q-input filled v-model="type.name" label="Title" class="col-9 col-lg-6">
+                            <q-input filled v-model="type.name" :label="data[language.getLanguage].title"
+                                class="col-9 col-lg-6">
                                 <template v-slot:prepend>
                                     <q-icon name="text_fields" />
                                 </template>
                             </q-input>
-                            <q-input v-model="type.description" filled label="Description" type="textarea"
-                                class="col-9 col-lg-6">
+                            <q-input v-model="type.description" filled :label="data[language.getLanguage].description"
+                                type="textarea" class="col-9 col-lg-6">
                                 <template v-slot:prepend>
                                     <q-icon name="description" />
                                 </template>
                             </q-input>
                             <div class="button col-9 col-lg-6 row justify-end">
-                                <q-btn color="teal" label="Create" rounded v-on:click="create" />
+                                <q-btn color="teal" :label="data[language.getLanguage].create" rounded
+                                    v-on:click="create" />
                             </div>
                         </q-form>
                     </q-card>
@@ -65,6 +67,10 @@ import { defineComponent, ref } from 'vue';
 import ListItems from 'components/ListItems.vue';
 import axios from 'axios';
 import { TypeStore } from 'stores/type-store';
+import { useLanguageStore } from 'stores/language-store.js';
+import data from 'src/languages/i18n.js';
+
+const language = useLanguageStore();
 
 export default defineComponent({
     name: 'TypePage',
@@ -83,6 +89,8 @@ export default defineComponent({
                 description: '',
             },
             typeStore: TypeStore(),
+            data,
+            language,
         };
     },
     methods: {

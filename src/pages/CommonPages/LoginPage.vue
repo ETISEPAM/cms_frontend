@@ -10,9 +10,9 @@
                 <q-form class="q-gutter-lg flex column justify-around" action="/panel">
                     <div>
                         <q-input :label="data[language.getLanguage].email" v-model="email"
-                            :rules="[val => !!val || 'Field is required']" />
+                            :rules="[val => !!val || data[language.getLanguage].fieldRequired]" />
                         <q-input :label="data[language.getLanguage].password" type="password" v-model="password"
-                            :rules="[val => !!val || 'Field is required']" />
+                            :rules="[val => !!val || data[language.getLanguage].fieldRequired]" />
                         <q-dialog v-model="invalid" class="dialog">
                             <q-card class="row content-between q-pa-md">
                                 <div class="col-12 row">
@@ -58,12 +58,12 @@
 <script>
 import axios from 'axios';
 import { userStore } from 'stores/user-store.js';
-import { useLanguageStore } from 'stores/language-store.js';
 import { defineComponent, ref } from 'vue';
+import { useLanguageStore } from 'stores/language-store.js';
 import data from 'src/languages/i18n.js';
 
-const user = userStore();
 const language = useLanguageStore();
+const user = userStore();
 
 export default defineComponent({
     name: 'LoginPage',
