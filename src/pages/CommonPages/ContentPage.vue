@@ -54,7 +54,7 @@
                             </template> -->
 
                             <q-carousel-slide name="landing-form">
-                                <q-form class="row q-gutter-lg q-pr-sm q-pb-md">
+                                <q-form class="row q-gutter-lg q-pr-sm q-pb-lg">
                                     <div class="col-12 row">
 
                                         <!-- DROPDOWN AUTOCOMPLETE SELECTION MENU -->
@@ -97,7 +97,7 @@
                                         >
                                             <div v-if="field.dataType === 'String'">
                                                 <q-input
-                                                    v-model="content.input[field.label]"
+                                                    v-model="newContent[field.label]"
                                                     :label="field.label"
                                                     type="text"
                                                     clearable
@@ -110,7 +110,7 @@
                                             </div>
                                             <div v-else-if="field.dataType === 'Number'">
                                                 <q-input
-                                                    v-model="content.input[field.label]"
+                                                    v-model="newContent[field.label]"
                                                     :label="field.label"
                                                     type="number"
                                                     clearable
@@ -123,30 +123,31 @@
                                             </div>
                                             <div v-else-if="field.dataType === 'Boolean'">
                                                 <q-field
-                                                    filled
+                                                    :label="field.label"
+                                                    stack-label
+                                                    class="row q-pa-none"
                                                 >
                                                     <template v-slot:before>
                                                         <q-icon name="toggle_off" />
                                                     </template>
-                                                    <template v-slot:prepend>
-                                                        <div class="text-caption">{{ field.label }}</div>
-                                                    </template>
                                                     <q-btn-toggle
-                                                        v-model="content.input[field.label]"
-                                                        color="teal"
+                                                        v-model="newContent[field.label]"
+                                                        unelevated
+                                                        text-color="white"
                                                         toggle-color="primary"
-                                                        flat
                                                         :options="[
-                                                            {label: 'YES', value: true},
-                                                            {label: 'NO', value: false},
+                                                            {label: 'Yes', value: true},
+                                                            {label: 'No', value: false},
                                                         ]"
                                                         spread
+                                                        dense
+                                                        class="col-12 q-pt-sm"
                                                     />
                                                 </q-field>
                                             </div>
                                             <div v-else-if="field.dataType === 'Date'">
                                                 <q-input
-                                                    v-model="content.input[field.label]"
+                                                    v-model="newContent[field.label]"
                                                     :label="field.label"
                                                     clearable
                                                     filled
@@ -156,14 +157,14 @@
                                                     </template>
                                                     <q-popup-proxy transition-show="scale" transition-hide="scale" :breakpoint="800">
                                                         <q-date
-                                                            v-model="content.input[field.label]"
+                                                            v-model="newContent[field.label]"
                                                         />
                                                     </q-popup-proxy>
                                                 </q-input>
                                             </div>
                                             <div v-else-if="field.dataType === 'File'">
                                                 <q-file
-                                                    v-model="content.input[field.label]"
+                                                    v-model="newContent[field.label]"
                                                     :label="field.label"
                                                     clearable
                                                     filled
@@ -178,7 +179,49 @@
                                 </q-form>
                             </q-carousel-slide>
                             <q-carousel-slide name="options-form" class="row wrap justify-end items-center q-pa-none">
-                                <q-form class="col-12 column no-wrap justify-center self-end q-gutter-sm text-right">
+                                <q-form class="col-12 column">
+                                    <div class="cursor-pointer q-pb-xs">
+                                        <span class="text-center">Tags</span>
+                                        <q-icon name="add" color="teal" class="q-pl-sm" size="sm" />
+                                        <q-popup-edit v-model="newTag" :cover="false" :offset="[0, 10]" v-slot="scope">
+                                            <q-input
+                                                type="text"
+                                                color="teal"
+                                                v-model="scope.value"
+                                                dense
+                                                autofocus
+                                                @keyup.enter="scope.set(); content.tag.push(newTag); newTag = '';"
+                                            >
+                                                <template v-slot:prepend>
+                                                    <q-icon
+                                                        name="text_fields"
+                                                        color="teal"
+                                                    />
+                                                </template>
+                                            </q-input>
+                                        </q-popup-edit>
+                                    </div>
+                                    <div class="tag-pool q-pa-sm">
+                                        <q-list v-if="content.tag.length" class="row">
+                                            <q-item v-for="tag in content.tag" :key="tag" class="row items-center q-pa-sm">
+                                                <q-badge color="primary" :label="tag" rounded class="tag-badge" />
+                                                <q-btn
+                                                    fab-mini
+                                                    color="red"
+                                                    class="badge-delete q-ml-xs q-pa-xs"
+                                                    dense
+                                                    v-on:click="deleteTag(tag)"
+                                                >
+                                                    <q-icon name="clear" size="8px" />
+                                                </q-btn>
+                                            </q-item>
+                                        </q-list>
+                                        <div v-else>
+                                            No tags assigned.
+                                        </div>
+                                    </div>
+                                </q-form>
+                                <q-form class="col-12 column no-wrap self-center q-gutter-sm text-right">
                                     <q-checkbox v-model="content.isPublished" label="Publish" color="teal" left-label />
                                     <q-checkbox v-model="content.dpAuthor" label="Display author information" color="teal" left-label />
                                     <q-checkbox v-model="content.dpDate" label="Display date information" color="teal" left-label />
@@ -211,14 +254,16 @@ export default defineComponent({
         return {
             content: {
                 typeId: 0,
-                input: {},
+                input: [],
                 isPublished: false,
                 dpAuthor: false,
                 dpDate: false,
-                tag: 'default tag',
+                tag: [],
             },
             contentStore: ContentStore(),
             typeStore: TypeStore(),
+            newTag: '',
+            newContent: [],
         };
     },
     setup() {
@@ -258,7 +303,21 @@ export default defineComponent({
         };
     },
     methods: {
-        create() {
+        async create() {
+            const fieldList = this.typeStore.list.find((type) => (type.id === this.model)).fields;
+            const keyList = Object.keys(this.newContent);
+
+            keyList.forEach((key) => {
+                const itemField = fieldList.find((field) => field.label === key);
+                this.content.input.push(
+                    {
+                        dataType: itemField.dataType,
+                        label: itemField.label,
+                        value: this.newContent[key],
+                    },
+                );
+            });
+
             axios
                 .post(
                     'http://127.0.0.1:3000/content',
@@ -273,17 +332,25 @@ export default defineComponent({
                 )
                 .then((response) => {
                     console.log(response.data);
-                    this.contentStore.$patch({ list: [...this.contentStore.list, response.data] });
+                    this.contentStore.$patch({ list: [...this.contentStore.list, { ...response.data }] });
                 })
                 .catch((err) => {
                     console.log(err.response.data);
                 });
 
+            this.resetNew();
+        },
+        deleteTag(tag) {
+            this.content.tag = this.content.tag.filter((element) => element !== tag);
+        },
+        resetNew() {
+            this.model = ref(null);
             this.content.typeId = 0;
             this.content.input = {};
             this.content.isPublished = false;
             this.content.dpAuthor = false;
             this.content.dpDate = false;
+            this.content.tag = [];
         },
     },
 });
@@ -292,13 +359,22 @@ export default defineComponent({
 <style lang="sass" scoped>
 .page
     margin: 0
-
     .q-card
         background-color: inherit
-
     .q-tab-panel
         padding: 0
-
+        .tag-pool
+            height: 84px
+            background: rgb(20, 20, 20)
+            overflow: auto
+            .q-item
+                min-height: 0
+            .tag-badge
+                padding: 0 12px
+                height: 18px
+            .badge-delete
+                min-width: 0
+                min-height: 0
         .q-placeholder
             max-width: 0
 </style>
