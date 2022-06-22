@@ -17,12 +17,14 @@
                                     <q-icon name="error" class="flex self-center q-pr-md" />
                                     The information you've entered is incorrect, please try again.
                                 </div>
-                                <div class="col-12 row justify-evenly items-center">
-                                    <div>
+                                <div class="col-12 row items-center">
+                                    <div class="q-pt-sm">
                                         If the issue persists, contact support at
-                                        <span class="phone">+90 507 279 19 19</span>
+                                        <span class="phone">+90 507 279 19 19</span>.
                                     </div>
-                                    <q-card-actions align="right">
+                                </div>
+                                <div class="col-12 row justify-end">
+                                    <q-card-actions>
                                         <q-btn label="CONFIRM" color="teal" v-close-popup />
                                     </q-card-actions>
                                 </div>
