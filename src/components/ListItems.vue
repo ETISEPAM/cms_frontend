@@ -395,7 +395,7 @@ addField = false;
                     <q-item-label>{{ typeStore.list.find((type) => type.id === content.typeId).name }}</q-item-label>
                     <q-item-label caption lines="1" class="row">
                         <div v-for="tag in content.tag" :key="tag" class="q-pr-sm q-pt-sm">
-                            <q-badge color="primary" :label="tag" rounded class="q-px-sm" />
+                            <q-badge color="accent" :label="tag" rounded class="q-px-sm" />
                         </div>
                     </q-item-label>
                 </q-item-section>

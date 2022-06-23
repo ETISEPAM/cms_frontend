@@ -66,6 +66,10 @@ const data = {
         maxValue: 'Maksimum değer',
         title: 'Başlık',
         description: 'Açıklama',
+        tags: 'Etiketler',
+        delete: 'Sil',
+        areYouSure: 'Silmek istediğinize emin misiniz?',
+        noTagsAssigned: 'Atanmış etiket yok.',
     },
     eng: {
         login: 'Login',
@@ -133,6 +137,10 @@ const data = {
         maxValue: 'Maximum value',
         title: 'Title',
         description: 'Description',
+        tags: 'Tags',
+        delete: 'Delete',
+        areYouSure: 'Are you sure?',
+        noTagsAssigned: 'No tags assigned.',
     },
     rus: {
         login: 'Войти',
@@ -187,7 +195,7 @@ const data = {
         dataType: 'Тип данных',
         defaultValue: 'Значение по умолчанию',
         isMandatory: 'Является обязательным',
-        isUnique: 'Уникален',
+        isUnique: 'Уникально',
         yes: 'Да',
         no: 'Нет',
         addField: 'добавить поле',
@@ -200,6 +208,10 @@ const data = {
         maxValue: 'Максимальное значение',
         title: 'Заголовок',
         description: 'Описание',
+        tags: 'Теги',
+        delete: 'Удалить',
+        areYouSure: 'Вы уверены?',
+        noTagsAssigned: 'Теги не присвоены.',
     },
 };
 

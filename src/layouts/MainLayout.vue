@@ -12,7 +12,8 @@
 
         <q-drawer v-model="leftDrawerOpen" side="left" elevated :breakpoint="800" show-if-above class="drawer">
             <div class="image col-2 row justify-center self-center q-pt-lg">
-                <img src="~src/assets/imgs/emakinaDark.png" alt="EMAKINA Logo" />
+                <img :src="theme.getTheme ? '../src/assets/imgs/emakinaDark.png' : '../src/assets/imgs/emakina.png'"
+                    alt="EMAKINA Logo" />
             </div>
 
             <q-list separator padding class="list col rounded-borders flex column justify-between q-pt-lg">
@@ -85,11 +86,17 @@
 import { defineComponent, ref } from 'vue';
 import { useLanguageStore } from 'stores/language-store.js';
 import data from 'src/languages/i18n.js';
+import { useThemeStore } from 'src/stores/theme-store.js';
 
 const language = useLanguageStore();
 
 export default defineComponent({
     name: 'MainLayout',
+    data() {
+        return {
+            theme: useThemeStore(),
+        };
+    },
     setup() {
         const leftDrawerOpen = ref(false);
 
@@ -102,15 +109,6 @@ export default defineComponent({
             language,
             data,
         };
-    },
-    methods: {
-        changeLanguage() {
-            if (language.getLanguage === 'eng') {
-                language.setLanguage('tr');
-            } else {
-                language.setLanguage('eng');
-            }
-        },
     },
 
 });
