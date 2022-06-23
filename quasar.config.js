@@ -106,6 +106,7 @@ module.exports = configure((/* ctx */) => ({
 
         // Quasar plugins
         plugins: [],
+        cssAddon: true,
     },
 
     // animations: 'all', // --- includes all animations
