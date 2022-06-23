@@ -26,11 +26,8 @@
                                     </div>
                                     <div class="col-12 row justify-end">
                                         <q-card-actions>
-                                            <q-btn
-                                                :label="data[language.getLanguage].confButton"
-                                                color="teal"
-                                                v-close-popup
-                                            />
+                                            <q-btn :label="data[language.getLanguage].confButton" color="teal"
+                                                v-close-popup />
                                         </q-card-actions>
                                     </div>
                                 </div>
@@ -124,6 +121,7 @@ export default defineComponent({
                     jwToken: response.data[0].jwToken,
                     email: response.data[0].email,
                     password: response.data[0].password,
+                    role: response.data[0].role,
                 };
 
                 if (response.data[0].firstLogin === true) {
