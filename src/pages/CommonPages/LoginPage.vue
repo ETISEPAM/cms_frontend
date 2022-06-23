@@ -1,59 +1,56 @@
 <template>
     <q-page class="page row wrap justify-center items-start">
         <div class="col-12 row justify-center self-center">
-            <img :src="theme.getTheme ? '../src/assets/imgs/emakinaDark.png' : '../src/assets/imgs/emakina.png'" alt="EMAKINA Logo">
+            <img :src="theme.getTheme ? '../src/assets/imgs/emakinaDark.png' : '../src/assets/imgs/emakina.png'"
+                alt="EMAKINA Logo">
 
         </div>
-
-        <q-card class="col-8 col-md-6 col-lg-4">
-            <q-card-section class="col">
-                <q-form class="q-gutter-lg flex column justify-around" action="/panel">
-                    <div>
-                        <q-input :label="data[language.getLanguage].email" v-model="email"
-                            :rules="[val => !!val || data[language.getLanguage].fieldRequired]" />
-                        <q-input :label="data[language.getLanguage].password" type="password" v-model="password"
-                            :rules="[val => !!val || data[language.getLanguage].fieldRequired]" />
-                        <q-dialog v-model="invalid" class="dialog">
-                            <q-card class="row content-between q-pa-md">
-                                <div class="col-12 row">
-                                    <q-icon name="error" class="flex self-center q-pr-md" />
-                                    {{ data[language.getLanguage].confMessage }}
-                                </div>
-                                <div class="col-12 row items-center">
-                                    <div class="q-pt-sm">
-                                        {{ data[language.getLanguage].confMessageCon }}
-                                        <span class="phone">+90 507 279 19 19</span>
-                                    </div>
-                                    <div class="col-12 row justify-end">
-                                        <q-card-actions>
-                                            <q-btn :label="data[language.getLanguage].confButton" color="teal"
-                                                v-close-popup />
-                                        </q-card-actions>
-                                    </div>
-                                </div>
-                            </q-card>
-                        </q-dialog>
-                    </div>
-                    <!-- <div>
-                        <vue-recaptcha ref="recaptcha" @expired="onExpired" :sitekey="sitekey">
-                        </vue-recaptcha>
-                        <button @click="resetRecaptcha">Reset ReCAPTCHA</button>
-                    </div> -->
-                    <div class="button flex justify-end">
-                        <q-btn color="primary" :label="data[language.getLanguage].login" rounded v-on:click="login">
-                        </q-btn>
-                    </div>
-                </q-form>
-            </q-card-section>
-        </q-card>
         <div class="col-12 row justify-center">
-            <q-btn-group outline>
-                <q-btn label="EN" v-on:click="changeLanguageEn"></q-btn>
-                <q-btn label="TR" v-on:click="changeLanguageTr"></q-btn>
-                <q-btn label="RUS" v-on:click="changeLanguageRus"></q-btn>
-            </q-btn-group>
+            <q-card class="col-8 col-md-6 col-lg-4">
+                <q-card-section class="col">
+                    <q-form class="q-gutter-lg flex column justify-around" action="/panel">
+                        <div>
+                            <q-input :label="data[language.getLanguage].email" v-model="email"
+                                :rules="[val => !!val || data[language.getLanguage].fieldRequired]" />
+                            <q-input :label="data[language.getLanguage].password" type="password" v-model="password"
+                                :rules="[val => !!val || data[language.getLanguage].fieldRequired]" />
+                            <q-dialog v-model="invalid" class="dialog">
+                                <q-card class="row content-between q-pa-md">
+                                    <div class="col-12 row">
+                                        <q-icon name="error" class="flex self-center q-pr-md" />
+                                        {{ data[language.getLanguage].confMessage }}
+                                    </div>
+                                    <div class="col-12 row items-center">
+                                        <div class="q-pt-sm">
+                                            {{ data[language.getLanguage].confMessageCon }}
+                                            <span class="phone">+90 507 279 19 19</span>
+                                        </div>
+                                        <div class="col-12 row justify-end">
+                                            <q-card-actions>
+                                                <q-btn :label="data[language.getLanguage].confButton" color="teal"
+                                                    v-close-popup />
+                                            </q-card-actions>
+                                        </div>
+                                    </div>
+                                </q-card>
+                            </q-dialog>
+                        </div>
+                        <!-- <div>
+                            <vue-recaptcha ref="recaptcha" @expired="onExpired" :sitekey="sitekey">
+                            </vue-recaptcha>
+                            <button @click="resetRecaptcha">Reset ReCAPTCHA</button>
+                        </div> -->
+                        <div class="button flex justify-end">
+                            <q-btn color="primary" :label="data[language.getLanguage].login" rounded v-on:click="login">
+                            </q-btn>
+                        </div>
+                    </q-form>
+                </q-card-section>
+            </q-card>
+            <div class="col-12 row justify-center q-pt-md">
+                <q-btn-toggle v-model="lang" flat :options="langOptions" @update:model-value="changeLanguage" />
+            </div>
         </div>
-
     </q-page>
 </template>
 
@@ -83,23 +80,29 @@ export default defineComponent({
             data,
             language,
             theme: useThemeStore(),
+            lang: ref(language.getLanguage),
+            langOptions: [
+                {
+                    label: 'EN',
+                    value: 'eng',
+                },
+                {
+                    label: 'TR',
+                    value: 'tr',
+                },
+                {
+                    label: 'UA',
+                    value: 'ua',
+                },
+                {
+                    label: 'RU',
+                    value: 'rus',
+                },
+            ],
         };
     },
     methods: {
         async login() {
-            // --- CODE BELOW USES API ---
-
-            // const response = await axios({
-            //     method: 'post',
-            //     url: 'http://127.0.0.1:3001/api/users/login',
-            //     data: {
-            //         username: this.email,
-            //         password: this.password,
-            //     },
-            // }).catch((error) => {
-            //     console.log(error.response.data.msg);
-            // });
-
             // --- CODE BELOW USES MOCK DATABASE ---
             // POST LOGIN FORM INPUT AND NAVIGATE TO HOMEPAGE IF VALID
 
@@ -141,14 +144,8 @@ export default defineComponent({
                 this.invalid = true;
             }
         },
-        changeLanguageEn() {
-            language.setLanguage('eng');
-        },
-        changeLanguageTr() {
-            language.setLanguage('tr');
-        },
-        changeLanguageRus() {
-            language.setLanguage('rus');
+        changeLanguage() {
+            language.setLanguage(this.lang);
         },
         /* onSubmit() {
             this.$refs.invisibleRecaptcha.execute();

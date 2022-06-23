@@ -1,31 +1,28 @@
 <template>
     <q-page class="page">
-        <q-card class="card">
-            <q-card-section class="text-h5 text-weight-bold">
+        <q-card class="card row">
+            <q-card-section class="col-12 col-sm-6 col-md-8 col-lg-9 text-h5 text-weight-bold">
                 {{ data[language.getLanguage].welcomeText }} {{ user.firstName }}.
             </q-card-section>
             <!-- <ConfirmDialog /> -->
-            <q-card-section>
-                <div class="row justify-between items-center">
-                    <div class="text-caption">
-                        {{ data[language.getLanguage].mode }}
-                    </div>
-                    <q-toggle v-model="blueModel" @update:model-value="lightModeOn" />
-                </div>
-                <div class="row justify-between items-center">
-                    <div class="text-caption">
-                        {{ data[language.getLanguage].sysLang }}
-                    </div>
-                    <div>
-                        <q-btn-group push>
-                            <q-btn label="EN" v-on:click="changeLanguageEn"></q-btn>
-                            <q-btn label="TR" v-on:click="changeLanguageTr"></q-btn>
-                            <q-btn label="RUS" v-on:click="changeLanguageRus"></q-btn>
-                        </q-btn-group>
-                    </div>
-                </div>
+            <q-card-section class="col-12 col-sm-6 col-md-4 col-lg-3 row justify-center justify-sm-end items-center">
+                    <q-btn v-model="blueModel" v-on:click="lightModeOn" :icon="themeController ? 'dark_mode' : 'light_mode'" flat />
+                    <q-select
+                        outlined
+                        v-model="lang"
+                        :options="langOptions"
+                        dense
+                        behavior="menu"
+                        emit-value
+                        map-options
+                        @update:model-value="changeLanguage"
+                    >
+                        <template v-slot:prepend>
+                            <q-icon name="language" class="q-pr-sm" />
+                        </template>
+                    </q-select>
             </q-card-section>
-            <q-card-section class="chart-section">
+            <q-card-section class="col-12 chart-section">
                 <chartExample :themeController="themeController" class="chart"/>
             </q-card-section>
         </q-card>
@@ -61,9 +58,27 @@ export default defineComponent({
 
         return {
             blueModel: ref(theme.getTheme),
-            model: ref('eng'),
+            lang: ref(language.getLanguage),
             language,
             data,
+            langOptions: [
+                {
+                    label: 'English',
+                    value: 'eng',
+                },
+                {
+                    label: 'Türkçe',
+                    value: 'tr',
+                },
+                {
+                    label: 'Українська',
+                    value: 'ua',
+                },
+                {
+                    label: 'Русский',
+                    value: 'rus',
+                },
+            ],
         };
     },
     components: {
@@ -71,14 +86,8 @@ export default defineComponent({
         chartExample,
     },
     methods: {
-        changeLanguageEn() {
-            this.language.setLanguage('eng');
-        },
-        changeLanguageTr() {
-            this.language.setLanguage('tr');
-        },
-        changeLanguageRus() {
-            this.language.setLanguage('rus');
+        changeLanguage() {
+            this.language.setLanguage(this.lang);
         },
         lightModeOn() {
             this.themeController = !this.themeController;
