@@ -1,29 +1,22 @@
 <template>
     <q-page class="page">
-        <q-card class="card row">
+        <q-card class="card row no-shadow">
             <q-card-section class="col-12 col-sm-6 col-md-8 col-lg-9 text-h5 text-weight-bold">
                 {{ data[language.getLanguage].welcomeText }} {{ user.firstName }}.
             </q-card-section>
             <!-- <ConfirmDialog /> -->
             <q-card-section class="col-12 col-sm-6 col-md-4 col-lg-3 row justify-center justify-sm-end items-center">
-                    <q-btn v-model="blueModel" v-on:click="lightModeOn" :icon="themeController ? 'dark_mode' : 'light_mode'" flat />
-                    <q-select
-                        outlined
-                        v-model="lang"
-                        :options="langOptions"
-                        dense
-                        behavior="menu"
-                        emit-value
-                        map-options
-                        @update:model-value="changeLanguage"
-                    >
-                        <template v-slot:prepend>
-                            <q-icon name="language" class="q-pr-sm" />
-                        </template>
-                    </q-select>
+                <q-btn v-model="blueModel" v-on:click="lightModeOn" :icon="themeController ? 'dark_mode' : 'light_mode'"
+                    flat />
+                <q-select outlined v-model="lang" :options="langOptions" dense behavior="menu" emit-value map-options
+                    @update:model-value="changeLanguage">
+                    <template v-slot:prepend>
+                        <q-icon name="language" class="q-pr-sm" />
+                    </template>
+                </q-select>
             </q-card-section>
             <q-card-section class="col-12 chart-section">
-                <chartExample :themeController="themeController" class="chart"/>
+                <chartExample :themeController="themeController" class="chart" />
             </q-card-section>
         </q-card>
     </q-page>

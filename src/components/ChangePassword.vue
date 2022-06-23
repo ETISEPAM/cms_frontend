@@ -1,5 +1,5 @@
 <template>
-    <q-card class="col-10 col-sm-8 col-md-6 col-lg-4">
+    <q-card class="card">
         <q-card-section>
             <q-form class="q-gutter-lg flex column justify-around" action="/panel">
                 <div>
@@ -22,10 +22,17 @@
                     <div class="q-pt-xl"
                         :class="themeController ? 'password-validation-dark' : 'password-validation-light'">
                         <ul>
-                            <li v-bind:class="{ is_valid: validPassword.eight }">8 Characters</li>
-                            <li v-bind:class="{ is_valid: validPassword.num }">Contains Number</li>
-                            <li v-bind:class="{ is_valid: validPassword.upper }">Contains Uppercase</li>
-                            <li v-bind:class="{ is_valid: validPassword.special }">Contains Special Character
+                            <li v-bind:class="{ is_valid: validPassword.eight }">{{
+                                    data[language.getLanguage].charNumber
+                            }}</li>
+                            <li v-bind:class="{ is_valid: validPassword.num }">{{ data[language.getLanguage].containsNum
+                            }}</li>
+                            <li v-bind:class="{ is_valid: validPassword.upper }">{{
+                                    data[language.getLanguage].containsUpper
+                            }}</li>
+                            <li v-bind:class="{ is_valid: validPassword.special }">{{
+                                    data[language.getLanguage].conainsChar
+                            }}
                             </li>
                         </ul>
                     </div>
@@ -118,37 +125,6 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
-.q-page
-    margin: 0
-
-*, *:before, *:after
-    box-sizing: inherit
-
-body
-    display: flex
-    justify-content: center
-    align-items: center
-    background: #ff6b6b
-    -webkit-font-smoothing: antialiased
-    -moz-osx-font-smoothing: grayscale
-
-h2
-    text-align: center
-    color: #FFF
-    font-weight: 400
-
-input[type="password"]
-    line-height: 1.5
-    display: block
-    color: rgba(136, 152, 170, 1)
-    font-weight: 300
-    width: 100%
-    height: calc(2.75rem + 2px)
-    padding: .625rem .75rem
-    border-radius: .25rem
-    background-color: #fff
-    outline: 0
-
-input[type="password"]:focus
-    border-color: rgba(50, 151, 211, .45)
+.card
+    width: 450px
 </style>

@@ -52,46 +52,41 @@
                 </q-tab-panel>
                 <q-tab-panel name="create">
                     <q-card class="q-pa-md row justify-center">
-                        <q-form @submit="onSubmit" @reset="onReset" class="col-12 row justify-center q-py-md q-gutter-sm">
-                            <q-input filled clearable dense v-model="user.name" :label="data[language.getLanguage].name" lazy-rules
-                                :rules="[val => val && val.length > 0 || data[language.getLanguage].fieldRequired]"
-                                class="col-9 col-sm-5 col-md-4"
-                            >
-                            </q-input>
-                            <q-input filled clearable dense v-model="user.surname" :label="data[language.getLanguage].surname"
+                        <q-form @submit="onSubmit" @reset="onReset"
+                            class="col-12 row justify-center q-py-md q-gutter-sm">
+                            <q-input filled clearable dense v-model="user.name" :label="data[language.getLanguage].name"
                                 lazy-rules
                                 :rules="[val => val && val.length > 0 || data[language.getLanguage].fieldRequired]"
-                                class="col-9 col-sm-5 col-md-4"
-                            >
+                                class="col-9 col-sm-5 col-md-4">
                             </q-input>
-                            <q-input filled clearable dense v-model="user.username" :label="data[language.getLanguage].username"
-                                lazy-rules
+                            <q-input filled clearable dense v-model="user.surname"
+                                :label="data[language.getLanguage].surname" lazy-rules
                                 :rules="[val => val && val.length > 0 || data[language.getLanguage].fieldRequired]"
-                                class="col-9 col-sm-5 col-md-4"
-                            >
+                                class="col-9 col-sm-5 col-md-4">
                             </q-input>
-                            <q-input filled clearable dense v-model="user.email" :label="data[language.getLanguage].email" lazy-rules
-                                :rules="
+                            <q-input filled clearable dense v-model="user.username"
+                                :label="data[language.getLanguage].username" lazy-rules
+                                :rules="[val => val && val.length > 0 || data[language.getLanguage].fieldRequired]"
+                                class="col-9 col-sm-5 col-md-4">
+                            </q-input>
+                            <q-input filled clearable dense v-model="user.email"
+                                :label="data[language.getLanguage].email" lazy-rules :rules="
                                 [val => isValidEmailAddress(val) || data[language.getLanguage].validEmail]"
-                                class="col-9 col-sm-5 col-md-4"
-                            >
+                                class="col-9 col-sm-5 col-md-4">
                             </q-input>
                             <q-input filled clearable dense v-model="user.password"
                                 @input="validPassword = checkPassword(user.password)"
                                 @update:modelValue="validPassword = checkPassword(user.password)"
                                 :label="data[language.getLanguage].password" :type="isPwd ? 'password' : 'text'"
                                 :rules="[val => val && val.length > 0 || data[language.getLanguage].fieldRequired]"
-                                class="col-9 col-sm-5 col-md-4"
-                            >
+                                class="col-9 col-sm-5 col-md-4">
                                 <template v-slot:append>
-                                    <q-icon
-                                        :name="isPwd ? 'visibility_off' : 'visibility'"
-                                        class="cursor-pointer"
-                                        @click="isPwd = !isPwd"
-                                    />
+                                    <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
+                                        @click="isPwd = !isPwd" />
                                 </template>
                             </q-input>
-                            <div class="password-validation col-9 col-sm-10 col-md-8">
+                            <div class="col-9 col-sm-10 col-md-8"
+                                :class="themeController ? 'password-validation-dark' : 'password-validation-light'">
                                 <ul>
                                     <li v-bind:class="{ is_valid: validPassword.eight }" class="q-ml-sm">
                                         {{ data[language.getLanguage].charNumber }}
@@ -128,6 +123,7 @@ import { userStore } from 'stores/user-store.js';
 import { checkPassword } from 'src/validations.js';
 import { useLanguageStore } from 'stores/language-store.js';
 import data from 'src/languages/i18n.js';
+import { useThemeStore } from 'stores/theme-store.js';
 
 const language = useLanguageStore();
 
@@ -139,6 +135,7 @@ export default defineComponent({
         };
     },
     data() {
+        const theme = useThemeStore();
         return {
             user: {
                 name: '',
@@ -151,6 +148,8 @@ export default defineComponent({
             checkPassword,
             language,
             data,
+            theme,
+            themeController: theme.getTheme,
             validPassword: {
                 eight: false,
                 num: false,
@@ -172,6 +171,10 @@ export default defineComponent({
             this.user.username = null;
             this.user.email = null;
             this.user.password = null;
+            this.validPassword.eight = false;
+            this.validPassword.num = false;
+            this.validPassword.upper = false;
+            this.validPassword.special = false;
         },
         onSave() {
             if (

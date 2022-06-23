@@ -1,6 +1,6 @@
 <template>
     <q-page class="page">
-        <q-card class="card row justify-around items-start">
+        <q-card class="card row justify-around items-start no-shadow">
             <q-card-section class="col-12">
                 <div class="text-h5 text-weight-bold">{{ data[language.getLanguage].profileSet }}</div>
                 <div class="text-caption q-mt-none">{{ data[language.getLanguage].changeSet }}</div>
@@ -32,7 +32,6 @@
                     @click="changePasswordDialog = true" />
                 <q-dialog v-model="changePasswordDialog">
                     <ChangePassword></ChangePassword>
-
                 </q-dialog>
             </q-card-section>
         </q-card>
@@ -46,6 +45,7 @@ import axios from 'axios';
 import { useLanguageStore } from 'stores/language-store.js';
 import data from 'src/languages/i18n.js';
 import ChangePassword from 'src/components/ChangePassword.vue';
+import { useThemeStore } from 'stores/theme-store.js';
 
 const language = useLanguageStore();
 
@@ -62,11 +62,14 @@ export default defineComponent({
         ChangePassword,
     },
     data() {
+        const theme = useThemeStore();
         return {
             firstName: this.user.firstName,
             lastName: this.user.lastName,
             username: this.user.username,
             changePasswordDialog: ref(false),
+            theme,
+            themeController: theme.getTheme,
         };
     },
     methods: {
