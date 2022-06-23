@@ -1,6 +1,6 @@
 <template>
     <q-page class="page">
-        <q-card>
+        <q-card class="card">
             <q-tabs v-model="tab" class="tabs text-grey" active-color="primary" indicator-color="primary"
                 narrow-indicator>
                 <div class="tabs row col">
@@ -207,13 +207,14 @@ export default defineComponent({
 <style lang="sass" scoped>
 .page
     margin: 0
+    padding: 0
 
-    .q-card
+    .card
         background-color: inherit
 
-    .q-tab-panel
-        padding: 0
+        .q-tab-panel
+            padding: 0
 
-        .q-placeholder
-            max-width: 0
+            .q-placeholder
+                max-width: 0
 </style>
