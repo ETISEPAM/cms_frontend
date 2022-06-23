@@ -1,4 +1,60 @@
 <template>
+    <div class="q-pa-sm row justify-between items-center">
+        <div class="col-10 q-pl-md row items-center">
+            <q-pagination
+                v-model="current"
+                color="teal"
+                :max="10"
+                :max-pages="6"
+                input
+            />
+        </div>
+        <div class="col-2 row justify-end">
+            <q-btn icon="search" color="teal" @click="search = true" flat dense />
+        </div>
+        <q-dialog v-model="search" position="right">
+            <q-card>
+                <q-linear-progress :value="1" color="pink-13" />
+
+                <q-card-section class="row items-center">
+                    <div>
+                        <div class="text-weight-bold q-pb-sm">Sort</div>
+                        <q-select filled clearable use-input hide-selected fill-input
+                            dense behavior="menu" label="Choose parameter"
+                        >
+                            <template v-slot:no-option>
+                                <q-item>
+                                    <q-item-section class="text-grey">
+                                        {{ data[language.getLanguage].noResults }}
+                                    </q-item-section>
+                                </q-item>
+                            </template>
+                        </q-select>
+                    </div>
+                </q-card-section>
+                <q-card-section class="row items-center">
+                    <div>
+                        <div class="text-weight-bold q-pb-sm">Filter</div>
+                        <q-select filled clearable use-input hide-selected fill-input
+                            dense behavior="menu" label="Choose parameter" class="q-pb-xs"
+                        >
+                            <template v-slot:no-option>
+                                <q-item>
+                                    <q-item-section class="text-grey">
+                                        {{ data[language.getLanguage].noResults }}
+                                    </q-item-section>
+                                </q-item>
+                            </template>
+                        </q-select>
+                        <q-input type="text" dense filled />
+                    </div>
+                </q-card-section>
+                <q-card-actions align="right" class="q-px-md q-pb-md q-pt-none">
+                    <q-btn label="Apply" color="pink-13" dense />
+                </q-card-actions>
+            </q-card>
+        </q-dialog>
+    </div>
     <q-list v-if="page === 'contentTypePage'">
         <q-expansion-item group="typeExpand" v-for="type in typeStore.list" :key="type.id" expand-icon-class="hidden"
             class="q-py-xs" clickable ripple @hide="resetNew">
@@ -21,13 +77,15 @@
                         <q-card class="q-pa-md">
                             <div class="column">
                                 <q-input type="text" color="teal" v-model="name" filled autofocus
-                                    :placeholder="type.name" @keyup.enter="
-    type.name = (name ? name : type.name);
-type.description = (description ? description : type.description);
-updateTypeHeader(type.id, type.name, type.description);
-name = '';
-description = '';
-                                    ">
+                                    :placeholder="type.name"
+                                    @keyup.enter="
+                                        type.name = (name ? name : type.name);
+                                        type.description = (description ? description : type.description);
+                                        updateTypeHeader(type.id, type.name, type.description);
+                                        name = '';
+                                        description = '';
+                                    "
+                                >
                                     <template v-slot:prepend>
                                         <q-icon name="text_fields" color="teal" />
                                     </template>
@@ -590,6 +648,8 @@ export default defineComponent({
                         .filter((v) => v.label.toLocaleLowerCase().includes(val.toLocaleLowerCase()));
                 });
             },
+            current: ref(1),
+            search: ref(false),
         };
     },
     methods: {
