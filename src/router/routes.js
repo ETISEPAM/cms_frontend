@@ -28,10 +28,10 @@ const routes = [
         ],
     },
     {
-        path: '/panel/registration',
+        path: '/panel/client',
         component: () => import('layouts/MainLayout.vue'),
         children: [
-            { path: '', component: () => import('src/pages/AdminPages/RegistrationPage.vue') },
+            { path: '', component: () => import('src/pages/AdminPages/ClientPage.vue') },
         ],
     },
     {
