@@ -1,13 +1,7 @@
 <template>
     <div class="q-pa-sm row justify-between items-center">
         <div class="col-10 q-pl-md row items-center">
-            <q-pagination
-                v-model="current"
-                color="teal"
-                :max="10"
-                :max-pages="6"
-                input
-            />
+            <q-pagination v-model="current" color="teal" :max="10" :max-pages="6" input />
         </div>
         <div class="col-2 row justify-end">
             <q-btn icon="search" color="teal" @click="search = true" flat dense />
@@ -19,9 +13,8 @@
                 <q-card-section class="row items-center">
                     <div>
                         <div class="text-weight-bold q-pb-sm">Sort</div>
-                        <q-select filled clearable use-input hide-selected fill-input
-                            dense behavior="menu" label="Choose parameter"
-                        >
+                        <q-select filled clearable use-input hide-selected fill-input dense behavior="menu"
+                            label="Choose parameter">
                             <template v-slot:no-option>
                                 <q-item>
                                     <q-item-section class="text-grey">
@@ -35,9 +28,8 @@
                 <q-card-section class="row items-center">
                     <div>
                         <div class="text-weight-bold q-pb-sm">Filter</div>
-                        <q-select filled clearable use-input hide-selected fill-input
-                            dense behavior="menu" label="Choose parameter" class="q-pb-xs"
-                        >
+                        <q-select filled clearable use-input hide-selected fill-input dense behavior="menu"
+                            label="Choose parameter" class="q-pb-xs">
                             <template v-slot:no-option>
                                 <q-item>
                                     <q-item-section class="text-grey">
@@ -77,15 +69,13 @@
                         <q-card class="q-pa-md">
                             <div class="column">
                                 <q-input type="text" color="teal" v-model="name" filled autofocus
-                                    :placeholder="type.name"
-                                    @keyup.enter="
-                                        type.name = (name ? name : type.name);
-                                        type.description = (description ? description : type.description);
-                                        updateTypeHeader(type.id, type.name, type.description);
-                                        name = '';
-                                        description = '';
-                                    "
-                                >
+                                    :placeholder="type.name" @keyup.enter="
+    type.name = (name ? name : type.name);
+type.description = (description ? description : type.description);
+updateTypeHeader(type.id, type.name, type.description);
+name = '';
+description = '';
+                                    ">
                                     <template v-slot:prepend>
                                         <q-icon name="text_fields" color="teal" />
                                     </template>
@@ -110,7 +100,8 @@ description = '';
             </template>
 
             <q-expansion-item group="fieldExpand" v-for="field in type.fields" :key="field.id" :header-inset-level="1"
-                :content-inset-level="1" expand-separator class="field-expand" popup @hide="
+                :content-inset-level="1" expand-separator
+                :class="themeController ? 'field-expand-dark' : 'field-expand-light'" popup @hide="
                     if (fieldsChanged) fieldsChanged = false;
                 " @before-show="newField = { ...field }">
                 <template v-slot:header>
@@ -130,7 +121,7 @@ description = '';
                 <q-card>
                     <q-card-section>
                         <q-list class="fields no-border">
-                            <q-item>
+                            <q-item :class="themeController ? 'q-item-dark' : 'q-item-light'">
                                 <label class="row items-center q-pb-sm">
                                     <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
                                     <span>{{ data[language.getLanguage].label }}</span>
@@ -148,7 +139,7 @@ description = '';
                                     </q-popup-edit>
                                 </div>
                             </q-item>
-                            <q-item>
+                            <q-item :class="themeController ? 'q-item-dark' : 'q-item-light'">
                                 <div class="row items-center q-pb-sm">
                                     <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
                                     <span>{{ data[language.getLanguage].dataType }}</span>
@@ -180,7 +171,8 @@ description = '';
                                     </q-popup-edit>
                                 </div>
                             </q-item>
-                            <q-item v-if="newField.dataType !== 'File'">
+                            <q-item v-if="newField.dataType !== 'File'"
+                                :class="themeController ? 'q-item-dark' : 'q-item-light'">
                                 <div class="row items-center q-pb-sm">
                                     <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
                                     <span>{{ data[language.getLanguage].defaultValue }}</span>
@@ -212,7 +204,8 @@ description = '';
                                     </q-popup-edit>
                                 </div>
                             </q-item>
-                            <q-item v-if="newField.dataType !== 'Boolean'">
+                            <q-item v-if="newField.dataType !== 'Boolean'"
+                                :class="themeController ? 'q-item-dark' : 'q-item-light'">
                                 <div class="row items-center q-pb-sm">
                                     <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
                                     <span>
@@ -239,7 +232,8 @@ description = '';
                                     </q-popup-edit>
                                 </div>
                             </q-item>
-                            <q-item v-if="newField.dataType !== 'Boolean'">
+                            <q-item v-if="newField.dataType !== 'Boolean'"
+                                :class="themeController ? 'q-item-dark' : 'q-item-light'">
                                 <div class="row items-center q-pb-sm">
                                     <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
                                     <span>
@@ -266,7 +260,7 @@ description = '';
                                     </q-popup-edit>
                                 </div>
                             </q-item>
-                            <q-item>
+                            <q-item :class="themeController ? 'q-item-dark' : 'q-item-light'">
                                 <div class="row items-center q-pb-sm">
                                     <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
                                     <span>{{ data[language.getLanguage].isMandatory }}</span>
@@ -277,7 +271,7 @@ description = '';
                                         { label: data[language.getLanguage].no, value: false },
                                     ]" />
                             </q-item>
-                            <q-item>
+                            <q-item :class="themeController ? 'q-item-dark' : 'q-item-light'">
                                 <div class="row items-center q-pb-sm">
                                     <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
                                     <span>{{ data[language.getLanguage].isUnique }}</span>
@@ -302,7 +296,8 @@ description = '';
                         <q-btn color="primary" :label="data[language.getLanguage].addField" class="col-12"
                             v-on:click="addField = true">
                             <q-popup-proxy @before-show="resetNew" :breakpoint="4092">
-                                <q-card class="add-field row q-pt-sm q-px-sm">
+                                <q-card class="row q-pt-sm q-px-sm"
+                                    :class="themeController ? 'add-field-dark' : 'add-field-light'">
                                     <q-card-section class="col-12 q-px-sm q-pt-sm">
                                         <div class="text-weight-bold text-h6">
                                             {{ data[language.getLanguage].addingFieldTo }} {{ type.name }}
@@ -387,7 +382,8 @@ description = '';
                                                 (!newField.dataType ? 'question_mark' : 'numbers')" color="teal" />
                                             </template>
                                         </q-input>
-                                        <q-item class="col-12 form-item row justify-between q-my-md">
+                                        <q-item class="col-12 form-item row justify-between q-my-md"
+                                            :class="themeController ? 'q-item-dark' : 'q-item-light'">
                                             <q-item-section>
                                                 <span>
                                                     {{ data[language.getLanguage].isMandatory }}
@@ -402,7 +398,8 @@ description = '';
                                                     ]" />
                                             </q-item-section>
                                         </q-item>
-                                        <q-item class="col-12 form-item row justify-between">
+                                        <q-item class="col-12 form-item row justify-between"
+                                            :class="themeController ? 'q-item-dark' : 'q-item-light'">
                                             <q-item-section>
                                                 <span>
                                                     {{ data[language.getLanguage].isUnique }}
@@ -419,15 +416,12 @@ description = '';
                                         </q-item>
                                         <q-item class="col-12 row justify-center q-pa-none q-my-md">
                                             <q-btn color="primary" :label="data[language.getLanguage].saveIt"
-                                                type="button"
-                                                v-on:click="
-                                                    type.fields = [...type.fields, { ...newField }];
-                                                    addTypeField(type.id, type.fields);
-                                                    resetNew();
-                                                    addField = false;
-                                                "
-                                                class="col-9"
-                                            />
+                                                type="button" v-on:click="
+    type.fields = [...type.fields, { ...newField }];
+addTypeField(type.id, type.fields);
+resetNew();
+addField = false;
+                                                " class="col-9" />
                                         </q-item>
                                     </q-card-section>
                                 </q-card>
@@ -456,7 +450,8 @@ description = '';
                     <q-item-label>{{ typeStore.list.find((type) => type.id === content.typeId).name }}</q-item-label>
                     <q-item-label caption lines="1" class="row">
                         <div v-for="tag in content.tag" :key="tag" class="q-pr-sm q-pt-sm">
-                            <q-badge color="accent" :label="tag" rounded class="q-px-sm" />
+                            <q-badge :color="themeController ? 'accent' : 'secondary'" :label="tag" rounded
+                                class="q-px-sm" />
                         </div>
                     </q-item-label>
                 </q-item-section>
@@ -480,7 +475,8 @@ description = '';
             <q-card>
                 <q-card-section>
                     <q-list class="fields no-border">
-                        <q-item v-for="field in content.contents" :key="field.id" class="row">
+                        <q-item v-for="field in content.contents" :key="field.id" class="row"
+                            :class="themeController ? 'q-item-dark' : 'q-item-light'">
                             <div class="row no-wrap items-center">
                                 <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
                                 <span>{{ field.label }}</span>
@@ -531,6 +527,7 @@ import { ContentStore } from 'stores/content-store.js';
 import { TypeStore } from 'stores/type-store.js';
 import { useLanguageStore } from 'stores/language-store.js';
 import data from 'src/languages/i18n.js';
+import { useThemeStore } from 'stores/theme-store.js';
 
 const language = useLanguageStore();
 
@@ -540,8 +537,11 @@ export default defineComponent({
         page: String,
     },
     data() {
+        const theme = useThemeStore();
         return {
             contentStore: ContentStore(),
+            theme,
+            themeController: theme.getTheme,
             typeStore: TypeStore(),
             name: '',
             description: '',
@@ -758,11 +758,14 @@ export default defineComponent({
 .hidden
     display: none
 
-.field-expand
+.field-expand-dark
     background: rgb(35, 35, 35)
     padding: 0                      // q-px-none is overriden by quasar on utility class
+.field-expand-light
+    background: rgb(230, 230, 230)
+    padding: 0                      // q-px-none is overriden by quasar on utility class
 
-.add-field
+.add-field-dark
     min-width: 256px
     .form-item
         background: rgb(35, 35, 35)
@@ -771,8 +774,17 @@ export default defineComponent({
             color: teal
             font-weight: 700
 
+.add-field-light
+    min-width: 256px
+    .form-item
+        background: rgb(230, 230, 230)
+
+        span
+            color: teal
+            font-weight: 700
+
 .fields
-    .q-item
+    .q-item-dark
         display: flex
         flex-direction: column
         justify-content: center
@@ -781,6 +793,20 @@ export default defineComponent({
 
         &:nth-of-type(2n)
             background: rgb(40, 40, 40)
+
+        span
+            color: teal
+            font-weight: 700
+
+    .q-item-light
+        display: flex
+        flex-direction: column
+        justify-content: center
+        align-items: space-between
+        overflow: auto
+
+        &:nth-of-type(2n)
+            background: rgb(240, 240, 240)
 
         span
             color: teal

@@ -19,7 +19,8 @@
                         @input="validPassword = checkPassword(password)"
                         @update:modelValue="validPassword = checkPassword(password)"
                         :rules="[val => !!val || data[language.getLanguage].fieldRequired]" />
-                    <div class="password-validation q-pt-xl">
+                    <div class="q-pt-xl"
+                        :class="themeController ? 'password-validation-dark' : 'password-validation-light'">
                         <ul>
                             <li v-bind:class="{ is_valid: validPassword.eight }">8 Characters</li>
                             <li v-bind:class="{ is_valid: validPassword.num }">Contains Number</li>
@@ -52,6 +53,7 @@ import axios from 'axios';
 import { checkPassword, matchPassword, matchCurrPassword } from 'src/validations.js';
 import { useLanguageStore } from 'stores/language-store.js';
 import data from 'src/languages/i18n.js';
+import { useThemeStore } from 'stores/theme-store.js';
 
 const language = useLanguageStore();
 
@@ -59,6 +61,7 @@ export default defineComponent({
     name: 'ChangePassword',
 
     data() {
+        const theme = useThemeStore();
         return {
             user: userStore(),
             currentPassword: '',
@@ -78,6 +81,8 @@ export default defineComponent({
             matchCurrPassword,
             language,
             data,
+            theme,
+            themeController: theme.getTheme,
         };
     },
     methods: {
@@ -85,6 +90,10 @@ export default defineComponent({
             this.password = '';
             this.newPasswordConf = '';
             this.currentPassword = '';
+            this.validPassword.upper = false;
+            this.validPassword.eight = false;
+            this.validPassword.num = false;
+            this.validPassword.special = false;
             console.log(this.role);
         },
         async updatePassword() {

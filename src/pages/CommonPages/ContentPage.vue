@@ -39,7 +39,7 @@
                 <q-tab-panel name="create">
                     <q-card class="no-box-shadow">
                         <q-carousel v-model="slide" transition-prev="slide-right" transition-next="slide-left" swipeable
-                            animated padding arrows>
+                            animated padding arrows :control-color="themeController ? 'white' : 'black'">
                             <!-- DO NOT DELETE UNTIL YOU FIGURE IT OUT -->
 
                             <!-- <template v-slot:navigation-icon="{ active, btnProps, onClick }">
@@ -97,7 +97,8 @@
                                                         <q-icon name="toggle_off" />
                                                     </template>
                                                     <q-btn-toggle v-model="newContent[field.label]" unelevated
-                                                        text-color="white" toggle-color="primary" :options="[
+                                                        :text-color="themeController ? 'white' : 'black'"
+                                                        toggle-color="primary" :options="[
                                                             { label: data[language.getLanguage].yes, value: true },
                                                             { label: data[language.getLanguage].no, value: false },
                                                         ]" spread dense class="col-12 q-pt-sm" />
@@ -141,7 +142,7 @@
                                             </q-input>
                                         </q-popup-edit>
                                     </div>
-                                    <div class="tag-pool q-pa-sm">
+                                    <div class="q-pa-sm" :class="themeController ? 'tag-pool-dark' : 'tag-pool-light'">
                                         <q-list v-if="content.tag.length" class="row">
                                             <q-item v-for="tag in content.tag" :key="tag"
                                                 class="row items-center q-pa-sm">
@@ -186,6 +187,7 @@ import { TypeStore } from 'stores/type-store.js';
 import ListItems from 'components/ListItems.vue';
 import { useLanguageStore } from 'stores/language-store.js';
 import data from 'src/languages/i18n.js';
+import { useThemeStore } from 'stores/theme-store.js';
 
 const language = useLanguageStore();
 
@@ -195,6 +197,7 @@ export default defineComponent({
         ListItems,
     },
     data() {
+        const theme = useThemeStore();
         return {
             content: {
                 typeId: 0,
@@ -210,6 +213,8 @@ export default defineComponent({
             language,
             newTag: '',
             newContent: [],
+            theme,
+            themeController: theme.getTheme,
         };
     },
     setup() {
@@ -310,9 +315,21 @@ export default defineComponent({
         background-color: inherit
         .q-tab-panel
             padding: 0
-            .tag-pool
+            .tag-pool-dark
                 height: 84px
                 background: rgb(20, 20, 20)
+                overflow: auto
+                .q-item
+                    min-height: 0
+                .tag-badge
+                    padding: 0 12px
+                    height: 18px
+                .badge-delete
+                    min-width: 0
+                    min-height: 0
+            .tag-pool-light
+                height: 84px
+                background: rgb(235, 235, 235)
                 overflow: auto
                 .q-item
                     min-height: 0
