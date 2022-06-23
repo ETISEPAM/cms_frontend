@@ -337,7 +337,7 @@ description = '';
                                             </q-item-section>
 
                                             <q-item-section>
-                                                <q-btn-toggle v-model="newField.isMandatory" unelevated
+                                                <q-btn-toggle v-model="newField.isMandatory" unelevated spread
                                                     toggle-color="secondary" :options="[
                                                         { label: data[language.getLanguage].yes, value: true },
                                                         { label: data[language.getLanguage].no, value: false },
@@ -352,7 +352,7 @@ description = '';
                                             </q-item-section>
 
                                             <q-item-section>
-                                                <q-btn-toggle v-model="newField.isUnique" unelevated
+                                                <q-btn-toggle v-model="newField.isUnique" unelevated spread
                                                     toggle-color="secondary" :options="[
                                                         { label: data[language.getLanguage].yes, value: true },
                                                         { label: data[language.getLanguage].no, value: false },
@@ -361,12 +361,15 @@ description = '';
                                         </q-item>
                                         <q-item class="col-12 row justify-center q-pa-none q-my-md">
                                             <q-btn color="primary" :label="data[language.getLanguage].saveIt"
-                                                type="button" v-on:click="
-    type.fields = [...type.fields, { ...newField }];
-addTypeField(type.id, type.fields);
-resetNew();
-addField = false;
-                                                " class="col-9" />
+                                                type="button"
+                                                v-on:click="
+                                                    type.fields = [...type.fields, { ...newField }];
+                                                    addTypeField(type.id, type.fields);
+                                                    resetNew();
+                                                    addField = false;
+                                                "
+                                                class="col-9"
+                                            />
                                         </q-item>
                                     </q-card-section>
                                 </q-card>

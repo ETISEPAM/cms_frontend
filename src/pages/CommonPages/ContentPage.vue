@@ -77,7 +77,7 @@
                                             :key="field.id" class="col-11 col-md-5 col-lg-4">
                                             <div v-if="field.dataType === 'String'">
                                                 <q-input v-model="newContent[field.label]" :label="field.label"
-                                                    type="text" clearable filled>
+                                                    type="text" clearable filled dense>
                                                     <template v-slot:before>
                                                         <q-icon name="text_fields" />
                                                     </template>
@@ -85,14 +85,14 @@
                                             </div>
                                             <div v-else-if="field.dataType === 'Number'">
                                                 <q-input v-model="newContent[field.label]" :label="field.label"
-                                                    type="number" clearable filled>
+                                                    type="number" clearable filled dense>
                                                     <template v-slot:before>
                                                         <q-icon name="numbers" />
                                                     </template>
                                                 </q-input>
                                             </div>
                                             <div v-else-if="field.dataType === 'Boolean'">
-                                                <q-field :label="field.label" stack-label class="row q-pa-none">
+                                                <q-field :label="field.label" stack-label dense class="row q-pa-none">
                                                     <template v-slot:before>
                                                         <q-icon name="toggle_off" />
                                                     </template>
@@ -105,7 +105,7 @@
                                             </div>
                                             <div v-else-if="field.dataType === 'Date'">
                                                 <q-input v-model="newContent[field.label]" :label="field.label"
-                                                    clearable filled>
+                                                    clearable filled dense>
                                                     <template v-slot:before>
                                                         <q-icon name="calendar_today" />
                                                     </template>
@@ -117,7 +117,7 @@
                                             </div>
                                             <div v-else-if="field.dataType === 'File'">
                                                 <q-file v-model="newContent[field.label]" :label="field.label" clearable
-                                                    filled>,
+                                                    filled dense>,
                                                     <template v-slot:before>
                                                         <q-icon name="upload_file" />
                                                     </template>
