@@ -98,8 +98,8 @@
                                                     </template>
                                                     <q-btn-toggle v-model="newContent[field.label]" unelevated
                                                         text-color="white" toggle-color="primary" :options="[
-                                                            { label: 'Yes', value: true },
-                                                            { label: 'No', value: false },
+                                                            { label: data[language.getLanguage].yes, value: true },
+                                                            { label: data[language.getLanguage].no, value: false },
                                                         ]" spread dense class="col-12 q-pt-sm" />
                                                 </q-field>
                                             </div>
@@ -130,7 +130,7 @@
                             <q-carousel-slide name="options-form" class="row wrap justify-end items-center q-pa-none">
                                 <q-form class="col-12 column">
                                     <div class="cursor-pointer q-pb-xs">
-                                        <span class="text-center">Tags</span>
+                                        <span class="text-center">{{ data[language.getLanguage].tags }}</span>
                                         <q-icon name="add" color="teal" class="q-pl-sm" size="sm" />
                                         <q-popup-edit v-model="newTag" :cover="false" :offset="[0, 10]" v-slot="scope">
                                             <q-input type="text" color="teal" v-model="scope.value" dense autofocus
@@ -153,7 +153,7 @@
                                             </q-item>
                                         </q-list>
                                         <div v-else>
-                                            No tags assigned.
+                                            {{ data[language.getLanguage].noTagsAssigned }}
                                         </div>
                                     </div>
                                 </q-form>

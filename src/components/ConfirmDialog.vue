@@ -1,46 +1,40 @@
-<!-- <template>
-    <div id="q-app" style="min-height: 100vh;">
-        <div class="q-pa-md q-gutter-sm">
-            <q-btn label="Confirm" color="primary" @click="confirm"></q-btn>
-        </div>
+<template>
+    <div class="q-pa-md q-gutter-sm">
+        <q-btn :label="data[language.getLanguage].delete" color="primary" @click="confirm = true" />
+
+        <q-dialog v-model="confirm" persistent>
+            <q-card>
+                <q-card-section class="row items-center">
+                    <q-avatar icon="delete" color="primary" text-color="white" />
+                    <span class="q-ml-sm">{{ data[language.getLanguage].areYouSure }}</span>
+                </q-card-section>
+
+                <q-card-actions align="right">
+                    <q-btn flat :label="data[language.getLanguage].no" color="primary" v-close-popup />
+                    <q-btn flat :label="data[language.getLanguage].yes" color="primary" v-close-popup />
+                </q-card-actions>
+            </q-card>
+        </q-dialog>
+
     </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
-import { useQuasar } from 'quasar';
+import { defineComponent, ref } from 'vue';
+import { useLanguageStore } from 'stores/language-store.js';
+import data from 'src/languages/i18n.js';
+
+const language = useLanguageStore();
 
 export default defineComponent({
     name: 'ConfirmDialog',
-    setup(props,{emit}) {
-        const $q = useQuasar();
-
-        function confirm() {
-            emit('onConfirmed');
-            $q.dialog({
-                dark: true,
-                title: 'Delete',
-                message: 'Are you sure?',
-                cancel: true,
-                persistent: true,
-            }).onOk(() => {
-                // console.log('>>>> OK')
-            }).onOk(() => {
-                // console.log('>>>> second OK catcher')
-            }).onCancel(() => {
-                // console.log('>>>> Cancel')
-            })
-                .onDismiss(() => {
-                    // console.log('I am triggered on both OK and Cancel')
-                });
-        }
-
-        return { confirm };
+    setup() {
+        return {
+            confirm: ref(false),
+            address: ref(''),
+            data,
+            language,
+        };
     },
 });
 </script>
-
-<style lang="sass" scoped>
-
-</style>
- -->
