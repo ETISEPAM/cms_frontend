@@ -17,17 +17,20 @@
                 </q-btn-group>
             </div>
         </div>
+        <chartExample :themeController="themeController" />
     </q-page>
 </template>
 
 <script>
-import { ref, defineComponent } from 'vue';
+import { ref, defineComponent, defineAsyncComponent } from 'vue';
 import { userStore } from 'stores/user-store.js';
 import { useQuasar } from 'Quasar';
 import { useLanguageStore } from 'stores/language-store.js';
 import data from 'src/languages/i18n.js';
 import ConfirmDialog from 'src/components/ConfirmDialog.vue';
 import { useThemeStore } from 'stores/theme-store.js';
+
+const chartExample = defineAsyncComponent(() => import('src/components/AdminChart.vue'));
 
 export default defineComponent({
     name: 'AdminHomePage',
@@ -54,6 +57,7 @@ export default defineComponent({
     },
     components: {
         ConfirmDialog,
+        chartExample,
     },
     methods: {
         changeLanguageEn() {
