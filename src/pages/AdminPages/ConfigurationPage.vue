@@ -1,28 +1,44 @@
 <template>
     <q-page class="page">
-        <q-card class="card">
-            <div class="q-pa-md q-gutter-y-lg column justify-center">
-                <div class="text-h4 q-py-md">{{ data[language.getLanguage].profileSet }}</div>
-                <div class="text-h6 q-py-md">{{ data[language.getLanguage].changeSet }}</div>
-                <q-input class="inpField" filled v-model="firstName" stack-label
-                    :label="data[language.getLanguage].changeName" :placeholder="user.firstName"
-                    :rules="[val => val && val.length > 0 || data[language.getLanguage].fieldRequired]">
-                </q-input>
-                <q-input class="inpField" filled v-model="lastName" stack-label
-                    :label="data[language.getLanguage].changeSurname" :placeholder="user.lastName"
-                    :rules="[val => val && val.length > 0 || data[language.getLanguage].fieldRequired]">
-                </q-input>
-                <q-input class="inpField" filled v-model="username" stack-label
-                    :label="data[language.getLanguage].changeUsername" :placeholder="user.username"
-                    :rules="[val => val && val.length > 0 || data[language.getLanguage].fieldRequired]">
-                </q-input>
-                <div class="q-pa-md q-gutter-y-sm row justify-between">
-                    <q-btn :label="data[language.getLanguage].changePassword" type="submit" color="primary"
-                        @click="this.$router.push('newpassword')"></q-btn>
-                    <q-btn :label="data[language.getLanguage].saveIt" @click="updateProfile" color="primary">
-                    </q-btn>
-                </div>
-            </div>
+        <q-card class="row justify-around items-start">
+            <q-card-section class="col-12">
+                <div class="text-h5 text-weight-bold">{{ data[language.getLanguage].profileSet }}</div>
+                <div class="text-caption q-mt-none">{{ data[language.getLanguage].changeSet }}</div>
+            </q-card-section>
+            <q-card-section class="col-12 col-sm-9 col-md-5 row">
+                <q-form class="col-12 row justify-center">
+                    <q-input filled v-model="firstName" stack-label
+                        :label="data[language.getLanguage].changeName" :placeholder="user.firstName"
+                        :rules="[val => val && val.length > 0 || data[language.getLanguage].fieldRequired]"
+                        dense
+                        class="col-11"
+                    >
+                    </q-input>
+                    <q-input filled v-model="lastName" stack-label
+                        :label="data[language.getLanguage].changeSurname" :placeholder="user.lastName"
+                        :rules="[val => val && val.length > 0 || data[language.getLanguage].fieldRequired]"
+                        dense
+                        class="col-11"
+                    >
+                    </q-input>
+                    <q-input filled v-model="username" stack-label
+                        :label="data[language.getLanguage].changeUsername" :placeholder="user.username"
+                        :rules="[val => val && val.length > 0 || data[language.getLanguage].fieldRequired]"
+                        dense
+                        class="col-11"
+                    >
+                    </q-input>
+                    <div class="row justify-end col-11">
+                        <q-btn :label="data[language.getLanguage].saveIt" @click="updateProfile" color="primary" />
+                    </div>
+                </q-form>
+            </q-card-section>
+            <q-card-section class="col-12 col-sm-9 col-md-5 row justify-center">
+                <q-btn :label="data[language.getLanguage].changePassword" type="submit" color="deep-orange"
+                    @click="this.$router.push('newpassword')"
+                    class="col-11"
+                />
+            </q-card-section>
         </q-card>
     </q-page>
 </template>
@@ -72,14 +88,7 @@ export default defineComponent({
 
 <style lang="sass" scoped>
 .page
-    height: 100%
     margin: 0
-
     .q-card
         background-color: inherit
-    .q-tab-panel
-        padding: 0
-    .inpField
-        width: 60%
-
 </style>

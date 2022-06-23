@@ -13,7 +13,6 @@ export default defineComponent({
         const theme = useThemeStore();
         const $q = useQuasar(); // DARK MODE
         $q.dark.set(theme.getTheme);
-        console.log(theme.getTheme);
     },
 });
 </script>
