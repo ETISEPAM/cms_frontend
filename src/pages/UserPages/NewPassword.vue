@@ -20,7 +20,7 @@
                             @input="validPassword = checkPassword(password)"
                             @update:modelValue="validPassword = checkPassword(password)"
                             :rules="[val => !!val || data[language.getLanguage].fieldRequired]" />
-                        <div class="input_container q-pt-xl">
+                        <div class="password-validation q-pt-xl">
                             <ul>
                                 <li v-bind:class="{ is_valid: validPassword.eight }">8 Characters</li>
                                 <li v-bind:class="{ is_valid: validPassword.num }">Contains Number</li>
@@ -132,34 +132,6 @@ h2
     color: #FFF
     font-weight: 400
 
-ul
-    padding-left: 20px
-    display: flex
-    flex-direction: column
-    align-items: flex-start
-
-li
-    margin-bottom: 8px
-    color: #FFFFFF
-    position: relative
-
-li:before
-    content: ""
-    width: 0%
-    height: 2px
-    background: #2ecc71
-    position: absolute
-    left: 0
-    top: 50%
-    display: block
-    transition: all .6s cubic-bezier(0.175, 0.885, 0.32, 1.275)
-
-.input_container
-    position: relative
-    padding: 5px
-    border-radius: 6px
-    background: #272727
-
 input[type="password"]
     line-height: 1.5
     display: block
@@ -174,10 +146,4 @@ input[type="password"]
 
 input[type="password"]:focus
     border-color: rgba(50, 151, 211, .45)
-
-.is_valid
-    color: rgba(136, 152, 170, 0.8)
-.is_valid:before
-    width: 100%
-
 </style>

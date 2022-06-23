@@ -45,6 +45,15 @@
                         <q-item-section>{{ data[language.getLanguage].contents }}</q-item-section>
                     </q-item>
 
+                    <q-item clickable v-ripple :active="link === 'client'" @click="link = 'client'"
+                        active-class="current" to="/panel/client" exact>
+                        <q-item-section avatar>
+                            <q-icon name="person_add" />
+                        </q-item-section>
+
+                        <q-item-section>{{ data[language.getLanguage].userOp }}</q-item-section>
+                    </q-item>
+
                     <q-item clickable v-ripple :active="link === 'conf'" @click="link = 'conf'" active-class="current"
                         to="/panel/configurations" exact>
                         <q-item-section avatar>
@@ -52,15 +61,6 @@
                         </q-item-section>
 
                         <q-item-section>{{ data[language.getLanguage].configuration }}</q-item-section>
-                    </q-item>
-
-                    <q-item clickable v-ripple :active="link === 'registration'" @click="link = 'registration'"
-                        active-class="current" to="/panel/registration" exact>
-                        <q-item-section avatar>
-                            <q-icon name="person_add" />
-                        </q-item-section>
-
-                        <q-item-section>{{ data[language.getLanguage].userOp }}</q-item-section>
                     </q-item>
                 </div>
                 <div>

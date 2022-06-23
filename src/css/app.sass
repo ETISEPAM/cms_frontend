@@ -7,3 +7,37 @@ body
 
 .button
     height: 36px
+
+.password-validation
+    position: relative
+    padding: 5px
+    border-radius: 6px
+    background: #272727
+
+    ul
+        padding-left: 20px
+        display: flex
+        flex-direction: column
+        align-items: flex-start
+
+        li
+            margin-bottom: 8px
+            color: #FFFFFF
+            position: relative
+
+            &:before
+                content: ""
+                width: 0%
+                height: 2px
+                background: #2ecc71
+                position: absolute
+                left: 0
+                top: 50%
+                display: block
+                transition: all .6s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+
+        .is_valid
+            color: rgba(136, 152, 170, 0.8)
+
+        .is_valid:before
+            width: 100%
