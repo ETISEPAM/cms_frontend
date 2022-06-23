@@ -122,7 +122,8 @@ export default defineComponent({
 <style lang="sass" scoped>
 .page
     margin: 0
-    .q-card
+    padding: 0
+    .card
         background-color: inherit
 
         .q-tab-panel

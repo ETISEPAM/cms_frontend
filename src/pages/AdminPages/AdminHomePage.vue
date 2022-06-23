@@ -1,26 +1,33 @@
 <template>
-    <q-page>
-        <q-card>
+    <q-page class="page">
+        <q-card class="card">
             <q-card-section class="text-h5 text-weight-bold">
                 {{ data[language.getLanguage].welcomeText }} {{ user.firstName }}.
             </q-card-section>
             <!-- <ConfirmDialog /> -->
-            <div class="q-pa-md q-gutter-y-sm row justify-between">
-                <div class="text-h6 q-py-md">{{ data[language.getLanguage].mode }}</div>
-                <q-toggle v-model="blueModel" @update:model-value="lightModeOn">
-                </q-toggle>
-            </div>
-            <div class="q-pa-md q-gutter-y-sm row justify-between">
-                <div class="text-h6 q-py-md">{{ data[language.getLanguage].sysLang }}</div>
-                <div class="q-pa-md text-white">
-                    <q-btn-group push>
-                        <q-btn push label="EN" v-on:click="changeLanguageEn"></q-btn>
-                        <q-btn push label="TR" v-on:click="changeLanguageTr"></q-btn>
-                        <q-btn push label="RUS" v-on:click="changeLanguageRus"></q-btn>
-                    </q-btn-group>
+            <q-card-section>
+                <div class="row justify-between items-center">
+                    <div class="text-caption">
+                        {{ data[language.getLanguage].mode }}
+                    </div>
+                    <q-toggle v-model="blueModel" @update:model-value="lightModeOn" />
                 </div>
-            </div>
-            <chartExample :themeController="themeController" />
+                <div class="row justify-between items-center">
+                    <div class="text-caption">
+                        {{ data[language.getLanguage].sysLang }}
+                    </div>
+                    <div>
+                        <q-btn-group push>
+                            <q-btn label="EN" v-on:click="changeLanguageEn"></q-btn>
+                            <q-btn label="TR" v-on:click="changeLanguageTr"></q-btn>
+                            <q-btn label="RUS" v-on:click="changeLanguageRus"></q-btn>
+                        </q-btn-group>
+                    </div>
+                </div>
+            </q-card-section>
+            <q-card-section class="chart-section">
+                <chartExample :themeController="themeController" class="chart"/>
+            </q-card-section>
         </q-card>
     </q-page>
 </template>
@@ -85,6 +92,11 @@ export default defineComponent({
 <style lang="sass" scoped>
 .page
     margin: 0
-    .q-card
+    padding: 0
+    .card
         background-color: inherit
+        .chart-section
+            overflow-y: auto
+            .chart
+                min-width: 578px
 </style>

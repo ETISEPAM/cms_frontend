@@ -305,22 +305,23 @@ export default defineComponent({
 <style lang="sass" scoped>
 .page
     margin: 0
+    padding: 0
     .q-card
         background-color: inherit
-    .q-tab-panel
-        padding: 0
-        .tag-pool
-            height: 84px
-            background: rgb(20, 20, 20)
-            overflow: auto
-            .q-item
-                min-height: 0
-            .tag-badge
-                padding: 0 12px
-                height: 18px
-            .badge-delete
-                min-width: 0
-                min-height: 0
-        .q-placeholder
-            max-width: 0
+        .q-tab-panel
+            padding: 0
+            .tag-pool
+                height: 84px
+                background: rgb(20, 20, 20)
+                overflow: auto
+                .q-item
+                    min-height: 0
+                .tag-badge
+                    padding: 0 12px
+                    height: 18px
+                .badge-delete
+                    min-width: 0
+                    min-height: 0
+            .q-placeholder
+                max-width: 0
 </style>

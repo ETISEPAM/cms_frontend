@@ -1,6 +1,6 @@
 <template>
     <q-page class="page">
-        <q-card class="row justify-around items-start">
+        <q-card class="card row justify-around items-start">
             <q-card-section class="col-12">
                 <div class="text-h5 text-weight-bold">{{ data[language.getLanguage].profileSet }}</div>
                 <div class="text-caption q-mt-none">{{ data[language.getLanguage].changeSet }}</div>
@@ -89,6 +89,7 @@ export default defineComponent({
 <style lang="sass" scoped>
 .page
     margin: 0
-    .q-card
+    padding: 0
+    .card
         background-color: inherit
 </style>
