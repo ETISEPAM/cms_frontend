@@ -1,7 +1,7 @@
 <template>
-    <q-page class="row wrap justify-center items-start">
+    <q-page class="page row wrap justify-center items-start">
         <div class="col-12 row justify-center self-center">
-            <img src="~src/assets/imgs/emakinaDark.png" alt="EMAKINA Logo">
+            <img :src="theme.getTheme ? '../src/assets/imgs/emakinaDark.png' : '../src/assets/imgs/emakina.png'" alt="EMAKINA Logo">
 
         </div>
 
@@ -50,10 +50,10 @@
             </q-card-section>
         </q-card>
         <div class="col-12 row justify-center">
-            <q-btn-group push>
-                <q-btn push label="EN" v-on:click="changeLanguageEn"></q-btn>
-                <q-btn push label="TR" v-on:click="changeLanguageTr"></q-btn>
-                <q-btn push label="RUS" v-on:click="changeLanguageRus"></q-btn>
+            <q-btn-group outline>
+                <q-btn label="EN" v-on:click="changeLanguageEn"></q-btn>
+                <q-btn label="TR" v-on:click="changeLanguageTr"></q-btn>
+                <q-btn label="RUS" v-on:click="changeLanguageRus"></q-btn>
             </q-btn-group>
         </div>
 
@@ -65,6 +65,7 @@ import axios from 'axios';
 import { userStore } from 'stores/user-store.js';
 import { defineComponent, ref } from 'vue';
 import { useLanguageStore } from 'stores/language-store.js';
+import { useThemeStore } from 'src/stores/theme-store.js';
 import data from 'src/languages/i18n.js';
 
 const language = useLanguageStore();
@@ -84,6 +85,7 @@ export default defineComponent({
             sitekey: '6LeBsWwgAAAAAOf3towi940LaSxthzMd-ZFZYgyd',
             data,
             language,
+            theme: useThemeStore(),
         };
     },
     methods: {
@@ -165,10 +167,13 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
-.q-card
-    min-height: 15%
+.page
+    margin: 0
+    padding: 0
+    .q-card
+        min-height: 15%
 
-    .phone
-        color: $primary
-        text-decoration: underline
+        .phone
+            color: $primary
+            text-decoration: underline
 </style>
