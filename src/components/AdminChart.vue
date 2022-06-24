@@ -78,13 +78,13 @@
             }
         " :series="[{
     name: data[language.getLanguage].users,
-    data: [2, 3, 6, 10, 9, 9, 9, 5, 10, 9, 9, 9],
+    data: [2, 3, 6, 10, 9, 2, 0, 0, 0, 0, 0, 0],
 }, {
     name: data[language.getLanguage].contentType,
-    data: [3, 2, 4, 15, 4, 9, 11, 12, 20, 12, 12, 12],
+    data: [3, 2, 4, 15, 4, typeSize, 0, 0, 0, 0, 0, 0],
 }, {
     name: data[language.getLanguage].contents,
-    data: [12, 6, 20, 25, 26, 45, 67, 50, 27, 30, 26, 21],
+    data: [12, 6, 20, 25, 26, contentSize, 0, 0, 0, 0, 0, 0],
 }]">
         </apexchart>
     </div>
@@ -99,6 +99,8 @@ export default {
     name: 'AdminChart',
     props: {
         themeController: Boolean,
+        contentSize: Number,
+        typeSize: Number,
     },
     setup() {
         const language = useLanguageStore();
@@ -107,7 +109,6 @@ export default {
             data,
         };
     },
-
 };
 
 </script>

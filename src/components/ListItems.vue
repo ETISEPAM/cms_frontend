@@ -510,7 +510,7 @@ addField = false;
                 </q-card-section>
                 <q-card-section class="row q-pt-none">
                     <q-btn color="primary" outline
-                        v-on:click="fieldsChanged ? updateContents(content.id, [...content.contents]) : null"
+                        v-on:click="contentsChanged ? updateContents(content.id, [...content.contents]) : null"
                         class="col-12">
                         {{ data[language.getLanguage].saveIt }}
                     </q-btn>
@@ -706,7 +706,7 @@ export default defineComponent({
             console.log('update types');
 
             const type = this.typeStore.list.find((element) => element.id === id);
-            const fieldList = type.fields;
+            const fieldList = [...type.fields];
             fieldList[fieldList.indexOf(fieldList.find((field) => field.label === pField.label))] = pField;
 
             this.fieldsChanged = false;

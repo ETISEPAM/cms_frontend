@@ -16,7 +16,7 @@
                 </q-select>
             </q-card-section>
             <q-card-section class="col-12 chart-section">
-                <chartExample :themeController="themeController" class="chart" />
+                <chartExample :themeController="themeController" :contentSize="contentSize" :typeSize="typeSize" class="chart" />
             </q-card-section>
         </q-card>
     </q-page>
@@ -27,6 +27,8 @@ import { ref, defineComponent, defineAsyncComponent } from 'vue';
 import { userStore } from 'stores/user-store.js';
 import { useQuasar } from 'Quasar';
 import { useLanguageStore } from 'stores/language-store.js';
+import { ContentStore } from 'stores/content-store.js';
+import { TypeStore } from 'stores/type-store.js';
 import data from 'src/languages/i18n.js';
 // import ConfirmDialog from 'src/components/ConfirmDialog.vue';
 import { useThemeStore } from 'stores/theme-store.js';
@@ -37,10 +39,16 @@ export default defineComponent({
     name: 'AdminHomePage',
     data() {
         const theme = useThemeStore();
+        const contents = ContentStore();
+        const types = TypeStore();
+        console.log(contents.getLength);
+        console.log(types.getLength);
 
         return {
             theme,
             themeController: theme.getTheme,
+            contentSize: contents.getLength,
+            typeSize: types.getLength,
             $q: useQuasar(),
             user: userStore(),
         };
