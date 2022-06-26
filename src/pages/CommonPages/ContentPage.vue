@@ -302,6 +302,7 @@ export default defineComponent({
             this.content.dpAuthor = false;
             this.content.dpDate = false;
             this.content.tag = [];
+            this.newContent = [];
         },
     },
 });

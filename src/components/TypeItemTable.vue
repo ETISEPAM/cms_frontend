@@ -179,7 +179,7 @@ import data from 'src/languages/i18n.js';
 const language = useLanguageStore();
 
 export default defineComponent({
-    name: 'ItemTables',
+    name: 'TypeItemTable',
     props: ['field', 'themeController'],
     emits: ['changed'],
     data() {

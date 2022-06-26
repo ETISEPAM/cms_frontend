@@ -41,8 +41,6 @@ export default defineComponent({
         const theme = useThemeStore();
         const contents = ContentStore();
         const types = TypeStore();
-        console.log(contents.getLength);
-        console.log(types.getLength);
 
         return {
             theme,
