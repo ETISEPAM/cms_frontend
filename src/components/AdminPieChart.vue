@@ -1,7 +1,7 @@
 <template>
     <div id="chart">
         <apexchart type="pie" width="400" :options="{
-            labels: ['Content Types', 'Contents'],
+            labels: [data[language.getLanguage].contentTypes, data[language.getLanguage].contents],
             responsive: [{
                 breakpoint: 480,
                 options: {
