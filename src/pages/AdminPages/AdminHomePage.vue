@@ -16,7 +16,12 @@
                 </q-select>
             </q-card-section>
             <q-card-section class="col-12 chart-section">
-                <chartExample :themeController="themeController" :contentSize="contentSize" :typeSize="typeSize" class="chart" />
+                <chartExample :themeController="themeController" :contentSize="contentSize" :typeSize="typeSize"
+                    class="chart" />
+            </q-card-section>
+            <q-card-section class="col-8 chart-section">
+                <AdminPieChart :themeController="themeController" :contentSize="contentSize" :typeSize="typeSize"
+                    class="chart" />
             </q-card-section>
         </q-card>
     </q-page>
@@ -34,6 +39,7 @@ import data from 'src/languages/i18n.js';
 import { useThemeStore } from 'stores/theme-store.js';
 
 const chartExample = defineAsyncComponent(() => import('src/components/AdminChart.vue'));
+const AdminPieChart = defineAsyncComponent(() => import('src/components/AdminPieChart.vue'));
 
 export default defineComponent({
     name: 'AdminHomePage',
@@ -85,6 +91,7 @@ export default defineComponent({
     components: {
         // ConfirmDialog,
         chartExample,
+        AdminPieChart,
     },
     methods: {
         changeLanguage() {
