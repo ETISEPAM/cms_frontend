@@ -1,3 +1,7 @@
+/**
+ * Bar Chart Displayed on Admin Homepage
+ * Shows Users, Contents and Content Types data
+ */
 <template>
     <div id="chart">
         <apexchart type="bar" height="350" :options="
@@ -91,7 +95,6 @@
 </template>
 
 <script>
-// import { useThemeStore } from 'stores/theme-store.js';
 import { useLanguageStore } from 'stores/language-store.js';
 import data from 'src/languages/i18n.js';
 
@@ -110,12 +113,4 @@ export default {
         };
     },
 };
-
 </script>
-
-<!-- <style>
-.apexcharts-tooltip {
-    background: #f3f3f3;
-    color: orange;
-}
-</style> -->

@@ -1,3 +1,7 @@
+/**
+ * Add New Client Page
+ * isValidEmailAddress(), onReset(), onSave() functions are called
+ */
 <template>
     <q-page class="page">
         <q-card class="card">
@@ -160,11 +164,18 @@ export default defineComponent({
         };
     },
     methods: {
+        /**
+         * e-mail validation
+         * checks if e-mail is valid
+         * @param  {String} email - email for user
+         * @return {Boolean} email is valid
+         */
         isValidEmailAddress(email) {
             // eslint-disable-next-line max-len
             const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return re.test(String(email).toLowerCase());
         },
+        /* reset all fields on reset button pressed */
         onReset() {
             this.user.name = null;
             this.user.surname = null;
@@ -176,6 +187,7 @@ export default defineComponent({
             this.validPassword.upper = false;
             this.validPassword.special = false;
         },
+        /* create new user in database when click save button, post request to api */
         onSave() {
             if (
                 this.validPassword.eight === true

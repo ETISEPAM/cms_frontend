@@ -1,3 +1,7 @@
+/**
+ * Admin Homepage with AdminPieChart, AdminChart as components
+ * changeLanguage() and lightModeOn() as functions toogle language and mode updates
+ */
 <template>
     <q-page class="page">
         <q-card class="card row no-shadow">
@@ -94,9 +98,11 @@ export default defineComponent({
         AdminPieChart,
     },
     methods: {
+        /* set the system language to the choosen one */
         changeLanguage() {
             this.language.setLanguage(this.lang);
         },
+        /* toogle between dark and light mode */
         lightModeOn() {
             this.themeController = !this.themeController;
             this.$q.dark.set(this.themeController);

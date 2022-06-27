@@ -1,3 +1,15 @@
+/**
+ * Change Password Component
+ * Called if user is login fot the first time to change the temporary password
+ * Called if admin want to change the password
+ * checkPassword, matchPassword, matchCurrPassword functions from validations.js file are being called
+ * @param  {String} currentPassword - users' current password
+ * @param  {String} password - entered password
+ * @param  {String} newPasswordConf - confirmation of entered password
+ * @return {Boolean} passwordsMatchesOld - currentPassword == password in db
+ * @return {Boolean} passwordsMatchesNew - entered passwords match
+ * @return {Boolean} validPassword - password validation
+ */
 <template>
     <q-card class="card">
         <q-card-section>
@@ -93,6 +105,7 @@ export default defineComponent({
         };
     },
     methods: {
+        /* clear fields if user presses reset button */
         onReset() {
             this.password = '';
             this.newPasswordConf = '';
@@ -103,6 +116,7 @@ export default defineComponent({
             this.validPassword.special = false;
             console.log(this.role);
         },
+        /* update password in database if all validations is passed */
         async updatePassword() {
             if (
                 this.validPassword.eight === true

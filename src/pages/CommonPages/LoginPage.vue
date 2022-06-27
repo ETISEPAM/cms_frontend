@@ -1,7 +1,13 @@
+/**
+ * Login Page
+ * User Auth if credentials are match with db
+ * changeLanguage() language of the system can be changed before login
+ * login() get request to api
+ */
 <template>
     <q-page class="page row wrap justify-center items-start">
         <div class="col-12 row justify-center self-center">
-            <img :src="theme.getTheme ? './imgs/emakinaDark.png' : './imgs/emakina.png'"
+            <img :src="theme.getTheme ? 'src/assets/imgs/emakinaDark.png' : 'src/assets/imgs/emakina.png'"
                 alt="EMAKINA Logo">
 
         </div>
@@ -10,7 +16,7 @@
                 <q-card-section class="col">
                     <q-form class="q-gutter-lg flex column justify-around" action="/panel">
                         <div>
-                            <q-input :label="data[language.getLanguage].email" v-model="email"
+                            <q-input :label="data[language.getLanguage].username" v-model="username"
                                 :rules="[val => !!val || data[language.getLanguage].fieldRequired]" />
                             <q-input :label="data[language.getLanguage].password" type="password" v-model="password"
                                 :rules="[val => !!val || data[language.getLanguage].fieldRequired]" />
@@ -23,7 +29,9 @@
                                     <div class="col-12 row items-center">
                                         <div class="q-pt-sm">
                                             {{ data[language.getLanguage].confMessageCon }}
-                                            <span class="phone">+90 507 279 19 19</span>
+                                            <span class="phone"
+                                                style="color: aquamarine; text-decoration: underline">+90 507 279 19
+                                                19</span>
                                         </div>
                                         <div class="col-12 row justify-end">
                                             <q-card-actions>
@@ -35,11 +43,6 @@
                                 </q-card>
                             </q-dialog>
                         </div>
-                        <!-- <div>
-                            <vue-recaptcha ref="recaptcha" @expired="onExpired" :sitekey="sitekey">
-                            </vue-recaptcha>
-                            <button @click="resetRecaptcha">Reset ReCAPTCHA</button>
-                        </div> -->
                         <div class="button flex justify-end">
                             <q-btn color="primary" :label="data[language.getLanguage].login" rounded v-on:click="login">
                             </q-btn>
@@ -74,7 +77,7 @@ export default defineComponent({
     },
     data() {
         return {
-            email: '',
+            username: '',
             password: '',
             sitekey: '6LeBsWwgAAAAAOf3towi940LaSxthzMd-ZFZYgyd',
             data,
@@ -102,6 +105,11 @@ export default defineComponent({
         };
     },
     methods: {
+        /**
+         * auth to the system if username and password match with db
+         * @param  {String} username - users' username
+         * @param  {String} password - users' password
+         */
         async login() {
             // --- CODE BELOW USES MOCK DATABASE ---
             // POST LOGIN FORM INPUT AND NAVIGATE TO HOMEPAGE IF VALID
@@ -110,7 +118,7 @@ export default defineComponent({
                 method: 'get',
                 url: 'http://127.0.0.1:3000/user',
                 params: {
-                    email: this.email,
+                    username: this.username,
                     password: this.password,
                 },
             }).catch((err) => {
@@ -147,15 +155,6 @@ export default defineComponent({
         changeLanguage() {
             language.setLanguage(this.lang);
         },
-        /* onSubmit() {
-            this.$refs.invisibleRecaptcha.execute();
-        },
-        onExpired() {
-            console.log('Expired');
-        },
-        resetRecaptcha() {
-            this.$refs.recaptcha.reset();
-        }, */
     },
 });
 
@@ -167,8 +166,7 @@ export default defineComponent({
     padding: 0
     .q-card
         min-height: 15%
-
         .phone
-            color: $primary
+            color: $secondary
             text-decoration: underline
 </style>
