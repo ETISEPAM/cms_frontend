@@ -1,3 +1,6 @@
+/**
+ * Main Layout for Admin Interface with left drawer
+ */
 <template>
     <q-layout view="lHh Lpr lFf" class="layout">
         <q-header elevated class="q-pl-sm main-header">
@@ -12,7 +15,7 @@
 
         <q-drawer v-model="leftDrawerOpen" side="left" elevated :breakpoint="800" show-if-above class="drawer">
             <div class="image col-2 row justify-center self-center q-pt-lg">
-                <img :src="theme.getTheme ? './imgs/emakinaDark.png' : './imgs/emakina.png'"
+                <img :src="theme.getTheme ? 'src/assets/imgs/emakinaDark.png' : 'src/assets/imgs/emakina.png'"
                     alt="EMAKINA Logo" />
             </div>
 

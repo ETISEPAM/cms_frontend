@@ -1,3 +1,7 @@
+/**
+ * Confirmation Dialog for Delete Operations
+ * @return {Boolean} confirm - delete if true / cancel the operation if false
+ */
 <template>
     <div class="q-pa-md q-gutter-sm">
         <q-btn :label="data[language.getLanguage].delete" color="primary" @click="confirm = true" />

@@ -1,3 +1,7 @@
+/**
+ * Pie Chart Displayed on Admin Homepage
+ * Shows Contents and Content Types data separately for each user in the system
+ */
 <template>
     <div id="chart">
         <apexchart
