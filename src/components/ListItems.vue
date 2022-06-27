@@ -124,6 +124,37 @@ addField = false;
             </q-card>
         </q-expansion-item>
     </q-list>
+    <q-list v-else-if="page === 'userPage'">
+        <q-expansion-item group="userExpand" v-for="user in userStore.list" :key="user.id"
+            expand-icon-class="hidden" class="q-py-xs" clickable ripple expand-separator
+            @hide="
+                usersChanged = false
+            "
+        >
+            <template v-slot:header>
+                <ListHeaders :page="page" :themeController="themeController" />
+            </template>
+
+            <q-card>
+                <q-card-section>
+                    <ContentItemTable :key="contentCopy" :content="contentCopy" :themeController="themeController"
+                        v-on:changed="
+                            (modified) => {
+                                contentsChanged = true;
+                                contentCopy = [...modified];
+                            }
+                        " />
+                </q-card-section>
+                <q-card-section class="row q-pt-none">
+                    <q-btn color="primary" outline
+                        v-on:click="contentsChanged ? updateContents(content.id, [...contentCopy]) : null"
+                        class="col-12">
+                        {{ data[language.getLanguage].saveIt }}
+                    </q-btn>
+                </q-card-section>
+            </q-card>
+        </q-expansion-item>
+    </q-list>
 </template>
 
 <script>
