@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <div class="col-12 row items-center">
+        <div class="col-12 row justify-center items-center">
             <chartExample
                 :themeController="themeController"
                 :userSize="userStore.list.length"
@@ -10,7 +10,7 @@
             />
         </div>
 
-        <div class="col-12 row items-center">
+        <div class="col-12 row justify-center items-center">
             <AdminPieChart
                 class="chart"
             />
