@@ -7,7 +7,7 @@
 <template>
     <q-page class="page row wrap justify-center items-start">
         <div class="col-12 row justify-center self-center">
-            <img :src="theme.getTheme ? 'src/assets/imgs/emakinaDark.png' : 'src/assets/imgs/emakina.png'"
+            <img :src="theme.getTheme ? 'imgs/emakinaDark.png' : 'imgs/emakina.png'"
                 alt="EMAKINA Logo">
 
         </div>

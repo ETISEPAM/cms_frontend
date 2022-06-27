@@ -4,7 +4,7 @@
  */
 <template>
     <div v-if="page === 'contentTypePage'" class="type-header row">
-        <q-item-section avatar class="q-pl-sm">
+        <q-item-section avatar>
             <q-avatar color="primary" text-color="white">
                 <!-- {{ type.name.charAt(0) }} -->
                 T
@@ -43,8 +43,8 @@
             </q-popup-proxy>
         </q-item-section>
     </div>
-    <div v-else class="content-header row">
-        <q-item-section avatar class="q-pl-sm">
+    <div v-else-if="page === 'contentPage'" class="content-header row">
+        <q-item-section avatar>
             <q-avatar color="primary" text-color="white">
                 C
             </q-avatar>
@@ -62,7 +62,34 @@
             <q-popup-proxy cover :breakpoint="500">
                 <q-card class="q-pa-md">
                     <div class="column">
-                        <q-input type="text" color="teal" dense>
+                        <q-input type="text" color="teal" dense autofocus autogrow>
+                            <template v-slot:prepend>
+                                <q-icon name="text_fields" color="teal" />
+                            </template>
+                        </q-input>
+                    </div>
+                </q-card>
+            </q-popup-proxy>
+        </q-item-section>
+    </div>
+    <div v-else-if="page === 'clientPage'" class="user-header row">
+        <q-item-section avatar>
+            <q-avatar color="primary" text-color="white">
+                U
+            </q-avatar>
+        </q-item-section>
+        <q-item-section>
+            <q-item-label>{{ user.firstName + ' ' + user.lastName }}</q-item-label>
+            <q-item-label caption lines="1" class="row">
+                {{ user.email }}
+            </q-item-label>
+        </q-item-section>
+        <q-item-section side>
+            <q-icon name="edit" class="cursor-pointer" />
+            <q-popup-proxy cover :breakpoint="500">
+                <q-card class="q-pa-md">
+                    <div class="column">
+                        <q-input type="text" color="teal" dense autofocus autogrow>
                             <template v-slot:prepend>
                                 <q-icon name="text_fields" color="teal" />
                             </template>
@@ -85,6 +112,7 @@ export default defineComponent({
         page: String,
         type: Object,
         content: Object,
+        user: Object,
         themeController: Boolean,
         typeName: String,
     },
@@ -92,10 +120,6 @@ export default defineComponent({
         return {
             name: '',
             description: '',
-        };
-    },
-    setup() {
-        return {
         };
     },
     methods: {
@@ -135,6 +159,6 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
-.type-header, .content-header
+.type-header, .content-header, .user-header
     width: 100%
 </style>

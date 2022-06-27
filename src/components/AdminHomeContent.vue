@@ -6,13 +6,20 @@
  */
 <template>
     <div class="row">
-        <div class="col-12 row items-center">
-            <chartExample :themeController="themeController" :userSize="userStore.list.length"
-                :contentSize="contentStore.list.length" :typeSize="typeStore.list.length" class="chart" />
+        <div class="col-12 row justify-center items-center">
+            <chartExample
+                :themeController="themeController"
+                :userSize="userStore.list.length"
+                :contentSize="contentStore.list.length"
+                :typeSize="typeStore.list.length"
+                class="chart"
+            />
         </div>
 
-        <div class="col-12 row items-center">
-            <AdminPieChart class="chart" />
+        <div class="col-12 row justify-center items-center">
+            <AdminPieChart
+                class="chart"
+            />
         </div>
     </div>
 </template>
@@ -55,7 +62,6 @@ export default defineComponent({
                 });
 
             if (response.data.length) userStore.list = response.data;
-            console.log(userStore.list);
         }
 
         if (!typeStore.list.length) {

@@ -16,23 +16,7 @@
                 <q-tab-panel name="list">
                     <Suspense>
                         <template #default>
-                            <!-- <ListItems page='clientPage' /> -->
-                            <q-list>
-                                <q-item class="row">
-                                    <q-item-section avatar class="row flex-center">
-                                        <q-skeleton type="QAvatar" />
-                                    </q-item-section>
-
-                                    <q-item-section class="row col-8">
-                                        <q-item-label class="row">
-                                            <q-skeleton type="text" class="col-6" />
-                                        </q-item-label>
-                                        <q-item-label caption>
-                                            <q-skeleton type="QRange" />
-                                        </q-item-label>
-                                    </q-item-section>
-                                </q-item>
-                            </q-list>
+                            <ListItems page='clientPage' />
                         </template>
                         <template #fallback>
                             <q-list>
@@ -128,11 +112,15 @@ import { checkPassword } from 'src/validations.js';
 import { useLanguageStore } from 'stores/language-store.js';
 import data from 'src/languages/i18n.js';
 import { useThemeStore } from 'stores/theme-store.js';
+import ListItems from 'components/ListItems.vue';
 
 const language = useLanguageStore();
 
 export default defineComponent({
     name: 'ClientPage',
+    components: {
+        ListItems,
+    },
     setup() {
         return {
             tab: ref('list'),
@@ -211,6 +199,7 @@ export default defineComponent({
                     .then((response) => {
                         console.log(response.data);
                         this.userStore.$patch({ list: [...this.userStore.list, response.data] });
+                        console.log(this.userStore.list);
                     })
                     .catch((err) => {                                                                   // TO THE BACK-END
                         console.log(err.response.data);
