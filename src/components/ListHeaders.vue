@@ -62,7 +62,7 @@
             <q-popup-proxy cover :breakpoint="500">
                 <q-card class="q-pa-md">
                     <div class="column">
-                        <q-input type="text" color="teal" dense>
+                        <q-input type="text" color="teal" dense autofocus autogrow>
                             <template v-slot:prepend>
                                 <q-icon name="text_fields" color="teal" />
                             </template>
@@ -89,7 +89,7 @@
             <q-popup-proxy cover :breakpoint="500">
                 <q-card class="q-pa-md">
                     <div class="column">
-                        <q-input type="text" color="teal" dense>
+                        <q-input type="text" color="teal" dense autofocus autogrow>
                             <template v-slot:prepend>
                                 <q-icon name="text_fields" color="teal" />
                             </template>

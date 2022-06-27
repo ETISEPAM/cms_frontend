@@ -12,13 +12,13 @@
             </div>
             <div class="q-pb-sm q-pl-lg cursor-pointer">
                 {{ item.value }}
-                <q-popup-edit v-model="item.value" :cover="false" v-slot="scope" debounce="500"
+                <q-popup-edit v-model="item.value" :cover="false" v-slot="scope" debounce="500" touch-position
                     @update:model-value="$emit('changed', content)">
                     <q-input :type="item.dataType === 'Number' ? 'number' :
                 (item.dataType === 'Date' ? 'date' :
                     (item.dataType === 'File' ? 'file' : 'text'))" :clickable="item.dataType === 'Boolean'"
                         :readonly="item.dataType === 'Boolean'" color="teal" v-model="scope.value" dense autofocus
-                        @keyup.enter="scope.set()">
+                        autogrow @keyup.enter="scope.set()">
                         <template v-slot:prepend>
                             <q-icon :name="iconName(item.dataType)" color="teal" />
                         </template>
