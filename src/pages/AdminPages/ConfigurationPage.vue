@@ -46,7 +46,7 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
-import { userStore } from 'stores/user-store.js';
+import { LoginStore } from 'stores/login-store.js';
 import axios from 'axios';
 import { useLanguageStore } from 'stores/language-store.js';
 import data from 'src/languages/i18n.js';
@@ -59,7 +59,7 @@ export default defineComponent({
     name: 'ConfigurationPage',
     setup() {
         return {
-            user: userStore(),
+            user: LoginStore(),
             language,
             data,
         };
@@ -74,7 +74,6 @@ export default defineComponent({
             lastName: this.user.lastName,
             username: this.user.username,
             changePasswordDialog: ref(false),
-            theme,
             themeController: theme.getTheme,
         };
     },

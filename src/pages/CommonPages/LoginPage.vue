@@ -59,14 +59,14 @@
 
 <script>
 import axios from 'axios';
-import { userStore } from 'stores/user-store.js';
+import { LoginStore } from 'stores/login-store.js';
 import { defineComponent, ref } from 'vue';
 import { useLanguageStore } from 'stores/language-store.js';
 import { useThemeStore } from 'src/stores/theme-store.js';
 import data from 'src/languages/i18n.js';
 
 const language = useLanguageStore();
-const user = userStore();
+const user = LoginStore();
 
 export default defineComponent({
     name: 'LoginPage',

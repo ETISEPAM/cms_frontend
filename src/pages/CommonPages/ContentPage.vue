@@ -297,11 +297,12 @@ export default defineComponent({
         resetNew() {
             this.model = ref(null);
             this.content.typeId = 0;
-            this.content.input = {};
+            this.content.input = [];
             this.content.isPublished = false;
             this.content.dpAuthor = false;
             this.content.dpDate = false;
             this.content.tag = [];
+            this.newContent = [];
         },
     },
 });

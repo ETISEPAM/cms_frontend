@@ -123,7 +123,7 @@
 <script>
 import { ref, defineComponent } from 'vue';
 import axios from 'axios';
-import { userStore } from 'stores/user-store.js';
+import { UserStore } from 'stores/user-store.js';
 import { checkPassword } from 'src/validations.js';
 import { useLanguageStore } from 'stores/language-store.js';
 import data from 'src/languages/i18n.js';
@@ -140,7 +140,10 @@ export default defineComponent({
     },
     data() {
         const theme = useThemeStore();
+        const userStore = UserStore();
+
         return {
+            userStore,
             user: {
                 name: '',
                 surname: '',
@@ -152,7 +155,6 @@ export default defineComponent({
             checkPassword,
             language,
             data,
-            theme,
             themeController: theme.getTheme,
             validPassword: {
                 eight: false,
@@ -198,7 +200,7 @@ export default defineComponent({
                     .post(
                         'http://127.0.0.1:3000/user',
                         {
-                            firstName: this.user.name,                   // POST INPUT CONTENT TYPE TO DATABASE WITH NO FIELDS BY DEFAULT
+                            firstName: this.user.name,
                             lastName: this.user.surname,
                             userName: this.user.username,
                             email: this.user.email,
@@ -208,7 +210,7 @@ export default defineComponent({
                     )
                     .then((response) => {
                         console.log(response.data);
-                        userStore.$patch({ user: [...userStore.user, response.data] });   // UPDATE CONTENT STORE TYPE LIST
+                        this.userStore.$patch({ list: [...this.userStore.list, response.data] });
                     })
                     .catch((err) => {                                                                   // TO THE BACK-END
                         console.log(err.response.data);

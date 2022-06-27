@@ -67,7 +67,7 @@
 
 <script>
 import { defineComponent } from 'vue';
-import { userStore } from 'stores/user-store.js';
+import { LoginStore } from 'stores/login-store.js';
 import axios from 'axios';
 import { checkPassword, matchPassword, matchCurrPassword } from 'src/validations.js';
 import { useLanguageStore } from 'stores/language-store.js';
@@ -82,7 +82,7 @@ export default defineComponent({
     data() {
         const theme = useThemeStore();
         return {
-            user: userStore(),
+            user: LoginStore(),
             currentPassword: '',
             password: '',
             passwordsMatchesOld: false,
