@@ -1,39 +1,65 @@
 <template>
     <div id="chart">
-        <apexchart type="pie" width="400" :options="{
-            labels: [data[language.getLanguage].contentTypes, data[language.getLanguage].contents],
-            responsive: [{
-                breakpoint: 480,
-                options: {
-                    chart: {
-                        width: 200
-                    },
-                    legend: {
-                        position: 'bottom'
+        <apexchart
+            type="pie"
+            width="400"
+            :options="{
+                labels: types,
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
                     }
-                }
-            }]
-        }" :series="[typeSize, contentSize]"></apexchart>
+                }]
+            }"
+            :series="
+                amounts
+            "
+            class="row flex-center"
+        ></apexchart>
     </div>
 </template>
 
 <script>
-
+import { ContentStore } from 'stores/content-store.js';
+import { TypeStore } from 'stores/type-store.js';
 import { useLanguageStore } from 'stores/language-store.js';
 import data from 'src/languages/i18n.js';
 
 export default {
     name: 'AdminPieChart',
-    props: {
-        themeController: Boolean,
-        contentSize: Number,
-        typeSize: Number,
-    },
     setup() {
         const language = useLanguageStore();
+        const contentStore = ContentStore();
+        const typeStore = TypeStore();
+        const types = [];
+        const amounts = [];
+
+        typeStore.list.forEach((type) => {
+            types.push(type.name);
+        });
+
+        typeStore.list.forEach((type) => {
+            let count = 0;
+
+            contentStore.list.forEach((content) => {
+                if (content.typeId === type.id) count++;
+            });
+
+            amounts.push(count);
+        });
+
+        console.log(amounts);
         return {
             language,
             data,
+            types,
+            amounts,
         };
     },
 };
