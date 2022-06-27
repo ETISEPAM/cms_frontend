@@ -1,3 +1,9 @@
+/**
+ * Contains two tabs: List -list contents and Create - create new contents
+ * deleteTag() - deletes selected tag from the tag input field under the create tab
+ * filter() filters the dropdown menu options depending on provided input
+ * create() send post requests with axios and update state management
+ */
 <template>
     <q-page class="page">
         <q-card>

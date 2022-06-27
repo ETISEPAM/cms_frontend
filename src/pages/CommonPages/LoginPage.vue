@@ -30,7 +30,8 @@
                                         <div class="q-pt-sm">
                                             {{ data[language.getLanguage].confMessageCon }}
                                             <span class="phone"
-                                                style="color: aquamarine; text-decoration: underline">+90 507 279 19
+                                                style="color:lightskyblue; text-decoration: underline">+90
+                                                507 279 19
                                                 19</span>
                                         </div>
                                         <div class="col-12 row justify-end">
@@ -166,7 +167,4 @@ export default defineComponent({
     padding: 0
     .q-card
         min-height: 15%
-        .phone
-            color: $secondary
-            text-decoration: underline
 </style>

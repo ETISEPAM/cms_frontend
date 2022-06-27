@@ -1,3 +1,7 @@
+/**
+ * Displays expansible item headers
+ * sending get and patch requests with axios
+ */
 <template>
     <div v-if="page === 'contentTypePage'" class="type-header row">
         <q-item-section avatar class="q-pl-sm">
@@ -17,32 +21,19 @@
             <q-popup-proxy cover :breakpoint="500">
                 <q-card class="q-pa-md">
                     <div class="column">
-                        <q-input
-                            type="text"
-                            color="teal"
-                            v-model="name"
-                            filled
-                            autofocus
-                            :placeholder="type.name"
+                        <q-input type="text" color="teal" v-model="name" filled autofocus :placeholder="type.name"
                             @keyup.enter="
-                                updateTypeHeader(type.id, name ? name : type.name, description ? description : type.description);
-                            "
-                        >
+    updateTypeHeader(type.id, name ? name : type.name, description ? description : type.description);
+                            ">
                             <template v-slot:prepend>
                                 <q-icon name="text_fields" color="teal" />
                             </template>
                         </q-input>
 
-                        <q-input
-                            type="textarea"
-                            color="teal"
-                            v-model="description"
-                            filled
-                            :placeholder="type.description"
-                            @keyup.enter="
-                                updateTypeHeader(type.id, name ? name : type.name, description ? description : type.description);
-                            "
-                        >
+                        <q-input type="textarea" color="teal" v-model="description" filled
+                            :placeholder="type.description" @keyup.enter="
+    updateTypeHeader(type.id, name ? name : type.name, description ? description : type.description);
+                            ">
                             <template v-slot:prepend>
                                 <q-icon name="text_fields" color="teal" />
                             </template>
@@ -62,8 +53,7 @@
             <q-item-label>{{ typeName }}</q-item-label>
             <q-item-label caption lines="1" class="row">
                 <div v-for="tag in content.tag" :key="tag" class="q-pr-sm q-pt-sm">
-                    <q-badge :color="themeController ? 'accent' : 'secondary'" :label="tag" rounded
-                        class="q-px-sm" />
+                    <q-badge :color="themeController ? 'accent' : 'secondary'" :label="tag" rounded class="q-px-sm" />
                 </div>
             </q-item-label>
         </q-item-section>

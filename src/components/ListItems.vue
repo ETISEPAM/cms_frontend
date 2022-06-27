@@ -1,3 +1,15 @@
+/**
+ * Displays contents of the list tabs of content, content type, and client management pages
+ * sending get and patch requests with axios
+ * iconName() setup an icon depends on the field type
+ * updateContentHeader() updates the information displayed in content list headers both in the db and in state management
+ * updateContents() updates the information displayed in content list item tables headers both in the db and in state management
+ * updateTypeFields() updates the information displayed in content type list item tables headers both in the db and in state management
+ * addTypeField() adds a new field to the content type whose item table the add field button was pressed under
+ * resetNew() resets the new field variable
+ * clone() creates a deep copy
+ * filter() filters the dropdown menu options depending on provided input
+ */
 <template>
     <div class="q-pa-sm row justify-between items-center">
         <div class="col-10 q-pl-md row items-center">
@@ -14,11 +26,9 @@
 
             <q-expansion-item group="fieldExpand" v-for="field in type.fields" :key="field.id" :header-inset-level="1"
                 :content-inset-level="1" expand-separator
-                :class="themeController ? 'field-expand-dark' : 'field-expand-light'" popup
-                @hide="
-                    fieldsChanged = false;
-                "
-                @before-show="resetNew(); newField = { ...field }">
+                :class="themeController ? 'field-expand-dark' : 'field-expand-light'" popup @hide="
+    fieldsChanged = false;
+                " @before-show="resetNew(); newField = { ...field }">
                 <template v-slot:header>
                     <div class="col row items-center">
                         <q-icon :name="iconName(field.dataType)" color="teal" />
@@ -30,17 +40,13 @@
 
                 <q-card>
                     <q-card-section>
-                        <TypeItemTable
-                            :key="newField"
-                            :field="newField"
-                            :themeController="themeController"
+                        <TypeItemTable :key="newField" :field="newField" :themeController="themeController"
                             v-on:changed="
                                 (modified) => {
                                     fieldsChanged = true;
                                     newField = { ...modified };
                                 }
-                            "
-                        />
+                            " />
                     </q-card-section>
                     <q-card-section class="row q-pt-none">
                         <q-btn color="primary" :label="data[language.getLanguage].saveIt" type="button" outline
@@ -63,24 +69,19 @@
                                         </div>
                                     </q-card-section>
                                     <q-card-section class="row col-12 q-px-sm q-py-none">
-                                        <AddFieldForm
-                                            :themeController="themeController"
-                                            v-on:ready="
-                                                (toAdd) => {
-                                                    newField = { ...toAdd };
-                                                }
-                                            "
-                                        />
+                                        <AddFieldForm :themeController="themeController" v-on:ready="
+                                            (toAdd) => {
+                                                newField = { ...toAdd };
+                                            }
+                                        " />
                                         <q-item class="col-12 row justify-center q-pa-none q-my-md">
                                             <q-btn color="primary" :label="data[language.getLanguage].saveIt"
-                                                type="button"
-                                                v-on:click="
-                                                    type.fields = [...type.fields, { ...newField }];
-                                                    addTypeField(type.id, type.fields);
-                                                    resetNew();
-                                                    addField = false;
-                                                "
-                                                class="col-9" />
+                                                type="button" v-on:click="
+    type.fields = [...type.fields, { ...newField }];
+addTypeField(type.id, type.fields);
+resetNew();
+addField = false;
+                                                " class="col-9" />
                                         </q-item>
                                     </q-card-section>
                                 </q-card>
@@ -93,40 +94,29 @@
     </q-list>
     <q-list v-else-if="page === 'contentPage'">
         <q-expansion-item group="contentExpand" v-for="content in contentStore.list" :key="content.id"
-            expand-icon-class="hidden" class="q-py-xs" clickable ripple expand-separator
-            @hide="
+            expand-icon-class="hidden" class="q-py-xs" clickable ripple expand-separator @hide="
                 contentsChanged = false
-            "
-            @before-show="
-                contentCopy = clone(content.contents)
-            "
-        >
+            " @before-show="
+    contentCopy = clone(content.contents)
+">
             <template v-slot:header>
-                <ListHeaders
-                    :page="page"
-                    :content="{ ...content }"
-                    :themeController="themeController"
-                    :typeName="typeStore.list.find((type) => type.id === content.typeId).name"
-                />
+                <ListHeaders :page="page" :content="{ ...content }" :themeController="themeController"
+                    :typeName="typeStore.list.find((type) => type.id === content.typeId).name" />
             </template>
 
             <q-card>
                 <q-card-section>
-                    <ContentItemTable
-                        :key="contentCopy"
-                        :content="contentCopy"
-                        :themeController="themeController"
+                    <ContentItemTable :key="contentCopy" :content="contentCopy" :themeController="themeController"
                         v-on:changed="
                             (modified) => {
                                 contentsChanged = true;
-                                contentCopy = [ ...modified ];
+                                contentCopy = [...modified];
                             }
-                        "
-                    />
+                        " />
                 </q-card-section>
                 <q-card-section class="row q-pt-none">
                     <q-btn color="primary" outline
-                        v-on:click="contentsChanged ? updateContents(content.id, [ ...contentCopy ]) : null"
+                        v-on:click="contentsChanged ? updateContents(content.id, [...contentCopy]) : null"
                         class="col-12">
                         {{ data[language.getLanguage].saveIt }}
                     </q-btn>
