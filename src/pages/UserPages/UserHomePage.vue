@@ -1,6 +1,6 @@
 <template>
     <q-page class="page flex flex-center">
-        Welcome to the Admin Panel.
+        Welcome to the User Panel.
     </q-page>
 </template>
 

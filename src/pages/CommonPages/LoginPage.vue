@@ -1,7 +1,8 @@
 <template>
     <q-page class="page row wrap justify-center items-start">
         <div class="col-12 row justify-center self-center">
-            <img :src="theme.getTheme ? '../src/assets/imgs/emakinaDark.png' : '../src/assets/imgs/emakina.png'" alt="EMAKINA Logo">
+            <img :src="theme.getTheme ? './imgs/emakinaDark.png' : './imgs/emakina.png'"
+                alt="EMAKINA Logo">
 
         </div>
         <div class="col-12 row justify-center">
@@ -26,11 +27,8 @@
                                         </div>
                                         <div class="col-12 row justify-end">
                                             <q-card-actions>
-                                                <q-btn
-                                                    :label="data[language.getLanguage].confButton"
-                                                    color="teal"
-                                                    v-close-popup
-                                                />
+                                                <q-btn :label="data[language.getLanguage].confButton" color="teal"
+                                                    v-close-popup />
                                             </q-card-actions>
                                         </div>
                                     </div>
@@ -50,12 +48,7 @@
                 </q-card-section>
             </q-card>
             <div class="col-12 row justify-center q-pt-md">
-                <q-btn-toggle
-                    v-model="lang"
-                    flat
-                    :options="langOptions"
-                    @update:model-value="changeLanguage"
-                />
+                <q-btn-toggle v-model="lang" flat :options="langOptions" @update:model-value="changeLanguage" />
             </div>
         </div>
     </q-page>
@@ -63,14 +56,14 @@
 
 <script>
 import axios from 'axios';
-import { userStore } from 'stores/user-store.js';
+import { LoginStore } from 'stores/login-store.js';
 import { defineComponent, ref } from 'vue';
 import { useLanguageStore } from 'stores/language-store.js';
 import { useThemeStore } from 'src/stores/theme-store.js';
 import data from 'src/languages/i18n.js';
 
 const language = useLanguageStore();
-const user = userStore();
+const user = LoginStore();
 
 export default defineComponent({
     name: 'LoginPage',
@@ -133,6 +126,7 @@ export default defineComponent({
                     jwToken: response.data[0].jwToken,
                     email: response.data[0].email,
                     password: response.data[0].password,
+                    role: response.data[0].role,
                 };
 
                 if (response.data[0].firstLogin === true) {

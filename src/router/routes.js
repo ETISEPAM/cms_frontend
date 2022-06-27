@@ -49,6 +49,13 @@ const routes = [
         ],
     },
     {
+        path: '/homepage',
+        component: () => import('layouts/BlankLayout.vue'),
+        children: [
+            { path: '', component: () => import('src/pages/UserPages/UserHomePage.vue') },
+        ],
+    },
+    {
         path: '/:catchAll(.*)*',
         component: () => import('src/pages/CommonPages/ErrorNotFound.vue'),
     },

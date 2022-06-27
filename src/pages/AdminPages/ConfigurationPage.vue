@@ -1,32 +1,26 @@
 <template>
     <q-page class="page">
-        <q-card class="card row justify-around items-start">
+        <q-card class="card row justify-around items-start no-shadow">
             <q-card-section class="col-12">
                 <div class="text-h5 text-weight-bold">{{ data[language.getLanguage].profileSet }}</div>
                 <div class="text-caption q-mt-none">{{ data[language.getLanguage].changeSet }}</div>
             </q-card-section>
             <q-card-section class="col-12 col-sm-9 col-md-5 row">
                 <q-form class="col-12 row justify-center">
-                    <q-input filled v-model="firstName" stack-label
-                        :label="data[language.getLanguage].changeName" :placeholder="user.firstName"
-                        :rules="[val => val && val.length > 0 || data[language.getLanguage].fieldRequired]"
-                        dense
-                        class="col-11"
-                    >
+                    <q-input filled v-model="firstName" stack-label :label="data[language.getLanguage].changeName"
+                        :placeholder="user.firstName"
+                        :rules="[val => val && val.length > 0 || data[language.getLanguage].fieldRequired]" dense
+                        class="col-11">
                     </q-input>
-                    <q-input filled v-model="lastName" stack-label
-                        :label="data[language.getLanguage].changeSurname" :placeholder="user.lastName"
-                        :rules="[val => val && val.length > 0 || data[language.getLanguage].fieldRequired]"
-                        dense
-                        class="col-11"
-                    >
+                    <q-input filled v-model="lastName" stack-label :label="data[language.getLanguage].changeSurname"
+                        :placeholder="user.lastName"
+                        :rules="[val => val && val.length > 0 || data[language.getLanguage].fieldRequired]" dense
+                        class="col-11">
                     </q-input>
-                    <q-input filled v-model="username" stack-label
-                        :label="data[language.getLanguage].changeUsername" :placeholder="user.username"
-                        :rules="[val => val && val.length > 0 || data[language.getLanguage].fieldRequired]"
-                        dense
-                        class="col-11"
-                    >
+                    <q-input filled v-model="username" stack-label :label="data[language.getLanguage].changeUsername"
+                        :placeholder="user.username"
+                        :rules="[val => val && val.length > 0 || data[language.getLanguage].fieldRequired]" dense
+                        class="col-11">
                     </q-input>
                     <div class="row justify-end col-11">
                         <q-btn :label="data[language.getLanguage].saveIt" @click="updateProfile" color="primary" />
@@ -35,20 +29,23 @@
             </q-card-section>
             <q-card-section class="col-12 col-sm-9 col-md-5 row justify-center">
                 <q-btn :label="data[language.getLanguage].changePassword" type="submit" color="deep-orange"
-                    @click="this.$router.push('newpassword')"
-                    class="col-11"
-                />
+                    @click="changePasswordDialog = true" />
+                <q-dialog v-model="changePasswordDialog">
+                    <ChangePassword></ChangePassword>
+                </q-dialog>
             </q-card-section>
         </q-card>
     </q-page>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
-import { userStore } from 'stores/user-store.js';
+import { defineComponent, ref } from 'vue';
+import { LoginStore } from 'stores/login-store.js';
 import axios from 'axios';
 import { useLanguageStore } from 'stores/language-store.js';
 import data from 'src/languages/i18n.js';
+import ChangePassword from 'src/components/ChangePassword.vue';
+import { useThemeStore } from 'stores/theme-store.js';
 
 const language = useLanguageStore();
 
@@ -56,16 +53,22 @@ export default defineComponent({
     name: 'ConfigurationPage',
     setup() {
         return {
-            user: userStore(),
+            user: LoginStore(),
             language,
             data,
         };
     },
+    components: {
+        ChangePassword,
+    },
     data() {
+        const theme = useThemeStore();
         return {
             firstName: this.user.firstName,
             lastName: this.user.lastName,
             username: this.user.username,
+            changePasswordDialog: ref(false),
+            themeController: theme.getTheme,
         };
     },
     methods: {

@@ -1,55 +1,53 @@
 <template>
     <q-page class="page">
-        <q-card class="card row">
+        <q-card class="card row justify-center no-shadow">
             <q-card-section class="col-12 col-sm-6 col-md-8 col-lg-9 text-h5 text-weight-bold">
                 {{ data[language.getLanguage].welcomeText }} {{ user.firstName }}.
             </q-card-section>
             <!-- <ConfirmDialog /> -->
             <q-card-section class="col-12 col-sm-6 col-md-4 col-lg-3 row justify-center justify-sm-end items-center">
-                    <q-btn v-model="blueModel" v-on:click="lightModeOn" :icon="themeController ? 'dark_mode' : 'light_mode'" flat />
-                    <q-select
-                        outlined
-                        v-model="lang"
-                        :options="langOptions"
-                        dense
-                        behavior="menu"
-                        emit-value
-                        map-options
-                        @update:model-value="changeLanguage"
-                    >
-                        <template v-slot:prepend>
-                            <q-icon name="language" class="q-pr-sm" />
-                        </template>
-                    </q-select>
+                <q-btn v-model="blueModel" v-on:click="lightModeOn" :icon="themeController ? 'dark_mode' : 'light_mode'"
+                    flat />
+                <q-select outlined v-model="lang" :options="langOptions" dense behavior="menu" emit-value map-options
+                    @update:model-value="changeLanguage">
+                    <template v-slot:prepend>
+                        <q-icon name="language" class="q-pr-sm" />
+                    </template>
+                </q-select>
             </q-card-section>
-            <q-card-section class="col-12 chart-section">
-                <chartExample :themeController="themeController" class="chart"/>
-            </q-card-section>
+            <Suspense>
+                <template #default>
+                    <q-card-section class="col-12 row chart-section">
+                        <AdminHomeContent :themeController="themeController" />
+                    </q-card-section>
+                </template>
+                <template #fallback>
+                    <q-card-section class="col-9">
+                        <q-skeleton type="rect" height="350px"/>
+                    </q-card-section>
+                </template>
+            </Suspense>
+
         </q-card>
     </q-page>
 </template>
 
 <script>
-import { ref, defineComponent, defineAsyncComponent } from 'vue';
-import { userStore } from 'stores/user-store.js';
+import { ref, defineComponent } from 'vue';
+import { LoginStore } from 'stores/login-store.js';
 import { useQuasar } from 'Quasar';
 import { useLanguageStore } from 'stores/language-store.js';
 import data from 'src/languages/i18n.js';
 // import ConfirmDialog from 'src/components/ConfirmDialog.vue';
 import { useThemeStore } from 'stores/theme-store.js';
-
-const chartExample = defineAsyncComponent(() => import('src/components/AdminChart.vue'));
+import AdminHomeContent from 'src/components/AdminHomeContent.vue';
 
 export default defineComponent({
     name: 'AdminHomePage',
     data() {
-        const theme = useThemeStore();
-
         return {
-            theme,
-            themeController: theme.getTheme,
             $q: useQuasar(),
-            user: userStore(),
+            user: LoginStore(),
         };
     },
     setup() {
@@ -59,6 +57,8 @@ export default defineComponent({
         return {
             blueModel: ref(theme.getTheme),
             lang: ref(language.getLanguage),
+            theme,
+            themeController: theme.getTheme,
             language,
             data,
             langOptions: [
@@ -83,7 +83,7 @@ export default defineComponent({
     },
     components: {
         // ConfirmDialog,
-        chartExample,
+        AdminHomeContent,
     },
     methods: {
         changeLanguage() {
@@ -106,6 +106,4 @@ export default defineComponent({
         background-color: inherit
         .chart-section
             overflow-y: auto
-            .chart
-                min-width: 578px
 </style>
