@@ -1,3 +1,7 @@
+/**
+ * Contains two tabs: List -list content types and Create - create new content types
+ * create() send post requests with axios and update state management
+ */
 <template>
     <q-page class="page">
         <q-card class="card">

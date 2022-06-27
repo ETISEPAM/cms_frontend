@@ -1,3 +1,6 @@
+/**
+ * Component to Sort and Filter Contents by particular parameters
+ */
 <template>
     <div class="col-2 row justify-end">
         <q-btn icon="search" color="teal" @click="search = true" flat dense />

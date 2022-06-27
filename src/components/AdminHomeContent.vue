@@ -1,6 +1,12 @@
+/**
+ * Combines bar and pie chart at Admin Homepage in a single component
+ * Retrieves users, contents, and content types from the db
+ * chartExample, AdminPieChart are included as components
+ * sending get requests with axios
+ */
 <template>
     <div class="row">
-        <div class="col-12 row items-center">
+        <div class="col-12 row justify-center items-center">
             <chartExample
                 :themeController="themeController"
                 :userSize="userStore.list.length"
@@ -10,7 +16,7 @@
             />
         </div>
 
-        <div class="col-12 row items-center">
+        <div class="col-12 row justify-center items-center">
             <AdminPieChart
                 class="chart"
             />
@@ -56,7 +62,6 @@ export default defineComponent({
                 });
 
             if (response.data.length) userStore.list = response.data;
-            console.log(userStore.list);
         }
 
         if (!typeStore.list.length) {

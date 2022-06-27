@@ -1,3 +1,9 @@
+/**
+ * Profile Settings Page
+ * User is able to update name, surname and password
+ * updateProfile() if required fields are not empty update the user information in db
+ * ChangePassword is called as a component
+ */
 <template>
     <q-page class="page">
         <q-card class="card row justify-around items-start no-shadow">

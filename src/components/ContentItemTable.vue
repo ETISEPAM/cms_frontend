@@ -1,27 +1,24 @@
+/**
+ * Displays Contents' Properties
+ * iconName() setup an icon depends on the field type
+ */
 <template>
     <q-list class="fields no-border">
         <q-item v-for="item in content" :key="item.label" class="row"
-            :class="themeController ? 'q-item-dark' : 'q-item-light'"
-        >
+            :class="themeController ? 'q-item-dark' : 'q-item-light'">
             <div class="row no-wrap items-center">
                 <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
                 <span>{{ item.label }}</span>
             </div>
             <div class="q-pb-sm q-pl-lg cursor-pointer">
                 {{ item.value }}
-                <q-popup-edit
-                    v-model="item.value"
-                    :cover="false"
-                    v-slot="scope"
-                    debounce="500"
-                    @update:model-value="$emit('changed', content)"
-                >
+                <q-popup-edit v-model="item.value" :cover="false" v-slot="scope" debounce="500"
+                    @update:model-value="$emit('changed', content)">
                     <q-input :type="item.dataType === 'Number' ? 'number' :
                 (item.dataType === 'Date' ? 'date' :
-                    (item.dataType === 'File' ? 'file' : 'text'))"
-                        :clickable="item.dataType === 'Boolean'"
-                        :readonly="item.dataType === 'Boolean'" color="teal" v-model="scope.value"
-                        dense autofocus @keyup.enter="scope.set()">
+                    (item.dataType === 'File' ? 'file' : 'text'))" :clickable="item.dataType === 'Boolean'"
+                        :readonly="item.dataType === 'Boolean'" color="teal" v-model="scope.value" dense autofocus
+                        @keyup.enter="scope.set()">
                         <template v-slot:prepend>
                             <q-icon :name="iconName(item.dataType)" color="teal" />
                         </template>

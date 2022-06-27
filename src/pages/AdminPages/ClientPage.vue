@@ -1,3 +1,7 @@
+/**
+ * Add New Client Page
+ * isValidEmailAddress(), onReset(), onSave() functions are called
+ */
 <template>
     <q-page class="page">
         <q-card class="card">
@@ -12,23 +16,7 @@
                 <q-tab-panel name="list">
                     <Suspense>
                         <template #default>
-                            <!-- <ListItems page='clientPage' /> -->
-                            <q-list>
-                                <q-item class="row">
-                                    <q-item-section avatar class="row flex-center">
-                                        <q-skeleton type="QAvatar" />
-                                    </q-item-section>
-
-                                    <q-item-section class="row col-8">
-                                        <q-item-label class="row">
-                                            <q-skeleton type="text" class="col-6" />
-                                        </q-item-label>
-                                        <q-item-label caption>
-                                            <q-skeleton type="QRange" />
-                                        </q-item-label>
-                                    </q-item-section>
-                                </q-item>
-                            </q-list>
+                            <ListItems page='clientPage' />
                         </template>
                         <template #fallback>
                             <q-list>
@@ -124,11 +112,15 @@ import { checkPassword } from 'src/validations.js';
 import { useLanguageStore } from 'stores/language-store.js';
 import data from 'src/languages/i18n.js';
 import { useThemeStore } from 'stores/theme-store.js';
+import ListItems from 'components/ListItems.vue';
 
 const language = useLanguageStore();
 
 export default defineComponent({
     name: 'ClientPage',
+    components: {
+        ListItems,
+    },
     setup() {
         return {
             tab: ref('list'),
@@ -162,11 +154,18 @@ export default defineComponent({
         };
     },
     methods: {
+        /**
+         * e-mail validation
+         * checks if e-mail is valid
+         * @param  {String} email - email for user
+         * @return {Boolean} email is valid
+         */
         isValidEmailAddress(email) {
             // eslint-disable-next-line max-len
             const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return re.test(String(email).toLowerCase());
         },
+        /* reset all fields on reset button pressed */
         onReset() {
             this.user.name = null;
             this.user.surname = null;
@@ -178,6 +177,7 @@ export default defineComponent({
             this.validPassword.upper = false;
             this.validPassword.special = false;
         },
+        /* create new user in database when click save button, post request to api */
         onSave() {
             if (
                 this.validPassword.eight === true
@@ -199,6 +199,7 @@ export default defineComponent({
                     .then((response) => {
                         console.log(response.data);
                         this.userStore.$patch({ list: [...this.userStore.list, response.data] });
+                        console.log(this.userStore.list);
                     })
                     .catch((err) => {                                                                   // TO THE BACK-END
                         console.log(err.response.data);
