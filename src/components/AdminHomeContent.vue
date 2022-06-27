@@ -62,7 +62,6 @@ export default defineComponent({
                 });
 
             if (response.data.length) userStore.list = response.data;
-            console.log(userStore.list);
         }
 
         if (!typeStore.list.length) {

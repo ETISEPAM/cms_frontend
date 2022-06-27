@@ -124,30 +124,42 @@ addField = false;
             </q-card>
         </q-expansion-item>
     </q-list>
-    <q-list v-else-if="page === 'userPage'">
+    <q-list v-else-if="page === 'clientPage'">
         <q-expansion-item group="userExpand" v-for="user in userStore.list" :key="user.id"
             expand-icon-class="hidden" class="q-py-xs" clickable ripple expand-separator
             @hide="
-                usersChanged = false
+                userChanged = false;
+                newBio = '';
             "
+            @before-show="newBio = user.bio"
         >
             <template v-slot:header>
-                <ListHeaders :page="page" :themeController="themeController" />
+                <ListHeaders :page="page" :user="{ ...user }" :themeController="themeController" />
             </template>
 
             <q-card>
-                <q-card-section>
-                    <ContentItemTable :key="contentCopy" :content="contentCopy" :themeController="themeController"
-                        v-on:changed="
-                            (modified) => {
-                                contentsChanged = true;
-                                contentCopy = [...modified];
-                            }
-                        " />
+                <q-card-section class="q-px-md">
+                    <div class="cursor-pointer">
+                        {{ newBio }}
+                    </div>
+                    <q-popup-edit
+                        v-model="newBio"
+                        :cover="false"
+                        v-slot="scope"
+                        touch-position
+                        @update:model-value="userChanged = true"
+                    >
+                        <q-input type="text" color="teal" v-model="scope.value" dense autofocus autogrow
+                            @keyup.enter="scope.set()">
+                            <template v-slot:prepend>
+                                <q-icon name="text_fields" color="teal" />
+                            </template>
+                        </q-input>
+                    </q-popup-edit>
                 </q-card-section>
                 <q-card-section class="row q-pt-none">
                     <q-btn color="primary" outline
-                        v-on:click="contentsChanged ? updateContents(content.id, [...contentCopy]) : null"
+                        v-on:click="userChanged ? updateBio(user.id, newBio) : null"
                         class="col-12">
                         {{ data[language.getLanguage].saveIt }}
                     </q-btn>
@@ -162,6 +174,7 @@ import axios from 'axios';
 import { defineComponent, ref } from 'vue';
 import { ContentStore } from 'stores/content-store.js';
 import { TypeStore } from 'stores/type-store.js';
+import { UserStore } from 'stores/user-store.js';
 import { useLanguageStore } from 'stores/language-store.js';
 import data from 'src/languages/i18n.js';
 import { useThemeStore } from 'stores/theme-store.js';
@@ -188,9 +201,11 @@ export default defineComponent({
     data() {
         const theme = useThemeStore();
         return {
+            userStore: UserStore(),
             contentStore: ContentStore(),
-            themeController: theme.getTheme,
             typeStore: TypeStore(),
+            themeController: theme.getTheme,
+            userChanged: false,
             contentsChanged: false,
             fieldsChanged: false,
             newField: {
@@ -202,6 +217,7 @@ export default defineComponent({
                 isMandatory: null,
                 isUnique: null,
             },
+            newBio: '',
             contentCopy: ref(null),
             addField: false,
             data,
@@ -298,6 +314,24 @@ export default defineComponent({
         };
     },
     methods: {
+        async updateBio(id, pBio) {
+            console.log('update bio');
+            this.userStore.list.find((user) => user.id === id).bio = pBio;
+
+            axios
+                .patch(
+                    `http://127.0.0.1:3000/user/${id}`,
+                    {
+                        bio: pBio,
+                    },
+                )
+                .then((response) => {
+                    console.log(response.data);
+                })
+                .catch((err) => {
+                    console.log(err.response.data);
+                });
+        },
         async updateContentHeader(id, pTag) {
             console.log('update type header');
             axios
