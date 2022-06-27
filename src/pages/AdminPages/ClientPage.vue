@@ -211,6 +211,7 @@ export default defineComponent({
                     .then((response) => {
                         console.log(response.data);
                         this.userStore.$patch({ list: [...this.userStore.list, response.data] });
+                        console.log(this.userStore.list);
                     })
                     .catch((err) => {                                                                   // TO THE BACK-END
                         console.log(err.response.data);

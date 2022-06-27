@@ -77,13 +77,13 @@
             }
         " :series="[{
     name: data[language.getLanguage].users,
-    data: [3, 3, 2, 0, 0, 0],
+    data: [1, 1, userSize, 0, 0, 0],
 }, {
     name: data[language.getLanguage].contentType,
-    data: [1, 4, typeSize, 0, 0, 0],
+    data: [2, 2, typeSize, 0, 0, 0],
 }, {
     name: data[language.getLanguage].contents,
-    data: [12, 9, contentSize, 0, 0, 0],
+    data: [1, 1, contentSize, 0, 0, 0],
 }]">
         </apexchart>
     </div>
@@ -97,6 +97,7 @@ export default {
     name: 'AdminChart',
     props: {
         themeController: Boolean,
+        userSize: Number,
         contentSize: Number,
         typeSize: Number,
     },

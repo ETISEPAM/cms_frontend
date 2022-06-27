@@ -58,7 +58,6 @@ export default {
             amounts.push(count);
         });
 
-        console.log(amounts);
         return {
             language,
             data,
