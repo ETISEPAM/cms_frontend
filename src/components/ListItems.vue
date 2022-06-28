@@ -127,11 +127,7 @@ addField = false;
     <q-list v-else-if="page === 'clientPage'">
         <q-expansion-item group="userExpand" v-for="user in userStore.list" :key="user.id"
             expand-icon-class="hidden" class="q-py-xs" clickable ripple expand-separator
-            @hide="
-                userChanged = false;
-                newBio = '';
-            "
-            @before-show="newBio = user.bio"
+            @before-show="userChanged = false; newBio = user.bio; logEvent(user.bio);"
         >
             <template v-slot:header>
                 <ListHeaders :page="page" :user="{ ...user }" :themeController="themeController" />

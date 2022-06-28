@@ -46,50 +46,47 @@ export default defineComponent({
             typeStore: TypeStore(),
         };
     },
-    async setup() {
+    async created() {
         const userStore = UserStore();
         const contentStore = ContentStore();
         const typeStore = TypeStore();
 
-        if (!userStore.list.length) {
-            // eslint-disable-next-line
-            await new Promise((slp) => setTimeout(slp, 1000));
+        // eslint-disable-next-line
+        await new Promise((slp) => setTimeout(slp, 500));
 
-            const response = await axios
-                .get('http://127.0.0.1:3000/user')
-                .catch((err) => {
-                    console.log(err);
-                });
+        let response = await axios
+            .get('http://127.0.0.1:3000/user')
+            .catch((err) => {
+                console.log(err);
+            });
 
-            if (response.data.length) userStore.list = response.data;
-        }
+        if (response.data.length) userStore.list = response.data;
 
-        if (!typeStore.list.length) {
-            // eslint-disable-next-line
-            await new Promise((slp) => setTimeout(slp, 1000));
+        // eslint-disable-next-line
+        await new Promise((slp) => setTimeout(slp, 500));
 
-            const response = await axios
-                .get('http://127.0.0.1:3000/contentType')
-                .catch((err) => {
-                    console.log(err);
-                });
+        response = await axios
+            .get('http://127.0.0.1:3000/contentType')
+            .catch((err) => {
+                console.log(err);
+            });
 
-            if (response.data.length) typeStore.list = response.data;
-        }
+        if (response.data.length) typeStore.list = response.data;
 
-        if (!contentStore.list.length) {
-            // eslint-disable-next-line
-            await new Promise((slp) => setTimeout(slp, 1000));
+        // eslint-disable-next-line
+        await new Promise((slp) => setTimeout(slp, 500));
 
-            const response = await axios
-                .get('http://127.0.0.1:3000/content')
-                .catch((err) => {
-                    console.log(err);
-                });
+        response = await axios
+            .get('http://127.0.0.1:3000/content')
+            .catch((err) => {
+                console.log(err);
+            });
 
-            if (response.data.length) contentStore.list = response.data;
-        }
+        if (response.data.length) contentStore.list = response.data;
     },
+    // async setup() {
+
+    // },
     components: {
         // ConfirmDialog,
         chartExample,
