@@ -7,8 +7,7 @@
 <template>
     <q-page class="page row wrap justify-center items-start">
         <div class="col-12 row justify-center self-center">
-            <img :src="theme.getTheme ? 'imgs/emakinaDark.png' : 'imgs/emakina.png'"
-                alt="EMAKINA Logo">
+            <img :src="theme.getTheme ? 'imgs/emakinaDark.png' : 'imgs/emakina.png'" alt="EMAKINA Logo">
 
         </div>
         <div class="col-12 row justify-center">
@@ -136,9 +135,10 @@ export default defineComponent({
                     email: response.data[0].email,
                     password: response.data[0].password,
                     role: response.data[0].role,
+                    bio: response.data[0].bio,
                 };
 
-                if (response.data[0].firstLogin === true) {
+                /* if (response.data[0].firstLogin === true) {
                     axios.patch(
                         `http://127.0.0.1:3000/user/${response.data[0].id}`,
                         {
@@ -146,6 +146,11 @@ export default defineComponent({
                         },
                     );
                     this.$router.push({ path: '/panel/newpassword' });
+                } else {
+                    this.$router.push({ path: '/panel' });
+                } */
+                if (response.data[0].role === 'user') {
+                    this.$router.push({ path: '/home' });
                 } else {
                     this.$router.push({ path: '/panel' });
                 }

@@ -10,5 +10,7 @@ export const LoginStore = defineStore('login', {
         password: '',
         firstLogin: true,
         jwToken: '',
+        bio: '',
+        role: 'user',
     }),
 });
