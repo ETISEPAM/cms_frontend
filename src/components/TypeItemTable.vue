@@ -1,6 +1,6 @@
 /**
  * Displays Content Types' Properties
- * iconName() setup an icon depends on the field type
+ * filter() filters the dropdown menu options depending on provided input
  */
 <template>
     <q-list class="fields no-border">
@@ -11,8 +11,8 @@
             </label>
             <div class="cursor-pointer">
                 {{ modified.label }}
-                <q-popup-edit v-model="modified.label" :cover="false" :offset="[0, 10]" touch-position v-slot="scope">
-                    <q-input type="text" color="teal" v-model="scope.value" dense autofocus autogrow
+                <q-popup-edit v-model="modified.label" :cover="false" :offset="[0, 10]" v-slot="scope">
+                    <q-input type="text" color="teal" v-model="scope.value" dense autofocus
                         @keyup.enter="scope.set(); $emit('changed', modified);">
                         <template v-slot:prepend>
                             <q-icon name="text_fields" color="teal" />
@@ -60,11 +60,11 @@
             </div>
             <div class="cursor-pointer">
                 {{ modified.default }}
-                <q-popup-edit v-model="modified.default" :cover="false" :offset="[0, 10]" touch-position v-slot="scope">
+                <q-popup-edit v-model="modified.default" :cover="false" :offset="[0, 10]" v-slot="scope">
                     <q-input v-if="modified.dataType !== 'Boolean'" :type="
                         modified.dataType === 'Date' ? 'date' :
                             (modified.dataType === 'String' || modified.dataType === 'Boolean' ? 'text' : 'number')
-                    " color="teal" v-model="scope.value" dense autofocus autogrow
+                    " color="teal" v-model="scope.value" dense autofocus
                         @keyup.enter="scope.set(); $emit('changed', modified);">
                         <template v-slot:prepend>
                             <q-icon :name="
