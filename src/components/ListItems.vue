@@ -125,14 +125,11 @@ addField = false;
         </q-expansion-item>
     </q-list>
     <q-list v-else-if="page === 'clientPage'">
-        <q-expansion-item group="userExpand" v-for="user in userStore.list" :key="user.id"
-            expand-icon-class="hidden" class="q-py-xs" clickable ripple expand-separator
-            @hide="
-                userChanged = false;
-                newBio = '';
-            "
-            @before-show="newBio = user.bio"
-        >
+        <q-expansion-item group="userExpand" v-for="user in userStore.list" :key="user.id" expand-icon-class="hidden"
+            class="q-py-xs" clickable ripple expand-separator @hide="
+    userChanged = false;
+newBio = '';
+            " @before-show="newBio = user.bio">
             <template v-slot:header>
                 <ListHeaders :page="page" :user="{ ...user }" :themeController="themeController" />
             </template>
@@ -142,13 +139,8 @@ addField = false;
                     <div class="cursor-pointer">
                         {{ newBio }}
                     </div>
-                    <q-popup-edit
-                        v-model="newBio"
-                        :cover="false"
-                        v-slot="scope"
-                        touch-position
-                        @update:model-value="userChanged = true"
-                    >
+                    <q-popup-edit v-model="newBio" :cover="false" v-slot="scope" touch-position
+                        @update:model-value="userChanged = true">
                         <q-input type="text" color="teal" v-model="scope.value" dense autofocus autogrow
                             @keyup.enter="scope.set()">
                             <template v-slot:prepend>
@@ -158,8 +150,7 @@ addField = false;
                     </q-popup-edit>
                 </q-card-section>
                 <q-card-section class="row q-pt-none">
-                    <q-btn color="primary" outline
-                        v-on:click="userChanged ? updateBio(user.id, newBio) : null"
+                    <q-btn color="primary" outline v-on:click="userChanged ? updateBio(user.id, newBio) : null"
                         class="col-12">
                         {{ data[language.getLanguage].saveIt }}
                     </q-btn>
@@ -393,7 +384,7 @@ export default defineComponent({
         },
         async addTypeField(id, toAdd) {
             console.log('add type');
-
+            // if validation
             axios
                 .patch(
                     `http://127.0.0.1:3000/contentType/${id}`,

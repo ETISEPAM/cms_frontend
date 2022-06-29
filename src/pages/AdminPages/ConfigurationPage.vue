@@ -23,11 +23,6 @@
                         :rules="[val => val && val.length > 0 || data[language.getLanguage].fieldRequired]" dense
                         class="col-11">
                     </q-input>
-                    <q-input filled v-model="username" stack-label :label="data[language.getLanguage].changeUsername"
-                        :placeholder="user.username"
-                        :rules="[val => val && val.length > 0 || data[language.getLanguage].fieldRequired]" dense
-                        class="col-11">
-                    </q-input>
                     <div class="row justify-end col-11">
                         <q-btn :label="data[language.getLanguage].saveIt" @click="updateProfile" color="primary" />
                     </div>
@@ -72,21 +67,19 @@ export default defineComponent({
         return {
             firstName: this.user.firstName,
             lastName: this.user.lastName,
-            username: this.user.username,
             changePasswordDialog: ref(false),
             themeController: theme.getTheme,
         };
     },
     methods: {
         async updateProfile() {
-            if (this.firstName !== '' && this.lastName !== '' && this.username !== '') {
+            if (this.firstName !== '' && this.lastName !== '') {
                 axios.patch(
 
                     `http://127.0.0.1:3000/user/${this.user.id}`,
                     {
                         firstName: this.firstName,
                         lastName: this.lastName,
-                        username: this.username,
                     },
                 );
             }

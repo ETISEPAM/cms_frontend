@@ -15,14 +15,13 @@
 
         <q-drawer v-model="leftDrawerOpen" side="left" elevated :breakpoint="800" show-if-above class="drawer">
             <div class="image col-2 row justify-center self-center q-pt-lg">
-                <img :src="theme.getTheme ? 'imgs/emakinaDark.png' : 'imgs/emakina.png'"
-                    alt="EMAKINA Logo" />
+                <img :src="theme.getTheme ? 'imgs/emakinaDark.png' : 'imgs/emakina.png'" alt="EMAKINA Logo" />
             </div>
 
             <q-list separator padding class="list col rounded-borders flex column justify-between q-pt-lg">
-                <div>
+                <div :class="user.role === 'admin' ? null : 'hidden'">
                     <q-item clickable v-ripple :active="link === 'home'" @click="link = 'home'" active-class="current"
-                        to="/panel" exact>
+                        :to="user.role === 'admin' ? '/panel' : '/home'" exact>
                         <q-item-section avatar>
                             <q-icon name="home" />
                         </q-item-section>
@@ -66,6 +65,9 @@
                         <q-item-section>{{ data[language.getLanguage].configuration }}</q-item-section>
                     </q-item>
                 </div>
+                <div class="self-center" :class="user.role === 'admin' ? 'hidden' : null">
+                    <UserCard></UserCard>
+                </div>
                 <div>
                     <q-item clickable v-ripple :active="link === 'logOut'" @click="link = 'logOut'"
                         active-class="current" to="/" exact>
@@ -90,6 +92,8 @@ import { defineComponent, ref } from 'vue';
 import { useLanguageStore } from 'stores/language-store.js';
 import data from 'src/languages/i18n.js';
 import { useThemeStore } from 'src/stores/theme-store.js';
+import { LoginStore } from 'src/stores/login-store.js';
+import UserCard from 'src/components/UserCard.vue';
 
 const language = useLanguageStore();
 
@@ -97,6 +101,7 @@ export default defineComponent({
     name: 'MainLayout',
     data() {
         return {
+            user: LoginStore(),
             theme: useThemeStore(),
         };
     },
@@ -112,6 +117,9 @@ export default defineComponent({
             language,
             data,
         };
+    },
+    components: {
+        UserCard,
     },
 
 });
@@ -150,4 +158,7 @@ export default defineComponent({
 
 .page-container
     padding: 0
+
+.hidden
+    display: none
 </style>
