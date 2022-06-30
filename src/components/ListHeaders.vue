@@ -62,7 +62,11 @@
             <q-popup-proxy cover :breakpoint="500">
                 <q-card class="q-pa-md">
                     <div class="column">
-                        <q-input type="text" color="teal" dense autofocus autogrow>
+                        <q-input v-model="tagArray" type="text" color="teal" dense autofocus
+                            @keyup.enter="
+                                updateTags(content.id, tagArray);
+                            "
+                        >
                             <template v-slot:prepend>
                                 <q-icon name="text_fields" color="teal" />
                             </template>
@@ -108,6 +112,7 @@ import { TypeStore } from 'stores/type-store.js';
 
 export default defineComponent({
     name: 'ListHeaders',
+    emits: ['changed'],
     props: {
         page: String,
         type: Object,
@@ -120,6 +125,7 @@ export default defineComponent({
         return {
             name: '',
             description: '',
+            tagArray: this.content ? this.content.tag : null,
         };
     },
     methods: {
@@ -153,6 +159,34 @@ export default defineComponent({
 
             this.name = '';
             this.description = '';
+        },
+        async updateTags(id, newTags) {
+            console.log(newTags.length);
+            const newTagArray = [];
+            for (let i = 0, temp = ''; i < newTags.length; i++) {
+                if (newTags[i] === ',') {
+                    newTagArray.push(temp);
+                    temp = '';
+                } else temp += newTags[i];
+
+                if (i === newTags.length - 1) newTagArray.push(temp);
+            }
+
+            this.$emit('changed', [...newTagArray]);
+            console.log(newTagArray);
+            axios
+                .patch(
+                    `http://127.0.0.1:3000/content/${id}`,
+                    {
+                        tag: newTagArray,
+                    },
+                )
+                .then((response) => {
+                    console.log(response.data);
+                })
+                .catch((err) => {
+                    console.log(err.response.data);
+                });
         },
     },
 });

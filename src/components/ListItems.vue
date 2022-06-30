@@ -100,8 +100,14 @@ addField = false;
     contentCopy = clone(content.contents)
 ">
             <template v-slot:header>
-                <ListHeaders :page="page" :content="{ ...content }" :themeController="themeController"
-                    :typeName="typeStore.list.find((type) => type.id === content.typeId).name" />
+                <ListHeaders :key="content.tag" :page="page" :content="{ ...content }" :themeController="themeController"
+                    :typeName="typeStore.list.find((type) => type.id === content.typeId).name"
+                    v-on:changed="
+                        (modified) => {
+                            content.tag = [...modified];
+                        }
+                    "
+                />
             </template>
 
             <q-card>
