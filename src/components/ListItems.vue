@@ -69,20 +69,18 @@
                                         </div>
                                     </q-card-section>
                                     <q-card-section class="row col-12 q-px-sm q-py-none">
-                                        <AddFieldForm :themeController="themeController" v-on:ready="
+                                        <AddFieldForm :themeController="themeController" v-on:save="
                                             (toAdd) => {
-                                                newField = { ...toAdd };
+                                                if (toAdd) {
+                                                    type.fields = [...type.fields, { ...toAdd }];
+                                                    addTypeField(type.id, type.fields);
+                                                    resetNew();
+                                                    addField = false;
+                                                } else {
+                                                    console.log('alert');
+                                                }
                                             }
                                         " />
-                                        <q-item class="col-12 row justify-center q-pa-none q-my-md">
-                                            <q-btn color="primary" :label="data[language.getLanguage].saveIt"
-                                                type="button" v-on:click="
-    type.fields = [...type.fields, { ...newField }];
-addTypeField(type.id, type.fields);
-resetNew();
-addField = false;
-                                                " class="col-9" />
-                                        </q-item>
                                     </q-card-section>
                                 </q-card>
                             </q-popup-proxy>
@@ -100,14 +98,13 @@ addField = false;
     contentCopy = clone(content.contents)
 ">
             <template v-slot:header>
-                <ListHeaders :key="content.tag" :page="page" :content="{ ...content }" :themeController="themeController"
-                    :typeName="typeStore.list.find((type) => type.id === content.typeId).name"
-                    v-on:changed="
+                <ListHeaders :key="content.tag" :page="page" :content="{ ...content }"
+                    :themeController="themeController"
+                    :typeName="typeStore.list.find((type) => type.id === content.typeId).name" v-on:changed="
                         (modified) => {
                             content.tag = [...modified];
                         }
-                    "
-                />
+                    " />
             </template>
 
             <q-card>
@@ -131,10 +128,9 @@ addField = false;
         </q-expansion-item>
     </q-list>
     <q-list v-else-if="page === 'clientPage'">
-        <q-expansion-item group="userExpand" v-for="user in userStore.list" :key="user.id"
-            expand-icon-class="hidden" class="q-py-xs" clickable ripple expand-separator
-            @before-show="userChanged = false; newBio = user.bio; logEvent(user.bio);"
-        >
+        <q-expansion-item group="userExpand" v-for="user in userStore.list" :key="user.id" expand-icon-class="hidden"
+            class="q-py-xs" clickable ripple expand-separator
+            @before-show="userChanged = false; newBio = user.bio; logEvent(user.bio);">
             <template v-slot:header>
                 <ListHeaders :page="page" :user="{ ...user }" :themeController="themeController" />
             </template>
@@ -388,7 +384,7 @@ export default defineComponent({
                 });
         },
         async addTypeField(id, toAdd) {
-            console.log('add type');
+            console.log('add type field');
             // if validation
             axios
                 .patch(
