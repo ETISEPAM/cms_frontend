@@ -49,8 +49,8 @@ const routes = [
         ],
     },
     {
-        path: '/homepage',
-        component: () => import('layouts/BlankLayout.vue'),
+        path: '/home',
+        component: () => import('layouts/MainLayout.vue'),
         children: [
             { path: '', component: () => import('src/pages/UserPages/UserHomePage.vue') },
         ],
