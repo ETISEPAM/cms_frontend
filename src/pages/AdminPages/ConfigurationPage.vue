@@ -32,7 +32,7 @@
                 <q-btn :label="data[language.getLanguage].changePassword" type="submit" color="deep-orange"
                     @click="changePasswordDialog = true" />
                 <q-dialog v-model="changePasswordDialog">
-                    <ChangePassword></ChangePassword>
+                    <ChangePassword v-on:save="changePasswordDialog = false" />
                 </q-dialog>
             </q-card-section>
         </q-card>
