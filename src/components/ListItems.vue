@@ -39,20 +39,13 @@
                 </template>
 
                 <q-card>
-                    <q-card-section>
-                        <TypeItemTable :key="newField" :field="newField" :themeController="themeController"
-                            v-on:changed="
-                                (modified) => {
-                                    fieldsChanged = true;
-                                    newField = { ...modified };
-                                }
-                            " />
-                    </q-card-section>
-                    <q-card-section class="row q-pt-none">
-                        <q-btn color="primary" :label="data[language.getLanguage].saveIt" type="button" outline
-                            v-on:click="fieldsChanged ? (updateTypeFields(type.id, { ...newField }), resetNew) : null"
-                            class="col-12" />
-                    </q-card-section>
+                    <TypeItemTable :key="newField" :field="newField" :themeController="themeController"
+                        v-on:save="
+                            (toAdd) => {
+                                updateTypeFields(type.id, toAdd);
+                            }
+                        "
+                    />
                 </q-card>
             </q-expansion-item>
             <q-expansion-item group="fieldExpand" expand-icon-class="hidden" v-model="addField">
@@ -108,22 +101,13 @@
             </template>
 
             <q-card>
-                <q-card-section>
-                    <ContentItemTable :key="contentCopy" :content="contentCopy" :themeController="themeController"
-                        v-on:changed="
-                            (modified) => {
-                                contentsChanged = true;
-                                contentCopy = [...modified];
-                            }
-                        " />
-                </q-card-section>
-                <q-card-section class="row q-pt-none">
-                    <q-btn color="primary" outline
-                        v-on:click="contentsChanged ? updateContents(content.id, [...contentCopy]) : null"
-                        class="col-12">
-                        {{ data[language.getLanguage].saveIt }}
-                    </q-btn>
-                </q-card-section>
+                <ContentItemTable :key="contentCopy" :typeId="content.typeId" :content="contentCopy" :themeController="themeController"
+                    v-on:save="
+                        (toAdd) => {
+                            updateContents(content.id, toAdd);
+                        }
+                    "
+                />
             </q-card>
         </q-expansion-item>
     </q-list>

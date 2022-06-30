@@ -117,13 +117,14 @@ import data from 'src/languages/i18n.js';
 import AlertDialog from 'components/AlertDialog.vue';
 
 const language = useLanguageStore();
-let valid = false;
 
 export default defineComponent({
     name: 'AddFieldForm',
     props: ['themeController'],
     emits: {
         save: (toAdd) => {
+            let valid = false;
+
             if (toAdd.dataType === 'String') {
                 valid = toAdd.minVal <= toAdd.default.length && toAdd.default.length <= toAdd.maxVal;
             } else if (toAdd.dataType === 'File') {
@@ -131,7 +132,7 @@ export default defineComponent({
             } else {
                 valid = toAdd.minVal <= toAdd.default && toAdd.default <= toAdd.maxVal;
             }
-            console.log(valid);
+
             if (valid) return true;
             throw new Error('Invalid input');
         },

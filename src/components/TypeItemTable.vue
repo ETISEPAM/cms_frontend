@@ -3,153 +3,160 @@
  * filter() filters the dropdown menu options depending on provided input
  */
 <template>
-    <q-list class="fields no-border">
-        <q-item :class="themeController ? 'q-item-dark' : 'q-item-light'">
-            <label class="row items-center q-pb-sm">
-                <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
-                <span>{{ data[language.getLanguage].label }}</span>
-            </label>
-            <div class="cursor-pointer">
-                {{ modified.label }}
-                <q-popup-edit v-model="modified.label" :cover="false" :offset="[0, 10]" v-slot="scope">
-                    <q-input type="text" color="teal" v-model="scope.value" dense autofocus
-                        @keyup.enter="scope.set(); $emit('changed', modified);">
-                        <template v-slot:prepend>
-                            <q-icon name="text_fields" color="teal" />
-                        </template>
-                    </q-input>
-                </q-popup-edit>
-            </div>
-        </q-item>
-        <q-item :class="themeController ? 'q-item-dark' : 'q-item-light'">
-            <div class="row items-center q-pb-sm">
-                <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
-                <span>{{ data[language.getLanguage].dataType }}</span>
-            </div>
-            <div class="cursor-pointer">
-                {{ modified.dataType }}
-                <q-popup-edit v-model="modified.dataType" :cover="false" :offset="[0, 10]">
-                    <q-select filled clearable v-model="newVal" use-input hide-selected fill-input dense behavior="menu"
-                        :options="options" @filter="filter" :label="data[language.getLanguage].dataType" emit-value
-                        map-options
-                        @update:model-value="modified.dataType = newVal; newVal = ''; $emit('changed', modified);">
-                        <template v-slot:no-option>
-                            <q-item>
-                                <q-item-section class="text-grey">
-                                    {{ data[language.getLanguage].noResults }}
-                                </q-item-section>
-                            </q-item>
-                        </template>
-                        <template v-slot:option="scope">
-                            <q-item v-bind="scope.itemProps">
-                                <q-icon :name="scope.opt.icon" class="q-pr-sm" />
-                                <q-item-section>
-                                    <q-item-label>{{ scope.opt.label }}</q-item-label>
-                                    <q-item-label caption>{{ scope.opt.description }}</q-item-label>
-                                </q-item-section>
-                            </q-item>
-                        </template>
-                    </q-select>
-                </q-popup-edit>
-            </div>
-        </q-item>
-        <q-item v-if="modified.dataType !== 'File'" :class="themeController ? 'q-item-dark' : 'q-item-light'">
-            <div class="row items-center q-pb-sm">
-                <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
-                <span>{{ data[language.getLanguage].defaultValue }}</span>
-            </div>
-            <div class="cursor-pointer">
-                {{ modified.default }}
-                <q-popup-edit v-model="modified.default" :cover="false" :offset="[0, 10]" v-slot="scope">
-                    <q-input v-if="modified.dataType !== 'Boolean'" :type="
-                        modified.dataType === 'Date' ? 'date' :
-                            (modified.dataType === 'String' || modified.dataType === 'Boolean' ? 'text' : 'number')
-                    " color="teal" v-model="scope.value" dense autofocus
-                        @keyup.enter="scope.set(); $emit('changed', modified);">
-                        <template v-slot:prepend>
-                            <q-icon :name="
-                                modified.dataType === 'Date' ? 'calendar_today' :
-                                    (modified.dataType === 'String' || modified.dataType === 'Boolean' ?
-                                        'text_fields' : 'numbers')
-                            " color="teal" />
-                        </template>
-                    </q-input>
+    <q-card-section>
+        <q-list class="fields no-border">
+            <q-item :class="themeController ? 'q-item-dark' : 'q-item-light'">
+                <label class="row items-center q-pb-sm">
+                    <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
+                    <span>{{ data[language.getLanguage].label }}</span>
+                </label>
+                <div class="cursor-pointer">
+                    {{ modified.label }}
+                    <q-popup-edit v-model="modified.label" :cover="false" :offset="[0, 10]" v-slot="scope">
+                        <q-input type="text" color="teal" v-model="scope.value" dense autofocus
+                            @keyup.enter="scope.set">
+                            <template v-slot:prepend>
+                                <q-icon name="text_fields" color="teal" />
+                            </template>
+                        </q-input>
+                    </q-popup-edit>
+                </div>
+            </q-item>
+            <q-item :class="themeController ? 'q-item-dark' : 'q-item-light'">
+                <div class="row items-center q-pb-sm">
+                    <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
+                    <span>{{ data[language.getLanguage].dataType }}</span>
+                </div>
+                <div class="cursor-pointer">
+                    {{ modified.dataType }}
+                    <q-popup-edit v-model="modified.dataType" :cover="false" :offset="[0, 10]">
+                        <q-select filled clearable v-model="newVal" use-input hide-selected fill-input dense behavior="menu"
+                            :options="options" @filter="filter" :label="data[language.getLanguage].dataType" emit-value
+                            map-options
+                            @update:model-value="modified.dataType = newVal; newVal = '';">
+                            <template v-slot:no-option>
+                                <q-item>
+                                    <q-item-section class="text-grey">
+                                        {{ data[language.getLanguage].noResults }}
+                                    </q-item-section>
+                                </q-item>
+                            </template>
+                            <template v-slot:option="scope">
+                                <q-item v-bind="scope.itemProps">
+                                    <q-icon :name="scope.opt.icon" class="q-pr-sm" />
+                                    <q-item-section>
+                                        <q-item-label>{{ scope.opt.label }}</q-item-label>
+                                        <q-item-label caption>{{ scope.opt.description }}</q-item-label>
+                                    </q-item-section>
+                                </q-item>
+                            </template>
+                        </q-select>
+                    </q-popup-edit>
+                </div>
+            </q-item>
+            <q-item v-if="modified.dataType !== 'File'" :class="themeController ? 'q-item-dark' : 'q-item-light'">
+                <div class="row items-center q-pb-sm">
+                    <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
+                    <span>{{ data[language.getLanguage].defaultValue }}</span>
+                </div>
+                <div class="cursor-pointer">
+                    {{ modified.default }}
+                    <q-popup-edit v-model="modified.default" :cover="false" :offset="[0, 10]" v-slot="scope">
+                        <q-input v-if="modified.dataType !== 'Boolean'" :type="
+                            modified.dataType === 'Date' ? 'date' :
+                                (modified.dataType === 'String' || modified.dataType === 'Boolean' ? 'text' : 'number')
+                        " color="teal" v-model="scope.value" dense autofocus
+                            @keyup.enter="scope.set">
+                            <template v-slot:prepend>
+                                <q-icon :name="
+                                    modified.dataType === 'Date' ? 'calendar_today' :
+                                        (modified.dataType === 'String' || modified.dataType === 'Boolean' ?
+                                            'text_fields' : 'numbers')
+                                " color="teal" />
+                            </template>
+                        </q-input>
 
-                    <q-select v-else filled clearable v-model="modified.default" use-input hide-selected fill-input
-                        dense options-dense input-debounce="0" :options="boolOptions"
-                        :label="data[language.getLanguage].defaultValue" emit-value map-options
-                        @update:model-value="$emit('changed', modified)">
-                    </q-select>
-                </q-popup-edit>
-            </div>
-        </q-item>
-        <q-item v-if="modified.dataType !== 'Boolean'" :class="themeController ? 'q-item-dark' : 'q-item-light'">
-            <div class="row items-center q-pb-sm">
-                <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
-                <span>
-                    {{
-                            modified.dataType == 'String' ? data[language.getLanguage].minimumLenght :
-                                (modified.dataType === 'File' ? data[language.getLanguage].minRequired :
-                                    data[language.getLanguage].minValue)
-                    }}
-                </span>
-            </div>
-            <div class="cursor-pointer">
-                {{ modified.minVal }}
-                <q-popup-edit v-model="modified.minVal" :cover="false" :offset="[0, 10]" v-slot="scope">
-                    <q-input :type="modified.dataType === 'Date' ? 'date' : 'number'" color="teal" v-model="scope.value"
-                        dense autofocus @keyup.enter="scope.set(); $emit('changed', modified);">
-                        <template v-slot:prepend>
-                            <q-icon :name="modified.dataType === 'Date' ? 'calendar_today' : 'numbers'" color="teal" />
-                        </template>
-                    </q-input>
-                </q-popup-edit>
-            </div>
-        </q-item>
-        <q-item v-if="modified.dataType !== 'Boolean'" :class="themeController ? 'q-item-dark' : 'q-item-light'">
-            <div class="row items-center q-pb-sm">
-                <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
-                <span>
-                    {{
-                            modified.dataType === 'String' ? data[language.getLanguage].maxLenght :
-                                (modified.dataType === 'File' ? data[language.getLanguage].maxAllowed :
-                                    data[language.getLanguage].maxValue)
-                    }}
-                </span>
-            </div>
-            <div class="cursor-pointer">
-                {{ modified.maxVal }}
-                <q-popup-edit v-model="modified.maxVal" :cover="false" :offset="[0, 10]" v-slot="scope">
-                    <q-input :type="modified.dataType === 'Date' ? 'date' : 'number'" color="teal" v-model="scope.value"
-                        dense autofocus @keyup.enter="scope.set(); $emit('changed', modified);">
-                        <template v-slot:prepend>
-                            <q-icon :name="modified.dataType === 'Date' ? 'calendar_today' : 'numbers'" color="teal" />
-                        </template>
-                    </q-input>
-                </q-popup-edit>
-            </div>
-        </q-item>
-        <q-item :class="themeController ? 'q-item-dark' : 'q-item-light'">
-            <div class="row items-center q-pb-sm">
-                <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
-                <span>{{ data[language.getLanguage].isMandatory }}</span>
-            </div>
-            <q-btn-toggle v-model="modified.isMandatory" unelevated toggle-color="secondary" :options="[
-                { label: data[language.getLanguage].yes, value: true },
-                { label: data[language.getLanguage].no, value: false },
-            ]" @update:model-value="$emit('changed', modified)" />
-        </q-item>
-        <q-item :class="themeController ? 'q-item-dark' : 'q-item-light'">
-            <div class="row items-center q-pb-sm">
-                <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
-                <span>{{ data[language.getLanguage].isUnique }}</span>
-            </div>
-            <q-btn-toggle v-model="modified.isUnique" unelevated toggle-color="secondary" :options="[
-                { label: data[language.getLanguage].yes, value: true },
-                { label: data[language.getLanguage].no, value: false },
-            ]" @update:model-value="$emit('changed', modified)" />
-        </q-item>
-    </q-list>
+                        <q-select v-else filled clearable v-model="modified.default" use-input hide-selected fill-input
+                            dense options-dense input-debounce="0" :options="boolOptions"
+                            :label="data[language.getLanguage].defaultValue" emit-value map-options
+                        >
+                        </q-select>
+                    </q-popup-edit>
+                </div>
+            </q-item>
+            <q-item v-if="modified.dataType !== 'Boolean'" :class="themeController ? 'q-item-dark' : 'q-item-light'">
+                <div class="row items-center q-pb-sm">
+                    <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
+                    <span>
+                        {{
+                                modified.dataType == 'String' ? data[language.getLanguage].minimumLenght :
+                                    (modified.dataType === 'File' ? data[language.getLanguage].minRequired :
+                                        data[language.getLanguage].minValue)
+                        }}
+                    </span>
+                </div>
+                <div class="cursor-pointer">
+                    {{ modified.minVal }}
+                    <q-popup-edit v-model="modified.minVal" :cover="false" :offset="[0, 10]" v-slot="scope">
+                        <q-input :type="modified.dataType === 'Date' ? 'date' : 'number'" color="teal" v-model="scope.value"
+                            dense autofocus @keyup.enter="scope.set">
+                            <template v-slot:prepend>
+                                <q-icon :name="modified.dataType === 'Date' ? 'calendar_today' : 'numbers'" color="teal" />
+                            </template>
+                        </q-input>
+                    </q-popup-edit>
+                </div>
+            </q-item>
+            <q-item v-if="modified.dataType !== 'Boolean'" :class="themeController ? 'q-item-dark' : 'q-item-light'">
+                <div class="row items-center q-pb-sm">
+                    <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
+                    <span>
+                        {{
+                                modified.dataType === 'String' ? data[language.getLanguage].maxLenght :
+                                    (modified.dataType === 'File' ? data[language.getLanguage].maxAllowed :
+                                        data[language.getLanguage].maxValue)
+                        }}
+                    </span>
+                </div>
+                <div class="cursor-pointer">
+                    {{ modified.maxVal }}
+                    <q-popup-edit v-model="modified.maxVal" :cover="false" :offset="[0, 10]" v-slot="scope">
+                        <q-input :type="modified.dataType === 'Date' ? 'date' : 'number'" color="teal" v-model="scope.value"
+                            dense autofocus @keyup.enter="scope.set">
+                            <template v-slot:prepend>
+                                <q-icon :name="modified.dataType === 'Date' ? 'calendar_today' : 'numbers'" color="teal" />
+                            </template>
+                        </q-input>
+                    </q-popup-edit>
+                </div>
+            </q-item>
+            <q-item :class="themeController ? 'q-item-dark' : 'q-item-light'">
+                <div class="row items-center q-pb-sm">
+                    <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
+                    <span>{{ data[language.getLanguage].isMandatory }}</span>
+                </div>
+                <q-btn-toggle v-model="modified.isMandatory" unelevated toggle-color="secondary" :options="[
+                    { label: data[language.getLanguage].yes, value: true },
+                    { label: data[language.getLanguage].no, value: false },
+                ]" />
+            </q-item>
+            <q-item :class="themeController ? 'q-item-dark' : 'q-item-light'">
+                <div class="row items-center q-pb-sm">
+                    <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
+                    <span>{{ data[language.getLanguage].isUnique }}</span>
+                </div>
+                <q-btn-toggle v-model="modified.isUnique" unelevated toggle-color="secondary" :options="[
+                    { label: data[language.getLanguage].yes, value: true },
+                    { label: data[language.getLanguage].no, value: false },
+                ]" />
+            </q-item>
+        </q-list>
+    </q-card-section>
+    <q-card-section class="row q-pt-none">
+        <q-btn color="primary" :label="data[language.getLanguage].saveIt" type="button" outline
+            v-on:click="$emit('save', )"
+            class="col-12" />
+    </q-card-section>
 </template>
 
 <script>
@@ -162,7 +169,14 @@ const language = useLanguageStore();
 export default defineComponent({
     name: 'TypeItemTable',
     props: ['field', 'themeController'],
-    emits: ['changed'],
+    emits: {
+        save: (modified) => {
+            const valid = false;
+            console.log(valid, modified);
+            if (valid) return true;
+            throw new Error('Invalid input');
+        },
+    },
     data() {
         return {
             newVal: '',
