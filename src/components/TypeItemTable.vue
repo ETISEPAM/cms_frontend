@@ -154,7 +154,7 @@
     </q-card-section>
     <q-card-section class="row q-pt-none">
         <q-btn color="primary" :label="data[language.getLanguage].saveIt" type="button" outline
-            v-on:click="$emit('save', )"
+            v-on:click="$emit('save', modified)"
             class="col-12" />
     </q-card-section>
 </template>
@@ -170,9 +170,18 @@ export default defineComponent({
     name: 'TypeItemTable',
     props: ['field', 'themeController'],
     emits: {
-        save: (modified) => {
-            const valid = false;
-            console.log(valid, modified);
+        save: (toUpdate) => {
+            let valid = false;
+
+            if (toUpdate.dataType === 'String') {
+                valid = toUpdate.minVal <= toUpdate.default.length && toUpdate.default.length <= toUpdate.maxVal;
+            } else if (toUpdate.dataType === 'File') {
+                valid = toUpdate.minVal <= toUpdate.maxVal;
+            } else {
+                valid = toUpdate.minVal <= toUpdate.default && toUpdate.default <= toUpdate.maxVal;
+            }
+
+            console.log(valid, toUpdate);
             if (valid) return true;
             throw new Error('Invalid input');
         },
