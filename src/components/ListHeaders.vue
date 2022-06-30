@@ -17,30 +17,37 @@
         </q-item-section>
 
         <q-item-section side>
-            <q-icon name="edit" class="cursor-pointer" />
-            <q-popup-proxy cover :breakpoint="500">
-                <q-card class="q-pa-md">
-                    <div class="column">
-                        <q-input type="text" color="teal" v-model="name" filled autofocus :placeholder="type.name"
-                            @keyup.enter="
-    updateTypeHeader(type.id, name ? name : type.name, description ? description : type.description);
-                            ">
-                            <template v-slot:prepend>
-                                <q-icon name="text_fields" color="teal" />
-                            </template>
-                        </q-input>
+            <div class="row">
+                <div>
+                    <q-icon name="edit" size="sm" class="cursor-pointer" />
+                    <q-popup-proxy cover :breakpoint="500">
+                        <q-card class="q-pa-md">
+                            <div class="column">
+                                <q-input type="text" color="teal" v-model="name" filled autofocus :placeholder="type.name"
+                                    @keyup.enter="
+            updateTypeHeader(type.id, name ? name : type.name, description ? description : type.description);
+                                    ">
+                                    <template v-slot:prepend>
+                                        <q-icon name="text_fields" color="teal" />
+                                    </template>
+                                </q-input>
 
-                        <q-input type="textarea" color="teal" v-model="description" filled
-                            :placeholder="type.description" @keyup.enter="
-    updateTypeHeader(type.id, name ? name : type.name, description ? description : type.description);
-                            ">
-                            <template v-slot:prepend>
-                                <q-icon name="text_fields" color="teal" />
-                            </template>
-                        </q-input>
-                    </div>
-                </q-card>
-            </q-popup-proxy>
+                                <q-input type="textarea" color="teal" v-model="description" filled
+                                    :placeholder="type.description" @keyup.enter="
+            updateTypeHeader(type.id, name ? name : type.name, description ? description : type.description);
+                                    ">
+                                    <template v-slot:prepend>
+                                        <q-icon name="text_fields" color="teal" />
+                                    </template>
+                                </q-input>
+                            </div>
+                        </q-card>
+                    </q-popup-proxy>
+                </div>
+                <div>
+                    <q-icon name="delete" size="sm" />
+                </div>
+            </div>
         </q-item-section>
     </div>
     <div v-else-if="page === 'contentPage'" class="content-header row">
@@ -58,22 +65,29 @@
             </q-item-label>
         </q-item-section>
         <q-item-section side>
-            <q-icon name="edit" class="cursor-pointer" />
-            <q-popup-proxy cover :breakpoint="500">
-                <q-card class="q-pa-md">
-                    <div class="column">
-                        <q-input v-model="tagArray" type="text" color="teal" dense autofocus
-                            @keyup.enter="
-                                updateTags(content.id, tagArray);
-                            "
-                        >
-                            <template v-slot:prepend>
-                                <q-icon name="text_fields" color="teal" />
-                            </template>
-                        </q-input>
-                    </div>
-                </q-card>
-            </q-popup-proxy>
+            <div class="row">
+                <div>
+                    <q-icon name="edit" size="sm" class="cursor-pointer" />
+                    <q-popup-proxy cover :breakpoint="500">
+                        <q-card class="q-pa-md">
+                            <div class="column">
+                                <q-input v-model="tagArray" type="text" color="teal" dense autofocus
+                                    @keyup.enter="
+                                        updateTags(content.id, tagArray);
+                                    "
+                                >
+                                    <template v-slot:prepend>
+                                        <q-icon name="text_fields" color="teal" />
+                                    </template>
+                                </q-input>
+                            </div>
+                        </q-card>
+                    </q-popup-proxy>
+                </div>
+                <div>
+                    <q-icon name="delete" size="sm" />
+                </div>
+            </div>
         </q-item-section>
     </div>
     <div v-else-if="page === 'clientPage'" class="user-header row">
@@ -89,18 +103,25 @@
             </q-item-label>
         </q-item-section>
         <q-item-section side>
-            <q-icon name="edit" class="cursor-pointer" />
-            <q-popup-proxy cover :breakpoint="500">
-                <q-card class="q-pa-md">
-                    <div class="column">
-                        <q-input type="text" color="teal" dense autofocus autogrow>
-                            <template v-slot:prepend>
-                                <q-icon name="text_fields" color="teal" />
-                            </template>
-                        </q-input>
-                    </div>
-                </q-card>
-            </q-popup-proxy>
+            <div class="row">
+                <div>
+                    <q-icon name="edit" size="sm" class="cursor-pointer" />
+                    <q-popup-proxy cover :breakpoint="500">
+                        <q-card class="q-pa-md">
+                            <div class="column">
+                                <q-input type="text" color="teal" dense autofocus autogrow>
+                                    <template v-slot:prepend>
+                                        <q-icon name="text_fields" color="teal" />
+                                    </template>
+                                </q-input>
+                            </div>
+                        </q-card>
+                    </q-popup-proxy>
+                </div>
+                <div>
+                    <q-icon name="delete" size="sm" />
+                </div>
+            </div>
         </q-item-section>
     </div>
 </template>
