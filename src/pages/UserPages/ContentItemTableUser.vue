@@ -6,7 +6,7 @@
                 <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
                 <span>{{ item.label }}</span>
             </div>
-            <div class="q-pb-sm q-pl-lg cursor-pointer">
+            <div class="q-pb-sm q-pl-lg">
                 {{ item.value }}
             </div>
         </q-item>

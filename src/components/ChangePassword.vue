@@ -70,6 +70,7 @@ import { defineComponent } from 'vue';
 import { LoginStore } from 'stores/login-store.js';
 import axios from 'axios';
 import { checkPassword, matchPassword, matchCurrPassword } from 'src/validations.js';
+import { useQuasar } from 'Quasar';
 import { useLanguageStore } from 'stores/language-store.js';
 import data from 'src/languages/i18n.js';
 import { useThemeStore } from 'stores/theme-store.js';
@@ -78,7 +79,7 @@ const language = useLanguageStore();
 
 export default defineComponent({
     name: 'ChangePassword',
-
+    emits: ['save'],
     data() {
         const theme = useThemeStore();
         return {
@@ -104,6 +105,11 @@ export default defineComponent({
             themeController: theme.getTheme,
         };
     },
+    setup() {
+        return {
+            q: useQuasar(),
+        };
+    },
     methods: {
         /* clear fields if user presses reset button */
         onReset() {
@@ -116,16 +122,39 @@ export default defineComponent({
             this.validPassword.special = false;
             console.log(this.role);
         },
+        alertFunc(alertMessage) {
+            this.q.dialog({
+                title: 'Alert',
+                message: alertMessage,
+            }).onOk(() => {
+                // console.log('OK')
+            }).onCancel(() => {
+                // console.log('Cancel')
+            }).onDismiss(() => {
+                // console.log('I am triggered on both OK and Cancel')
+            });
+        },
         /* update password in database if all validations is passed */
         async updatePassword() {
+            if (this.passwordsMatchesOld === false) {
+                this.alertFunc(data[language.getLanguage].passwordDoesnMatch);
+            } else if (this.validPassword.eight === false
+                || this.validPassword.num === false || this.validPassword.upper === false || this.validPassword.special === false) {
+                this.alertFunc(data[language.getLanguage].checkPassword);
+            } else if (this.passwordsMatchesNew === false) {
+                this.alertFunc(data[language.getLanguage].passConfirmed);
+            }
             if (
                 this.validPassword.eight === true
                 && this.validPassword.num === true
                 && this.validPassword.upper === true
                 && this.validPassword.special === true
                 && this.passwordsMatchesNew === true
-                && this.passwordsMatchesOld === true) {
+                && this.passwordsMatchesOld === true
+            ) {
+                this.$emit('save');
                 console.log('patch');
+                this.user.password = this.newPasswordConf;
                 axios.patch(
                     `http://127.0.0.1:3000/user/${this.user.id}`,
                     {

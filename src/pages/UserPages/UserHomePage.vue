@@ -1,6 +1,10 @@
 <template>
     <q-page class="page">
         <q-card>
+            <q-card-section class="col-12 col-sm-6 col-md-4 col-lg-3 row justify-center justify-sm-end items-center">
+                <q-btn v-model="blueModel" v-on:click="lightModeOn" :icon="themeController ? 'dark_mode' : 'light_mode'"
+                    flat />
+            </q-card-section>
             <Suspense>
                 <template #default>
                     <ListItems />
@@ -14,12 +18,8 @@
 import { defineComponent, ref } from 'vue';
 import { ContentStore } from 'stores/content-store.js';
 import { TypeStore } from 'stores/type-store.js';
-import { useLanguageStore } from 'stores/language-store.js';
-import data from 'src/languages/i18n.js';
 import { useThemeStore } from 'stores/theme-store.js';
 import ListItems from './ListItemsUser.vue';
-
-const language = useLanguageStore();
 
 export default defineComponent({
     name: 'ContentPage',
@@ -31,8 +31,6 @@ export default defineComponent({
         return {
             contentStore: ContentStore(),
             typeStore: TypeStore(),
-            data,
-            language,
             newTag: '',
             newContent: [],
             theme,
@@ -41,6 +39,8 @@ export default defineComponent({
     },
     setup() {
         const typeStore = TypeStore();
+        const theme = useThemeStore();
+
 
         const options = ref(
             typeStore.list.map((type) => {
@@ -56,6 +56,7 @@ export default defineComponent({
 
         return {
             model,
+            blueModel: ref(theme.getTheme),
             options,
             filter(val, update) {
                 update(() => {
@@ -72,6 +73,14 @@ export default defineComponent({
                 });
             },
         };
+    },
+    methods: {
+        /* toggle between dark and light mode */
+        lightModeOn() {
+            this.themeController = !this.themeController;
+            this.$q.dark.set(this.themeController);
+            this.theme.setTheme(this.themeController);
+        },
     },
 });
 </script>

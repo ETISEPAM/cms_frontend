@@ -24,4 +24,6 @@ const matchPassword = (password, newPasswordConf) => password === newPasswordCon
 
 const matchCurrPassword = (password, currentPassword) => currentPassword === password;
 
-export { checkPassword, matchPassword, matchCurrPassword };
+const checkMinMaxValue = (defaultValue, minValue, maxValue) => minValue <= defaultValue && defaultValue <= maxValue;
+
+export { checkPassword, matchPassword, matchCurrPassword, checkMinMaxValue };

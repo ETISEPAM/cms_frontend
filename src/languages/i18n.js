@@ -84,6 +84,10 @@ const data = {
         dec: 'Ara',
         users: 'Kullanicilar',
         total: '# (total)',
+        alertDialog: 'Minimum deger varsayilan degerden kucuk veya esit olmali, varsayilan deger ise maksimum değerden kucuk veya esit olmalidir',
+        passwordDoesnMatch: 'Girdiginiz Sifre Mevcut Sifre ile uyusmuyor',
+        checkPassword: 'Lutfen parolanin minimum gereksinimleri karsilayip karsilamadigini kontrol edin',
+        passConfirmed: 'Şifre Onaylanmadı',
     },
     eng: {
         login: 'Login',
@@ -169,6 +173,10 @@ const data = {
         dec: 'Dec.',
         users: 'Users',
         total: '# (total)',
+        alertDialog: 'The minimum value should be smaller than or equal to the default value, and the default value should be smaller than or equal to the maximum value',
+        passwordDoesnMatch: 'Password you have entered does not match with the Current Password',
+        checkPassword: 'Please check whether the password satisfies the minimum requirements ',
+        passConfirmed: 'Password is not Confirmed',
     },
     rus: {
         login: 'Войти',
@@ -254,6 +262,10 @@ const data = {
         dec: 'Дек',
         users: 'Пользователи',
         total: '# (общее количество)',
+        alertDialog: 'Минимальное значение должно быть меньше или равно значению по умолчанию, а значение по умолчанию должно быть меньше или равно максимальному значению',
+        passwordDoesnMatch: 'Введенный пароль не совпадает с текущим паролем',
+        checkPassword: 'Пожалуйста, проверьте, соответствует ли пароль минимальным требованиям',
+        passConfirmed: 'Пароль не подтвержден',
     },
     ua: {
         login: 'Війти',
@@ -339,6 +351,10 @@ const data = {
         dec: 'Груд',
         users: 'Користувачі',
         total: '# (Загальна кількість)',
+        alertDialog: 'Мінімальне значення має бути меншим або дорівнювати значенню за замовчуванням, а значення за замовчуванням має бути меншим або дорівнювати максимальному значенню',
+        passwordDoesnMatch: 'Введений пароль не збігається з поточним паролем',
+        checkPassword: 'Будь ласка, перевірте, чи відповідає пароль мінімальним вимогам ',
+        passConfirmed: 'Пароль не підтверджено',
     },
 };
 

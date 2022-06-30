@@ -171,3 +171,47 @@ export default defineComponent({
     },
 });
 </script>
+
+<style lang="sass" scoped>
+.hidden
+    display: none
+
+.field-expand-dark
+    background: rgb(35, 35, 35)
+    padding: 0                      // q-px-none is overriden by quasar on utility class
+.field-expand-light
+    background: rgb(230, 230, 230)
+    padding: 0                      // q-px-none is overriden by quasar on utility class
+
+.add-field-dark, .add-field-light
+    min-width: 256px
+
+.fields
+    .q-item-dark
+        display: flex
+        flex-direction: column
+        justify-content: center
+        align-items: space-between
+        overflow: auto
+
+        &:nth-of-type(2n)
+            background: rgb(40, 40, 40)
+
+        span
+            color: teal
+            font-weight: 700
+
+    .q-item-light
+        display: flex
+        flex-direction: column
+        justify-content: center
+        align-items: space-between
+        overflow: auto
+
+        &:nth-of-type(2n)
+            background: rgb(240, 240, 240)
+
+        span
+            color: teal
+            font-weight: 700
+</style>

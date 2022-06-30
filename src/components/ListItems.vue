@@ -21,7 +21,7 @@
         <q-expansion-item group="typeExpand" v-for="type in typeStore.list" :key="type.id" expand-icon-class="hidden"
             class="q-py-xs" clickable ripple @hide="resetNew">
             <template v-slot:header>
-                <ListHeaders :page="page" :type="type" />
+                <ListHeaders :page="page" :type="type" v-on:deleted="deleteType(type.id)" />
             </template>
 
             <q-expansion-item group="fieldExpand" v-for="field in type.fields" :key="field.id" :header-inset-level="1"
@@ -39,20 +39,13 @@
                 </template>
 
                 <q-card>
-                    <q-card-section>
-                        <TypeItemTable :key="newField" :field="newField" :themeController="themeController"
-                            v-on:changed="
-                                (modified) => {
-                                    fieldsChanged = true;
-                                    newField = { ...modified };
-                                }
-                            " />
-                    </q-card-section>
-                    <q-card-section class="row q-pt-none">
-                        <q-btn color="primary" :label="data[language.getLanguage].saveIt" type="button" outline
-                            v-on:click="fieldsChanged ? (updateTypeFields(type.id, { ...newField }), resetNew) : null"
-                            class="col-12" />
-                    </q-card-section>
+                    <TypeItemTable :key="newField" :field="newField" :themeController="themeController"
+                        v-on:save="
+                            (toAdd) => {
+                                updateTypeFields(type.id, toAdd);
+                            }
+                        "
+                    />
                 </q-card>
             </q-expansion-item>
             <q-expansion-item group="fieldExpand" expand-icon-class="hidden" v-model="addField">
@@ -69,20 +62,18 @@
                                         </div>
                                     </q-card-section>
                                     <q-card-section class="row col-12 q-px-sm q-py-none">
-                                        <AddFieldForm :themeController="themeController" v-on:ready="
+                                        <AddFieldForm :themeController="themeController" v-on:save="
                                             (toAdd) => {
-                                                newField = { ...toAdd };
+                                                if (toAdd) {
+                                                    type.fields = [...type.fields, { ...toAdd }];
+                                                    addTypeField(type.id, type.fields);
+                                                    resetNew();
+                                                    addField = false;
+                                                } else {
+                                                    console.log('alert');
+                                                }
                                             }
                                         " />
-                                        <q-item class="col-12 row justify-center q-pa-none q-my-md">
-                                            <q-btn color="primary" :label="data[language.getLanguage].saveIt"
-                                                type="button" v-on:click="
-    type.fields = [...type.fields, { ...newField }];
-addTypeField(type.id, type.fields);
-resetNew();
-addField = false;
-                                                " class="col-9" />
-                                        </q-item>
                                     </q-card-section>
                                 </q-card>
                             </q-popup-proxy>
@@ -100,38 +91,33 @@ addField = false;
     contentCopy = clone(content.contents)
 ">
             <template v-slot:header>
-                <ListHeaders :page="page" :content="{ ...content }" :themeController="themeController"
-                    :typeName="typeStore.list.find((type) => type.id === content.typeId).name" />
+                <ListHeaders :key="content.tag" :page="page" :content="{ ...content }"
+                    :themeController="themeController"
+                    :typeName="typeStore.list.find((type) => type.id === content.typeId).name" v-on:changed="
+                        (modified) => {
+                            content.tag = [...modified];
+                        }
+                    " v-on:deleted="deleteContent(content.id)" />
             </template>
 
             <q-card>
-                <q-card-section>
-                    <ContentItemTable :key="contentCopy" :content="contentCopy" :themeController="themeController"
-                        v-on:changed="
-                            (modified) => {
-                                contentsChanged = true;
-                                contentCopy = [...modified];
-                            }
-                        " />
-                </q-card-section>
-                <q-card-section class="row q-pt-none">
-                    <q-btn color="primary" outline
-                        v-on:click="contentsChanged ? updateContents(content.id, [...contentCopy]) : null"
-                        class="col-12">
-                        {{ data[language.getLanguage].saveIt }}
-                    </q-btn>
-                </q-card-section>
+                <ContentItemTable :key="contentCopy" :typeId="content.typeId" :content="contentCopy" :themeController="themeController"
+                    v-on:save="
+                        (toAdd) => {
+                            updateContents(content.id, toAdd);
+                        }
+                    "
+                />
             </q-card>
         </q-expansion-item>
     </q-list>
     <q-list v-else-if="page === 'clientPage'">
         <q-expansion-item group="userExpand" v-for="user in userStore.list" :key="user.id" expand-icon-class="hidden"
-            class="q-py-xs" clickable ripple expand-separator @hide="
-    userChanged = false;
-newBio = '';
-            " @before-show="newBio = user.bio">
+            class="q-py-xs" clickable ripple expand-separator
+            @before-show="userChanged = false; newBio = user.bio; logEvent(user.bio);">
             <template v-slot:header>
-                <ListHeaders :page="page" :user="{ ...user }" :themeController="themeController" />
+                <ListHeaders :page="page" :user="{ ...user }" :themeController="themeController"
+                    v-on:deleted="deleteUser(user.id)" />
             </template>
 
             <q-card>
@@ -383,7 +369,8 @@ export default defineComponent({
                 });
         },
         async addTypeField(id, toAdd) {
-            console.log('add type');
+            console.log('add type field');
+
             // if validation
             axios
                 .patch(
@@ -398,6 +385,43 @@ export default defineComponent({
                 .catch((err) => {
                     console.log(err.response.data);
                 });
+        },
+        async deleteType(typeId) {
+            axios
+                .delete(`http://127.0.0.1:3000/contentType/${typeId}`)
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+
+            this.typeStore.list = this.typeStore.list.filter((type) => type.id !== typeId);
+            this.contentStore.list = this.contentStore.list.filter((content) => content.typeId !== typeId);
+        },
+        async deleteContent(contentId) {
+            axios
+                .delete(`http://127.0.0.1:3000/content/${contentId}`)
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+
+            this.contentStore.list = this.contentStore.list.filter((content) => content.id !== contentId);
+        },
+        async deleteUser(userId) {
+            axios
+                .delete(`http://127.0.0.1:3000/user/${userId}`)
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+
+            this.userStore.list = this.userStore.list.filter((user) => user.id !== userId);
         },
         resetNew() {
             this.newField.label = null;
