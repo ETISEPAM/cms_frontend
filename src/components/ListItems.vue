@@ -370,6 +370,7 @@ export default defineComponent({
         },
         async addTypeField(id, toAdd) {
             console.log('add type field');
+
             // if validation
             axios
                 .patch(

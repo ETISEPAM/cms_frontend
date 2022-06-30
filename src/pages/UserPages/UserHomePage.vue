@@ -41,6 +41,7 @@ export default defineComponent({
         const typeStore = TypeStore();
         const theme = useThemeStore();
 
+
         const options = ref(
             typeStore.list.map((type) => {
                 const option = {
@@ -74,7 +75,7 @@ export default defineComponent({
         };
     },
     methods: {
-        /* toogle between dark and light mode */
+        /* toggle between dark and light mode */
         lightModeOn() {
             this.themeController = !this.themeController;
             this.$q.dark.set(this.themeController);
