@@ -425,6 +425,7 @@ export default defineComponent({
                 });
 
             this.typeStore.list = this.typeStore.list.filter((type) => type.id !== typeId);
+            this.contentStore.list = this.contentStore.list.filter((content) => content.typeId !== typeId);
         },
         async deleteContent(contentId) {
             axios
