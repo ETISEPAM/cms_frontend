@@ -17,30 +17,58 @@
         </q-item-section>
 
         <q-item-section side>
-            <q-icon name="edit" class="cursor-pointer" />
-            <q-popup-proxy cover :breakpoint="500">
-                <q-card class="q-pa-md">
-                    <div class="column">
-                        <q-input type="text" color="teal" v-model="name" filled autofocus :placeholder="type.name"
-                            @keyup.enter="
-    updateTypeHeader(type.id, name ? name : type.name, description ? description : type.description);
-                            ">
-                            <template v-slot:prepend>
-                                <q-icon name="text_fields" color="teal" />
-                            </template>
-                        </q-input>
+            <div class="row">
+                <div>
+                    <q-btn flat icon="edit" />
+                    <q-popup-proxy cover :breakpoint="500">
+                        <q-card class="q-pa-md">
+                            <div class="column">
+                                <q-input type="text" color="teal" v-model="name" filled autofocus :placeholder="type.name"
+                                    @keyup.enter="
+            updateTypeHeader(type.id, name ? name : type.name, description ? description : type.description);
+                                    ">
+                                    <template v-slot:prepend>
+                                        <q-icon name="text_fields" color="teal" />
+                                    </template>
+                                </q-input>
 
-                        <q-input type="textarea" color="teal" v-model="description" filled
-                            :placeholder="type.description" @keyup.enter="
-    updateTypeHeader(type.id, name ? name : type.name, description ? description : type.description);
-                            ">
-                            <template v-slot:prepend>
-                                <q-icon name="text_fields" color="teal" />
-                            </template>
-                        </q-input>
-                    </div>
-                </q-card>
-            </q-popup-proxy>
+                                <q-input type="textarea" color="teal" v-model="description" filled
+                                    :placeholder="type.description" @keyup.enter="
+            updateTypeHeader(type.id, name ? name : type.name, description ? description : type.description);
+                                    ">
+                                    <template v-slot:prepend>
+                                        <q-icon name="text_fields" color="teal" />
+                                    </template>
+                                </q-input>
+                            </div>
+                        </q-card>
+                    </q-popup-proxy>
+                </div>
+                <div>
+                    <q-btn flat icon="delete" v-on:click.stop="confirm = true" />
+                    <q-dialog v-model="confirm" persistent>
+                        <q-card>
+                            <q-card-section class="row items-center">
+                                <q-avatar icon="delete" color="primary" text-color="white" size="sm" />
+                                <span class="q-ml-sm">{{ data[language.getLanguage].areYouSure }}</span>
+                            </q-card-section>
+
+                            <q-card-actions align="right">
+                                <q-btn flat :label="data[language.getLanguage].no" color="primary" v-on:click="confirm = false" />
+                                <q-btn
+                                    flat
+                                    :label="data[language.getLanguage].yes"
+                                    color="primary"
+                                    v-on:click="
+                                        confirm = false;
+                                        $emit('deleted', 'type', type.id);
+                                    "
+                                />
+                            </q-card-actions>
+                        </q-card>
+                    </q-dialog>
+                </div>
+            </div>
         </q-item-section>
     </div>
     <div v-else-if="page === 'contentPage'" class="content-header row">
@@ -58,22 +86,50 @@
             </q-item-label>
         </q-item-section>
         <q-item-section side>
-            <q-icon name="edit" class="cursor-pointer" />
-            <q-popup-proxy cover :breakpoint="500">
-                <q-card class="q-pa-md">
-                    <div class="column">
-                        <q-input v-model="tagArray" type="text" color="teal" dense autofocus
-                            @keyup.enter="
-                                updateTags(content.id, tagArray);
-                            "
-                        >
-                            <template v-slot:prepend>
-                                <q-icon name="text_fields" color="teal" />
-                            </template>
-                        </q-input>
-                    </div>
-                </q-card>
-            </q-popup-proxy>
+            <div class="row">
+                <div>
+                    <q-btn flat icon="edit" />
+                    <q-popup-proxy cover :breakpoint="500">
+                        <q-card class="q-pa-md">
+                            <div class="column">
+                                <q-input v-model="tagArray" type="text" color="teal" dense autofocus
+                                    @keyup.enter="
+                                        updateTags(content.id, tagArray);
+                                    "
+                                >
+                                    <template v-slot:prepend>
+                                        <q-icon name="text_fields" color="teal" />
+                                    </template>
+                                </q-input>
+                            </div>
+                        </q-card>
+                    </q-popup-proxy>
+                </div>
+                <div>
+                    <q-btn flat icon="delete" v-on:click.stop="confirm = true" />
+                    <q-dialog v-model="confirm" persistent>
+                        <q-card>
+                            <q-card-section class="row items-center">
+                                <q-avatar icon="delete" color="primary" text-color="white" size="sm" />
+                                <span class="q-ml-sm">{{ data[language.getLanguage].areYouSure }}</span>
+                            </q-card-section>
+
+                            <q-card-actions align="right">
+                                <q-btn flat :label="data[language.getLanguage].no" color="primary" v-on:click="confirm = false" />
+                                <q-btn
+                                    flat
+                                    :label="data[language.getLanguage].yes"
+                                    color="primary"
+                                    v-on:click="
+                                        confirm = false;
+                                        $emit('deleted', 'content', content.id);
+                                    "
+                                />
+                            </q-card-actions>
+                        </q-card>
+                    </q-dialog>
+                </div>
+            </div>
         </q-item-section>
     </div>
     <div v-else-if="page === 'clientPage'" class="user-header row">
@@ -89,30 +145,60 @@
             </q-item-label>
         </q-item-section>
         <q-item-section side>
-            <q-icon name="edit" class="cursor-pointer" />
-            <q-popup-proxy cover :breakpoint="500">
-                <q-card class="q-pa-md">
-                    <div class="column">
-                        <q-input type="text" color="teal" dense autofocus autogrow>
-                            <template v-slot:prepend>
-                                <q-icon name="text_fields" color="teal" />
-                            </template>
-                        </q-input>
-                    </div>
-                </q-card>
-            </q-popup-proxy>
+            <div class="row">
+                <div>
+                    <q-btn flat icon="edit" />
+                    <q-popup-proxy cover :breakpoint="500">
+                        <q-card class="q-pa-md">
+                            <div class="column">
+                                <q-input type="text" color="teal" dense autofocus autogrow>
+                                    <template v-slot:prepend>
+                                        <q-icon name="text_fields" color="teal" />
+                                    </template>
+                                </q-input>
+                            </div>
+                        </q-card>
+                    </q-popup-proxy>
+                </div>
+                <div>
+                    <q-btn flat icon="delete" v-on:click.stop="confirm = true" />
+                    <q-dialog v-model="confirm" persistent>
+                        <q-card>
+                            <q-card-section class="row items-center">
+                                <q-avatar icon="delete" color="primary" text-color="white" size="sm" />
+                                <span class="q-ml-sm">{{ data[language.getLanguage].areYouSure }}</span>
+                            </q-card-section>
+
+                            <q-card-actions align="right">
+                                <q-btn flat :label="data[language.getLanguage].no" color="primary" v-on:click="confirm = false" />
+                                <q-btn
+                                    flat
+                                    :label="data[language.getLanguage].yes"
+                                    color="primary"
+                                    v-on:click="
+                                        confirm = false;
+                                        $emit('deleted', 'user', user.id);
+                                    "
+                                />
+                            </q-card-actions>
+                        </q-card>
+                    </q-dialog>
+                </div>
+            </div>
         </q-item-section>
     </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import axios from 'axios';
 import { TypeStore } from 'stores/type-store.js';
+import { useLanguageStore } from 'stores/language-store.js';
+import data from 'src/languages/i18n.js';
 
 export default defineComponent({
     name: 'ListHeaders',
-    emits: ['changed'],
+    emits: ['changed', 'deleted'],
     props: {
         page: String,
         type: Object,
@@ -126,6 +212,9 @@ export default defineComponent({
             name: '',
             description: '',
             tagArray: this.content ? this.content.tag : null,
+            confirm: ref(false),
+            language: useLanguageStore(),
+            data,
         };
     },
     methods: {
