@@ -19,7 +19,7 @@
         <q-item-section side>
             <div class="row">
                 <div>
-                    <q-icon name="edit" size="sm" class="cursor-pointer" />
+                    <q-btn flat icon="edit" />
                     <q-popup-proxy cover :breakpoint="500">
                         <q-card class="q-pa-md">
                             <div class="column">
@@ -45,7 +45,28 @@
                     </q-popup-proxy>
                 </div>
                 <div>
-                    <q-icon name="delete" size="sm" />
+                    <q-btn flat icon="delete" v-on:click.stop="confirm = true" />
+                    <q-dialog v-model="confirm" persistent>
+                        <q-card>
+                            <q-card-section class="row items-center">
+                                <q-avatar icon="delete" color="primary" text-color="white" size="sm" />
+                                <span class="q-ml-sm">{{ data[language.getLanguage].areYouSure }}</span>
+                            </q-card-section>
+
+                            <q-card-actions align="right">
+                                <q-btn flat :label="data[language.getLanguage].no" color="primary" v-on:click="confirm = false" />
+                                <q-btn
+                                    flat
+                                    :label="data[language.getLanguage].yes"
+                                    color="primary"
+                                    v-on:click="
+                                        confirm = false;
+                                        $emit('deleted', 'type', type.id);
+                                    "
+                                />
+                            </q-card-actions>
+                        </q-card>
+                    </q-dialog>
                 </div>
             </div>
         </q-item-section>
@@ -67,7 +88,7 @@
         <q-item-section side>
             <div class="row">
                 <div>
-                    <q-icon name="edit" size="sm" class="cursor-pointer" />
+                    <q-btn flat icon="edit" />
                     <q-popup-proxy cover :breakpoint="500">
                         <q-card class="q-pa-md">
                             <div class="column">
@@ -85,7 +106,28 @@
                     </q-popup-proxy>
                 </div>
                 <div>
-                    <q-icon name="delete" size="sm" />
+                    <q-btn flat icon="delete" v-on:click.stop="confirm = true" />
+                    <q-dialog v-model="confirm" persistent>
+                        <q-card>
+                            <q-card-section class="row items-center">
+                                <q-avatar icon="delete" color="primary" text-color="white" size="sm" />
+                                <span class="q-ml-sm">{{ data[language.getLanguage].areYouSure }}</span>
+                            </q-card-section>
+
+                            <q-card-actions align="right">
+                                <q-btn flat :label="data[language.getLanguage].no" color="primary" v-on:click="confirm = false" />
+                                <q-btn
+                                    flat
+                                    :label="data[language.getLanguage].yes"
+                                    color="primary"
+                                    v-on:click="
+                                        confirm = false;
+                                        $emit('deleted', 'content', content.id);
+                                    "
+                                />
+                            </q-card-actions>
+                        </q-card>
+                    </q-dialog>
                 </div>
             </div>
         </q-item-section>
@@ -105,7 +147,7 @@
         <q-item-section side>
             <div class="row">
                 <div>
-                    <q-icon name="edit" size="sm" class="cursor-pointer" />
+                    <q-btn flat icon="edit" />
                     <q-popup-proxy cover :breakpoint="500">
                         <q-card class="q-pa-md">
                             <div class="column">
@@ -119,7 +161,28 @@
                     </q-popup-proxy>
                 </div>
                 <div>
-                    <q-icon name="delete" size="sm" />
+                    <q-btn flat icon="delete" v-on:click.stop="confirm = true" />
+                    <q-dialog v-model="confirm" persistent>
+                        <q-card>
+                            <q-card-section class="row items-center">
+                                <q-avatar icon="delete" color="primary" text-color="white" size="sm" />
+                                <span class="q-ml-sm">{{ data[language.getLanguage].areYouSure }}</span>
+                            </q-card-section>
+
+                            <q-card-actions align="right">
+                                <q-btn flat :label="data[language.getLanguage].no" color="primary" v-on:click="confirm = false" />
+                                <q-btn
+                                    flat
+                                    :label="data[language.getLanguage].yes"
+                                    color="primary"
+                                    v-on:click="
+                                        confirm = false;
+                                        $emit('deleted', 'user', user.id);
+                                    "
+                                />
+                            </q-card-actions>
+                        </q-card>
+                    </q-dialog>
                 </div>
             </div>
         </q-item-section>
@@ -127,13 +190,15 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import axios from 'axios';
 import { TypeStore } from 'stores/type-store.js';
+import { useLanguageStore } from 'stores/language-store.js';
+import data from 'src/languages/i18n.js';
 
 export default defineComponent({
     name: 'ListHeaders',
-    emits: ['changed'],
+    emits: ['changed', 'deleted'],
     props: {
         page: String,
         type: Object,
@@ -147,6 +212,9 @@ export default defineComponent({
             name: '',
             description: '',
             tagArray: this.content ? this.content.tag : null,
+            confirm: ref(false),
+            language: useLanguageStore(),
+            data,
         };
     },
     methods: {

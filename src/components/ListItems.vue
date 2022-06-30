@@ -21,7 +21,11 @@
         <q-expansion-item group="typeExpand" v-for="type in typeStore.list" :key="type.id" expand-icon-class="hidden"
             class="q-py-xs" clickable ripple @hide="resetNew">
             <template v-slot:header>
-                <ListHeaders :page="page" :type="type" />
+                <ListHeaders
+                    :page="page"
+                    :type="type"
+                    v-on:deleted="deleteType(type.id)"
+                />
             </template>
 
             <q-expansion-item group="fieldExpand" v-for="field in type.fields" :key="field.id" :header-inset-level="1"
@@ -107,6 +111,7 @@ addField = false;
                             content.tag = [...modified];
                         }
                     "
+                    v-on:deleted="deleteContent(content.id)"
                 />
             </template>
 
@@ -136,7 +141,12 @@ addField = false;
             @before-show="userChanged = false; newBio = user.bio; logEvent(user.bio);"
         >
             <template v-slot:header>
-                <ListHeaders :page="page" :user="{ ...user }" :themeController="themeController" />
+                <ListHeaders
+                    :page="page"
+                    :user="{ ...user }"
+                    :themeController="themeController"
+                    v-on:deleted="deleteUser(user.id)"
+                />
             </template>
 
             <q-card>
@@ -403,6 +413,42 @@ export default defineComponent({
                 .catch((err) => {
                     console.log(err.response.data);
                 });
+        },
+        async deleteType(typeId) {
+            axios
+                .delete(`http://127.0.0.1:3000/contentType/${typeId}`)
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+
+            this.typeStore.list = this.typeStore.list.filter((type) => type.id !== typeId);
+        },
+        async deleteContent(contentId) {
+            axios
+                .delete(`http://127.0.0.1:3000/content/${contentId}`)
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+
+            this.contentStore.list = this.contentStore.list.filter((content) => content.id !== contentId);
+        },
+        async deleteUser(userId) {
+            axios
+                .delete(`http://127.0.0.1:3000/user/${userId}`)
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+
+            this.userStore.list = this.userStore.list.filter((user) => user.id !== userId);
         },
         resetNew() {
             this.newField.label = null;
