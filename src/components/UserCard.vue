@@ -46,4 +46,5 @@ export default defineComponent({
     width: 100%
     max-width: 280px
     max-height: 560px
+    overflow: scroll
 </style>

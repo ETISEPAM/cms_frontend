@@ -39,7 +39,7 @@
         <!-- <SortFilterMenu /> -->
     </div>
     <q-list v-if="page === 'contentTypePage'">
-        <q-expansion-item group="typeExpand" v-for="type in typeChunks[current - 1]" :key="type.id" expand-icon-class="hidden"
+        <q-expansion-item group="typeExpand" v-for="type in typeChunks[current - 1]" :key="type" expand-icon-class="hidden"
             class="q-py-xs" clickable ripple @hide="resetNew">
             <template v-slot:header>
                 <ListHeaders :page="page" :type="type" v-on:deleted="deleteType(type.id)" />
@@ -105,7 +105,7 @@
         </q-expansion-item>
     </q-list>
     <q-list v-else-if="page === 'contentPage'">
-        <q-expansion-item group="contentExpand" v-for="content in contentChunks[current - 1]" :key="content.id"
+        <q-expansion-item group="contentExpand" v-for="content in contentChunks[current - 1]" :key="content"
             expand-icon-class="hidden" class="q-py-xs" clickable ripple expand-separator @hide="
                 contentsChanged = false
             " @before-show="
@@ -133,7 +133,7 @@
         </q-expansion-item>
     </q-list>
     <q-list v-else-if="page === 'clientPage'">
-        <q-expansion-item group="userExpand" v-for="user in userChunks[current - 1]" :key="user.id" expand-icon-class="hidden"
+        <q-expansion-item group="userExpand" v-for="user in userChunks[current - 1]" :key="user" expand-icon-class="hidden"
             class="q-py-xs" clickable ripple expand-separator
             @before-show="userChanged = false; newBio = user.bio; logEvent(user.bio);">
             <template v-slot:header>
@@ -435,6 +435,7 @@ export default defineComponent({
 
             this.typeStore.list = this.typeStore.list.filter((type) => type.id !== typeId);
             this.contentStore.list = this.contentStore.list.filter((content) => content.typeId !== typeId);
+            this.updateChunks();
         },
         async deleteContent(contentId) {
             axios
@@ -447,6 +448,7 @@ export default defineComponent({
                 });
 
             this.contentStore.list = this.contentStore.list.filter((content) => content.id !== contentId);
+            this.updateChunks();
         },
         async deleteUser(userId) {
             axios
@@ -459,6 +461,7 @@ export default defineComponent({
                 });
 
             this.userStore.list = this.userStore.list.filter((user) => user.id !== userId);
+            this.updateChunks();
         },
         resetNew() {
             this.newField.label = null;

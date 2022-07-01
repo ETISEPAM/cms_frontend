@@ -154,13 +154,20 @@
     </q-card-section>
     <q-card-section class="row q-pt-none">
         <q-btn color="primary" :label="data[language.getLanguage].saveIt" type="button" outline
-            v-on:click="$emit('save', modified)"
+            v-on:click="
+                try {
+                    $emit('save', modified);
+                } catch (error) {
+                    alertFunc('Please check your default, minimum, and maximum value inputs.');
+                }
+            "
             class="col-12" />
     </q-card-section>
 </template>
 
 <script>
 import { defineComponent, ref } from 'vue';
+import { useQuasar } from 'Quasar';
 import { useLanguageStore } from 'stores/language-store.js';
 import data from 'src/languages/i18n.js';
 
@@ -171,7 +178,7 @@ export default defineComponent({
     props: ['field', 'themeController'],
     emits: {
         save: (toUpdate) => {
-            let valid = false;
+            let valid = true;
 
             if (toUpdate.dataType === 'String') {
                 valid = toUpdate.minVal <= toUpdate.default.length && toUpdate.default.length <= toUpdate.maxVal;
@@ -238,6 +245,7 @@ export default defineComponent({
         const options = ref(optionTemplate.value);
 
         return {
+            q: useQuasar(),
             boolOptions,
             options,
             data,
@@ -249,6 +257,21 @@ export default defineComponent({
                 });
             },
         };
+    },
+    methods: {
+        alertFunc(alertMessage) {
+            this.q.dialog({
+                title: '<strong>Alert</strong>',
+                message: alertMessage,
+                html: true,
+            }).onOk(() => {
+                // console.log('OK')
+            }).onCancel(() => {
+                // console.log('Cancel')
+            }).onDismiss(() => {
+                // console.log('I am triggered on both OK and Cancel')
+            });
+        },
     },
 });
 </script>

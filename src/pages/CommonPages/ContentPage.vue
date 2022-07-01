@@ -174,7 +174,15 @@
                                 </q-form>
                                 <div class="button flex justify-end">
                                     <q-btn color="teal" :label="data[language.getLanguage].create" rounded
-                                        v-on:click="create" />
+                                        v-on:click="
+                                            try {
+                                                create();
+                                            } catch (error) {
+                                                // eslint-disable-next-line
+                                                alertFunc('Please check that your field input values are consistent with their respective minimum and maximum value requirements.');
+                                            }
+                                        "
+                                    />
                                 </div>
                             </q-carousel-slide>
                         </q-carousel>
@@ -194,6 +202,7 @@ import ListItems from 'components/ListItems.vue';
 import { useLanguageStore } from 'stores/language-store.js';
 import data from 'src/languages/i18n.js';
 import { useThemeStore } from 'stores/theme-store.js';
+import { useQuasar } from 'quasar';
 
 const language = useLanguageStore();
 
@@ -239,6 +248,7 @@ export default defineComponent({
         const model = ref(null);
 
         return {
+            q: useQuasar(),
             slide: ref('landing-form'),         // INITIAL SLIDE OF CAROUSEL IN CREATE TAB
             tab: ref('list'),                   // INITIAL TAB IN PAGE
             model,
@@ -260,12 +270,31 @@ export default defineComponent({
         };
     },
     methods: {
-        async create() {
+        create() {
             const fieldList = this.typeStore.list.find((type) => (type.id === this.model)).fields;
             const keyList = Object.keys(this.newContent);
 
+            let valid = true;
             keyList.forEach((key) => {
                 const itemField = fieldList.find((field) => field.label === key);
+                console.log(this.newContent[key], itemField.default, itemField.minVal, itemField.maxVal);
+
+                if (itemField.dataType === 'String') {
+                    if (this.newContent[key].length <= itemField.minVal || this.newContent[key].length >= itemField.maxVal) {
+                        valid = false;
+                        console.log('string', this.newContent[key].length, itemField.minVal, itemField.maxVal);
+                    }
+                } else if (itemField.dataType === 'Number' || itemField.dataType === 'Date') {
+                    if (this.newContent[key] <= itemField.minVal || this.newContent[key] >= itemField.maxVal) {
+                        valid = false;
+                        console.log('number or date', this.newContent[key], itemField.minVal, itemField.maxVal);
+                        console.log(this.newContent[key] <= itemField.minVal);
+                        console.log(this.newContent[key] >= itemField.maxVal);
+                    }
+                }
+
+                if (!valid) throw new Error('Invalid input');
+
                 this.content.input.push(
                     {
                         dataType: itemField.dataType,
@@ -309,6 +338,19 @@ export default defineComponent({
             this.content.dpDate = false;
             this.content.tag = [];
             this.newContent = [];
+        },
+        alertFunc(alertMessage) {
+            this.q.dialog({
+                title: '<strong>Alert</strong>',
+                message: alertMessage,
+                html: true,
+            }).onOk(() => {
+                // console.log('OK')
+            }).onCancel(() => {
+                // console.log('Cancel')
+            }).onDismiss(() => {
+                // console.log('I am triggered on both OK and Cancel')
+            });
         },
     },
 });

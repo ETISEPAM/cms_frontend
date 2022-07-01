@@ -2,7 +2,7 @@
     <q-dialog v-model="alert">
         <q-card>
             <q-card-section>
-                <div class="text-h6">Error</div>
+                <div class="text-h6 text-weight-bold">Error</div>
             </q-card-section>
 
             <q-card-section class="q-pt-none" color="red">

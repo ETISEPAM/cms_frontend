@@ -38,7 +38,7 @@
                 try {
                     $emit('save', content, typeId);
                 } catch (error) {
-                    logEvent(error);
+                    alertFunc('Please check your default, minimum, and maximum value inputs.');
                 }
             "
             class="col-12">
@@ -49,6 +49,7 @@
 
 <script>
 import { defineComponent } from 'vue';
+import { useQuasar } from 'Quasar';
 import { useLanguageStore } from 'stores/language-store.js';
 import { TypeStore } from 'stores/type-store.js';
 import data from 'src/languages/i18n.js';
@@ -87,6 +88,7 @@ export default defineComponent({
     },
     setup() {
         return {
+            q: useQuasar(),
             data,
             language: useLanguageStore(),
         };
@@ -102,8 +104,18 @@ export default defineComponent({
                                     : 'help'
             );
         },
-        logEvent(e) {
-            console.log(e);
+        alertFunc(alertMessage) {
+            this.q.dialog({
+                title: '<strong>Alert</strong>',
+                message: alertMessage,
+                html: true,
+            }).onOk(() => {
+                // console.log('OK')
+            }).onCancel(() => {
+                // console.log('Cancel')
+            }).onDismiss(() => {
+                // console.log('I am triggered on both OK and Cancel')
+            });
         },
     },
 });
