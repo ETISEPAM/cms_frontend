@@ -1,12 +1,12 @@
 <template>
-    <div class="q-pa-sm row justify-between items-center">
-        <div class="col-10 q-pl-md row items-center">
+    <div class="row justify-between items-center">
+        <div class="col-12 row flex-center">
             <q-pagination v-model="current" color="teal" :max="10" :max-pages="6" input />
         </div>
-        <SortFilterMenu />
+        <!-- <SortFilterMenu /> -->
     </div>
-    <div class="row justify-evenly items-center">
-        <q-card v-for="content in contentStore.list" :key="content.id" class="col-3 q-pa-sm q-ma-sm">
+    <div class="row justify-evenly items-center q-px-md q-gutter-md">
+        <q-card v-for="content in contentStore.list" :key="content.id" class="col-12 col-sm-5 col-lg-3 q-pa-sm">
             <q-card-section>
                 <ListHeaders :page="page" :content="{ ...content }" :themeController="themeController"
                     :typeName="typeStore.list.find((type) => type.id === content.typeId).name" />
@@ -27,8 +27,7 @@ import { TypeStore } from 'stores/type-store.js';
 import { UserStore } from 'stores/user-store.js';
 import { useLanguageStore } from 'stores/language-store.js';
 import data from 'src/languages/i18n.js';
-import { useThemeStore } from 'stores/theme-store.js';
-import SortFilterMenu from 'components/SortFilterMenu.vue';
+// import SortFilterMenu from 'components/SortFilterMenu.vue';
 import ListHeaders from './ListHeadersUsers.vue';
 import ContentItemTable from './ContentItemTableUser.vue';
 
@@ -38,19 +37,18 @@ export default defineComponent({
     name: 'ListItems',
     props: {
         page: String,
+        themeController: Boolean,
     },
     components: {
-        SortFilterMenu,
+        // SortFilterMenu,
         ListHeaders,
         ContentItemTable,
     },
     data() {
-        const theme = useThemeStore();
         return {
             userStore: UserStore(),
             contentStore: ContentStore(),
             typeStore: TypeStore(),
-            themeController: theme.getTheme,
             userChanged: false,
             contentsChanged: false,
             fieldsChanged: false,
@@ -173,20 +171,7 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
-.hidden
-    display: none
-
-.field-expand-dark
-    background: rgb(35, 35, 35)
-    padding: 0                      // q-px-none is overriden by quasar on utility class
-.field-expand-light
-    background: rgb(230, 230, 230)
-    padding: 0                      // q-px-none is overriden by quasar on utility class
-
-.add-field-dark, .add-field-light
-    min-width: 256px
-
-.fields
+.q-card
     .q-item-dark
         display: flex
         flex-direction: column

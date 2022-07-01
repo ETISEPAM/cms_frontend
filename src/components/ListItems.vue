@@ -12,13 +12,34 @@
  */
 <template>
     <div class="q-pa-sm row justify-between items-center">
-        <div class="col-10 q-pl-md row items-center">
-            <q-pagination v-model="current" color="teal" :max="10" :max-pages="6" input />
+        <div class="col q-pl-md row items-center">
+            <q-pagination
+                v-model="current"
+                color="teal"
+                input
+                :max="
+                    page === 'contentTypePage' ? Math.ceil(typeStore.list.length / perPage) :
+                        (page === 'contentPage' ? Math.ceil(contentStore.list.length / perPage) :
+                            (page === 'clientPage' ? Math.ceil(userStore.list.length / perPage) : 0))
+                "
+            />
+            <div class="col-5 col-sm-3 col-lg-2 row items-center">
+                <q-input
+                    type="number"
+                    v-model="perPage"
+                    filled
+                    dense
+                    class="col-5 q-ml-md q-mr-xs"
+                    @update:model-value="updateChunks"
+                />
+                <span class="col">per page</span>
+            </div>
         </div>
-        <SortFilterMenu />
+        <q-btn icon="search" color="teal" flat dense class="col-1" />
+        <!-- <SortFilterMenu /> -->
     </div>
     <q-list v-if="page === 'contentTypePage'">
-        <q-expansion-item group="typeExpand" v-for="type in typeStore.list" :key="type.id" expand-icon-class="hidden"
+        <q-expansion-item group="typeExpand" v-for="type in typeChunks[current - 1]" :key="type" expand-icon-class="hidden"
             class="q-py-xs" clickable ripple @hide="resetNew">
             <template v-slot:header>
                 <ListHeaders :page="page" :type="type" v-on:deleted="deleteType(type.id)" />
@@ -84,7 +105,7 @@
         </q-expansion-item>
     </q-list>
     <q-list v-else-if="page === 'contentPage'">
-        <q-expansion-item group="contentExpand" v-for="content in contentStore.list" :key="content.id"
+        <q-expansion-item group="contentExpand" v-for="content in contentChunks[current - 1]" :key="content"
             expand-icon-class="hidden" class="q-py-xs" clickable ripple expand-separator @hide="
                 contentsChanged = false
             " @before-show="
@@ -112,7 +133,7 @@
         </q-expansion-item>
     </q-list>
     <q-list v-else-if="page === 'clientPage'">
-        <q-expansion-item group="userExpand" v-for="user in userStore.list" :key="user.id" expand-icon-class="hidden"
+        <q-expansion-item group="userExpand" v-for="user in userChunks[current - 1]" :key="user" expand-icon-class="hidden"
             class="q-py-xs" clickable ripple expand-separator
             @before-show="userChanged = false; newBio = user.bio; logEvent(user.bio);">
             <template v-slot:header>
@@ -123,6 +144,10 @@
             <q-card>
                 <q-card-section class="q-px-md">
                     <div class="cursor-pointer">
+                        <div class="row items-center q-pb-sm q-pl-lg">
+                            <q-icon name="stop" color="teal" class="text-center q-pr-sm" />
+                            <span class="item-head">Bio</span>
+                        </div>
                         {{ newBio }}
                     </div>
                     <q-popup-edit v-model="newBio" :cover="false" v-slot="scope" touch-position
@@ -148,6 +173,7 @@
 
 <script>
 import axios from 'axios';
+import _ from 'lodash';
 import { defineComponent, ref } from 'vue';
 import { ContentStore } from 'stores/content-store.js';
 import { TypeStore } from 'stores/type-store.js';
@@ -155,7 +181,7 @@ import { UserStore } from 'stores/user-store.js';
 import { useLanguageStore } from 'stores/language-store.js';
 import data from 'src/languages/i18n.js';
 import { useThemeStore } from 'stores/theme-store.js';
-import SortFilterMenu from './SortFilterMenu.vue';
+// import SortFilterMenu from './SortFilterMenu.vue';
 import ListHeaders from './ListHeaders.vue';
 import TypeItemTable from './TypeItemTable.vue';
 import AddFieldForm from './AddFieldForm.vue';
@@ -169,7 +195,7 @@ export default defineComponent({
         page: String,
     },
     components: {
-        SortFilterMenu,
+        // SortFilterMenu,
         ListHeaders,
         TypeItemTable,
         AddFieldForm,
@@ -177,10 +203,20 @@ export default defineComponent({
     },
     data() {
         const theme = useThemeStore();
+        const userStore = UserStore();
+        const contentStore = ContentStore();
+        const typeStore = TypeStore();
+        const userChunks = _.chunk(userStore.list, this.perPage);
+        const contentChunks = _.chunk(contentStore.list, this.perPage);
+        const typeChunks = _.chunk(typeStore.list, this.perPage);
+
         return {
-            userStore: UserStore(),
-            contentStore: ContentStore(),
-            typeStore: TypeStore(),
+            userStore,
+            contentStore,
+            typeStore,
+            userChunks,
+            contentChunks,
+            typeChunks,
             themeController: theme.getTheme,
             userChanged: false,
             contentsChanged: false,
@@ -288,6 +324,7 @@ export default defineComponent({
                 });
             },
             current: ref(1),
+            perPage: ref(5),
         };
     },
     methods: {
@@ -398,6 +435,7 @@ export default defineComponent({
 
             this.typeStore.list = this.typeStore.list.filter((type) => type.id !== typeId);
             this.contentStore.list = this.contentStore.list.filter((content) => content.typeId !== typeId);
+            this.updateChunks();
         },
         async deleteContent(contentId) {
             axios
@@ -410,6 +448,7 @@ export default defineComponent({
                 });
 
             this.contentStore.list = this.contentStore.list.filter((content) => content.id !== contentId);
+            this.updateChunks();
         },
         async deleteUser(userId) {
             axios
@@ -422,6 +461,7 @@ export default defineComponent({
                 });
 
             this.userStore.list = this.userStore.list.filter((user) => user.id !== userId);
+            this.updateChunks();
         },
         resetNew() {
             this.newField.label = null;
@@ -459,6 +499,11 @@ export default defineComponent({
         },
         logEvent(toLog) {
             console.log(toLog);
+        },
+        updateChunks() {
+            this.userChunks = _.chunk(this.userStore.list, this.perPage);
+            this.contentChunks = _.chunk(this.contentStore.list, this.perPage);
+            this.typeChunks = _.chunk(this.typeStore.list, this.perPage);
         },
     },
 });
@@ -506,4 +551,8 @@ export default defineComponent({
         span
             color: teal
             font-weight: 700
+
+.item-head
+    color: teal
+    font-weight: 700
 </style>

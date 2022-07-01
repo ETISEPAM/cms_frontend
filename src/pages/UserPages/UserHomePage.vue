@@ -1,13 +1,13 @@
 <template>
     <q-page class="page">
         <q-card>
-            <q-card-section class="col-12 col-sm-6 col-md-4 col-lg-3 row justify-center justify-sm-end items-center">
+            <q-card-section class="col-12 row flex-center q-py-xs">
                 <q-btn v-model="blueModel" v-on:click="lightModeOn" :icon="themeController ? 'dark_mode' : 'light_mode'"
-                    flat />
+                    flat dense />
             </q-card-section>
             <Suspense>
                 <template #default>
-                    <ListItems />
+                    <ListItems :themeController="themeController" />
                 </template>
             </Suspense>
         </q-card>
@@ -40,7 +40,6 @@ export default defineComponent({
     setup() {
         const typeStore = TypeStore();
         const theme = useThemeStore();
-
 
         const options = ref(
             typeStore.list.map((type) => {
@@ -89,32 +88,4 @@ export default defineComponent({
 .page
     margin: 0
     padding: 0
-    .q-card
-        background-color: inherit
-        .tag-pool-dark
-            height: 84px
-            background: rgb(20, 20, 20)
-            overflow: auto
-            .q-item
-                min-height: 0
-            .tag-badge
-                padding: 0 12px
-                height: 18px
-            .badge-delete
-                min-width: 0
-                min-height: 0
-        .tag-pool-light
-            height: 84px
-            background: rgb(235, 235, 235)
-            overflow: auto
-            .q-item
-                min-height: 0
-            .tag-badge
-                padding: 0 12px
-                height: 18px
-            .badge-delete
-                min-width: 0
-                min-height: 0
-        .q-placeholder
-            max-width: 0
 </style>

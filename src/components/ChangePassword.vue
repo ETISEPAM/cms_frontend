@@ -124,8 +124,9 @@ export default defineComponent({
         },
         alertFunc(alertMessage) {
             this.q.dialog({
-                title: 'Alert',
+                title: '<strong>Alert</strong>',
                 message: alertMessage,
+                html: true,
             }).onOk(() => {
                 // console.log('OK')
             }).onCancel(() => {

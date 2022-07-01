@@ -34,7 +34,13 @@
     </q-card-section>
     <q-card-section class="row q-pt-none">
         <q-btn color="primary" outline
-            v-on:click="$emit('save', content, typeId)"
+            v-on:click="
+                try {
+                    $emit('save', content, typeId);
+                } catch (error) {
+                    alertFunc('Please check your default, minimum, and maximum value inputs.');
+                }
+            "
             class="col-12">
             {{ data[language.getLanguage].saveIt }}
         </q-btn>
@@ -43,6 +49,7 @@
 
 <script>
 import { defineComponent } from 'vue';
+import { useQuasar } from 'Quasar';
 import { useLanguageStore } from 'stores/language-store.js';
 import { TypeStore } from 'stores/type-store.js';
 import data from 'src/languages/i18n.js';
@@ -60,9 +67,17 @@ export default defineComponent({
             contentFields.forEach((item) => {
                 const field = fields.find((element) => element.label === item.label);
                 if (field.dataType === 'String') {
-                    if (item.value.length <= field.minVal || item.value.length >= field.maxVal) valid = false;
+                    if (item.value.length <= field.minVal || item.value.length >= field.maxVal) {
+                        valid = false;
+                        console.log('string', item.value.length, field.minVal, field.maxVal);
+                    }
                 } else if (field.dataType === 'Number' || field.dataType === 'Date') {
-                    if (item.value <= field.minVal || item.value >= field.maxVal) valid = false;
+                    if (item.value <= field.minVal || item.value >= field.maxVal) {
+                        valid = false;
+                        console.log('number or date', item.value, field.minVal, field.maxVal);
+                        console.log(item.value <= field.minVal);
+                        console.log(item.value >= field.maxVal);
+                    }
                 }
             });
 
@@ -73,6 +88,7 @@ export default defineComponent({
     },
     setup() {
         return {
+            q: useQuasar(),
             data,
             language: useLanguageStore(),
         };
@@ -87,6 +103,19 @@ export default defineComponent({
                                 : type === 'File' ? 'upload_file'
                                     : 'help'
             );
+        },
+        alertFunc(alertMessage) {
+            this.q.dialog({
+                title: '<strong>Alert</strong>',
+                message: alertMessage,
+                html: true,
+            }).onOk(() => {
+                // console.log('OK')
+            }).onCancel(() => {
+                // console.log('Cancel')
+            }).onDismiss(() => {
+                // console.log('I am triggered on both OK and Cancel')
+            });
         },
     },
 });

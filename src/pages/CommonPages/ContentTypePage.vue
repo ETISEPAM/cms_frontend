@@ -43,13 +43,15 @@
                     <q-card class="no-box-shadow">
                         <q-form class="row wrap justify-center col q-gutter-lg q-py-lg">
                             <q-input filled v-model="type.name" :label="data[language.getLanguage].title"
-                                class="col-9 col-lg-6">
+                                class="col-9 col-lg-6"
+                                :rules="[val => !!val || data[language.getLanguage].fieldRequired]">
                                 <template v-slot:prepend>
                                     <q-icon name="text_fields" />
                                 </template>
                             </q-input>
                             <q-input v-model="type.description" filled :label="data[language.getLanguage].description"
-                                type="textarea" class="col-9 col-lg-6">
+                                type="textarea" class="col-9 col-lg-6"
+                                :rules="[val => !!val || data[language.getLanguage].fieldRequired]">
                                 <template v-slot:prepend>
                                     <q-icon name="description" />
                                 </template>

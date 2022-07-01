@@ -65,7 +65,9 @@
                         <q-input v-if="modified.dataType !== 'Boolean'" :type="
                             modified.dataType === 'Date' ? 'date' :
                                 (modified.dataType === 'String' || modified.dataType === 'Boolean' ? 'text' : 'number')
-                        " color="teal" v-model="scope.value" dense autofocus
+                            "
+                            color="teal" v-model="scope.value" dense autofocus
+                            :rules="[val => !!val || data[language.getLanguage].fieldRequired]"
                             @keyup.enter="scope.set">
                             <template v-slot:prepend>
                                 <q-icon :name="
@@ -99,7 +101,9 @@
                     {{ modified.minVal }}
                     <q-popup-edit v-model="modified.minVal" :cover="false" :offset="[0, 10]" v-slot="scope">
                         <q-input :type="modified.dataType === 'Date' ? 'date' : 'number'" color="teal" v-model="scope.value"
-                            dense autofocus @keyup.enter="scope.set">
+                            dense autofocus @keyup.enter="scope.set"
+                            :rules="[val => !!val || data[language.getLanguage].fieldRequired]"
+                        >
                             <template v-slot:prepend>
                                 <q-icon :name="modified.dataType === 'Date' ? 'calendar_today' : 'numbers'" color="teal" />
                             </template>
@@ -122,7 +126,9 @@
                     {{ modified.maxVal }}
                     <q-popup-edit v-model="modified.maxVal" :cover="false" :offset="[0, 10]" v-slot="scope">
                         <q-input :type="modified.dataType === 'Date' ? 'date' : 'number'" color="teal" v-model="scope.value"
-                            dense autofocus @keyup.enter="scope.set">
+                            dense autofocus @keyup.enter="scope.set"
+                            :rules="[val => !!val || data[language.getLanguage].fieldRequired]"
+                        >
                             <template v-slot:prepend>
                                 <q-icon :name="modified.dataType === 'Date' ? 'calendar_today' : 'numbers'" color="teal" />
                             </template>
@@ -154,13 +160,20 @@
     </q-card-section>
     <q-card-section class="row q-pt-none">
         <q-btn color="primary" :label="data[language.getLanguage].saveIt" type="button" outline
-            v-on:click="$emit('save', )"
+            v-on:click="
+                try {
+                    $emit('save', modified);
+                } catch (error) {
+                    alertFunc('Please check your default, minimum, and maximum value inputs.');
+                }
+            "
             class="col-12" />
     </q-card-section>
 </template>
 
 <script>
 import { defineComponent, ref } from 'vue';
+import { useQuasar } from 'Quasar';
 import { useLanguageStore } from 'stores/language-store.js';
 import data from 'src/languages/i18n.js';
 
@@ -170,9 +183,18 @@ export default defineComponent({
     name: 'TypeItemTable',
     props: ['field', 'themeController'],
     emits: {
-        save: (modified) => {
-            const valid = false;
-            console.log(valid, modified);
+        save: (toUpdate) => {
+            let valid = true;
+
+            if (toUpdate.dataType === 'String') {
+                valid = toUpdate.minVal <= toUpdate.default.length && toUpdate.default.length <= toUpdate.maxVal;
+            } else if (toUpdate.dataType === 'File') {
+                valid = toUpdate.minVal <= toUpdate.maxVal;
+            } else {
+                valid = toUpdate.minVal <= toUpdate.default && toUpdate.default <= toUpdate.maxVal;
+            }
+
+            console.log(valid, toUpdate);
             if (valid) return true;
             throw new Error('Invalid input');
         },
@@ -229,6 +251,7 @@ export default defineComponent({
         const options = ref(optionTemplate.value);
 
         return {
+            q: useQuasar(),
             boolOptions,
             options,
             data,
@@ -240,6 +263,21 @@ export default defineComponent({
                 });
             },
         };
+    },
+    methods: {
+        alertFunc(alertMessage) {
+            this.q.dialog({
+                title: '<strong>Alert</strong>',
+                message: alertMessage,
+                html: true,
+            }).onOk(() => {
+                // console.log('OK')
+            }).onCancel(() => {
+                // console.log('Cancel')
+            }).onDismiss(() => {
+                // console.log('I am triggered on both OK and Cancel')
+            });
+        },
     },
 });
 </script>

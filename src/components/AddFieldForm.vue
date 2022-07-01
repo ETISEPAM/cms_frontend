@@ -5,7 +5,8 @@
  */
 <template>
     <q-input type="text" color="primary" v-model="toAdd.label" :label="data[language.getLanguage].label" filled
-        clearable dense class="col-12 q-my-xs" debounce="500">
+        clearable dense class="col-12 q-my-xs" debounce="500"
+        :rules="[val => !!val || data[language.getLanguage].fieldRequired]">
         <template v-slot:prepend>
             <q-icon name="text_fields" color="teal" />
         </template>
