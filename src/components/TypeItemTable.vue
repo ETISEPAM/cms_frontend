@@ -65,7 +65,9 @@
                         <q-input v-if="modified.dataType !== 'Boolean'" :type="
                             modified.dataType === 'Date' ? 'date' :
                                 (modified.dataType === 'String' || modified.dataType === 'Boolean' ? 'text' : 'number')
-                        " color="teal" v-model="scope.value" dense autofocus
+                            "
+                            color="teal" v-model="scope.value" dense autofocus
+                            :rules="[val => !!val || data[language.getLanguage].fieldRequired]"
                             @keyup.enter="scope.set">
                             <template v-slot:prepend>
                                 <q-icon :name="
@@ -99,7 +101,9 @@
                     {{ modified.minVal }}
                     <q-popup-edit v-model="modified.minVal" :cover="false" :offset="[0, 10]" v-slot="scope">
                         <q-input :type="modified.dataType === 'Date' ? 'date' : 'number'" color="teal" v-model="scope.value"
-                            dense autofocus @keyup.enter="scope.set">
+                            dense autofocus @keyup.enter="scope.set"
+                            :rules="[val => !!val || data[language.getLanguage].fieldRequired]"
+                        >
                             <template v-slot:prepend>
                                 <q-icon :name="modified.dataType === 'Date' ? 'calendar_today' : 'numbers'" color="teal" />
                             </template>
@@ -122,7 +126,9 @@
                     {{ modified.maxVal }}
                     <q-popup-edit v-model="modified.maxVal" :cover="false" :offset="[0, 10]" v-slot="scope">
                         <q-input :type="modified.dataType === 'Date' ? 'date' : 'number'" color="teal" v-model="scope.value"
-                            dense autofocus @keyup.enter="scope.set">
+                            dense autofocus @keyup.enter="scope.set"
+                            :rules="[val => !!val || data[language.getLanguage].fieldRequired]"
+                        >
                             <template v-slot:prepend>
                                 <q-icon :name="modified.dataType === 'Date' ? 'calendar_today' : 'numbers'" color="teal" />
                             </template>
