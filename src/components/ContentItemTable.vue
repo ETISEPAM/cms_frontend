@@ -34,7 +34,13 @@
     </q-card-section>
     <q-card-section class="row q-pt-none">
         <q-btn color="primary" outline
-            v-on:click="$emit('save', content, typeId)"
+            v-on:click="
+                try {
+                    $emit('save', content, typeId);
+                } catch (error) {
+                    logEvent(error);
+                }
+            "
             class="col-12">
             {{ data[language.getLanguage].saveIt }}
         </q-btn>
@@ -60,9 +66,17 @@ export default defineComponent({
             contentFields.forEach((item) => {
                 const field = fields.find((element) => element.label === item.label);
                 if (field.dataType === 'String') {
-                    if (item.value.length <= field.minVal || item.value.length >= field.maxVal) valid = false;
+                    if (item.value.length <= field.minVal || item.value.length >= field.maxVal) {
+                        valid = false;
+                        console.log('string', item.value.length, field.minVal, field.maxVal);
+                    }
                 } else if (field.dataType === 'Number' || field.dataType === 'Date') {
-                    if (item.value <= field.minVal || item.value >= field.maxVal) valid = false;
+                    if (item.value <= field.minVal || item.value >= field.maxVal) {
+                        valid = false;
+                        console.log('number or date', item.value, field.minVal, field.maxVal);
+                        console.log(item.value <= field.minVal);
+                        console.log(item.value >= field.maxVal);
+                    }
                 }
             });
 
@@ -87,6 +101,9 @@ export default defineComponent({
                                 : type === 'File' ? 'upload_file'
                                     : 'help'
             );
+        },
+        logEvent(e) {
+            console.log(e);
         },
     },
 });
